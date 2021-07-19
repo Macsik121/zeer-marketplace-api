@@ -1,6 +1,6 @@
 require('dotenv').config();
 const {MongoClient} = require('mongodb');
-const dbUri = process.env.DB_URL || '';
+const dbUri = process.env.DB_URL || 'mongodb+srv://Macsick121:AsDf1234@cluster0.dtorr.mongodb.net/zeer-marketplace?retryWrites=true&w=majority';
 
 let db;
 
