@@ -58,7 +58,12 @@ async function signUp(_, {email, name, password}) {
         const user = await db.collection('users').findOne({_id: insertedId})
 
         token = jwt.sign(
-            {email: user.email, id: user._id, name: user.name},
+            {
+                email: user.email,
+                id: user._id,
+                name: user.name,
+                avatar: user.avatar
+            },
             '!@secretKey: Morgenshtern - Show@!',
             {expiresIn: '3d'}
         );
@@ -73,8 +78,9 @@ async function signUp(_, {email, name, password}) {
     }
 }
 
-async function signIn(_, {email, password, rememberMe}) {
+async function signIn(_, {email, password, rememberMe}, {res}) {
     try {
+        console.log(res);
         const db = getDb();
         const user = (
             await db.collection('users').findOne({email}) ||
@@ -102,7 +108,8 @@ async function signIn(_, {email, password, rememberMe}) {
                 {
                     email: user.email,
                     id: user._id,
-                    name: user.name
+                    name: user.name,
+                    avatar: user.avatar
                 },
                 '!@secretKey: Morgenshtern - Show@!'
             );
@@ -111,7 +118,8 @@ async function signIn(_, {email, password, rememberMe}) {
                 {
                     email: user.email,
                     id: user._id,
-                    name: user.name
+                    name: user.name,
+                    avatar: user.avatar
                 },
                 '!@secretKey: Morgenshtern - Show@!',
                 {expiresIn: '3d'}

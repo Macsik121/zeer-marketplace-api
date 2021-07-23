@@ -1,6 +1,5 @@
 require('dotenv').config()
 const express = require('express');
-const passport = require('passport');
 const db = require('./db');
 const installHandler = require('./api_handler');
 const app = express();

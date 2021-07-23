@@ -3,6 +3,12 @@
 const typeDefs = `
     scalar Date
 
+    type AnswerSort {
+        base: Boolean
+        paymentActivation: Boolean
+        config: Boolean
+    }
+
     type Status {
         isActive: Boolean
         isFreezed: Boolean
@@ -47,6 +53,14 @@ const typeDefs = `
         message: String!
     }
 
+    type Answer {
+        sort: AnswerSort!
+        title: String!
+        answer: String!
+        usefulRate: Int!
+        rateCount: Int!
+    }
+
     type Characteristics {
         version: String!
         osSupport: String!
@@ -78,10 +92,10 @@ const typeDefs = `
         products: [Product!]!
         popularProducts(viewedToday: Int!): [Product!]!
         user(name: String!): User!
-        token: String!
         verifyToken(token: String!): String!
         getSubscriptions(name: String!): Subscriptions
         getProduct(title: String!): Product!
+        getAnswers: [Answer!]!
     }
 
     type Mutation {
@@ -91,6 +105,7 @@ const typeDefs = `
         viewProduct(title: String!): Product
         changeAvatar(name: String!, avatar: String!): User!
         logout: String!
+        rateAnswer(title: String!): Answer!
     }
 `;
 

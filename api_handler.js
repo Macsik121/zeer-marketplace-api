@@ -1,7 +1,8 @@
-const {ApolloServer} = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 const typeDefs = require('./schema.graphql');
 const products = require('./products');
 const user = require('./user');
+const answers = require('./answersFAQ');
 const { GraphQLScalarType, Kind } = require('graphql');
 
 const dateScalar = new GraphQLScalarType({
@@ -30,9 +31,9 @@ const resolvers = {
         popularProducts: products.getPopularProducts,
         getProduct: products.getProduct,
         user: user.getUser,
-        token: user.getToken,
         verifyToken: user.verifyToken,
         getSubscriptions: user.getSubscriptions,
+        getAnswers: answers.getAnswers
     },
     Mutation: {
         signUp: user.signUp,

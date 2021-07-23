@@ -134,10 +134,69 @@ const products = [
     },
 ];
 
-db.users.drop();
+const answers = [
+    {
+        sort: {
+            base: true,
+        },
+        title: 'Миксолидийский что-то',
+        answer: 'Пентатоника имитирует хамбакер.',
+        usefulRate: 0,
+        rateCount: 0
+    },
+    {
+        sort: {
+            base: true
+        },
+        title: 'Живая сессия имеет сонорный',
+        answer: 'Пентатоника имитирует хамбакер. Пентатоника имитирует хамбакер.',
+        usefulRate: 25,
+        rateCount: 0
+    },
+    {
+        sort: {
+            base: true
+        },
+        title: 'Soem title right here',
+        answer: 'Ответ на вопрос здесь. Это просто тестовый ответ и я не знаю, что написать, поэтому пишу это',
+        usefulRate: 75,
+        rateCount: 0
+    },
+    {
+        sort: {
+            base: true
+        },
+        title: 'Заголовок Ответа',
+        answer: 'Ответ на вопрос. сорпов ан тевтО. Не знаю, что писать. ьтасип отч, юанз еН',
+        usefulRate: 100,
+        rateCount: 0
+    },
+    {
+        sort: {
+            paymentActivation: true
+        },
+        title: 'Мелодический аккорд современников',
+        answer: 'Пентатоника имитирует хамбакер. Пенатоника имитирует хамбакер. Пенатоника имитирует хамбакер.',
+        usefulRate: 0,
+        rateCount: 0
+    },
+    {
+        sort: {
+            config: true
+        },
+        title: 'I want something just like this',
+        answer: 'Пишем ответ на вопрос здесь',
+        usefulRate: 0,
+        rateCount: 0
+    }
+];
+
 db.users.insertOne({email: ''});
 db.users.deleteOne({email: ''});
 
 db.products.drop();
 db.products.createIndex({ viewedToday: 1 });
 db.products.insertMany(products);
+
+db.answersFAQ.drop();
+db.answersFAQ.insertMany(answers);
