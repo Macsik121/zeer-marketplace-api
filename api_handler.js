@@ -15,10 +15,7 @@ const dateScalar = new GraphQLScalarType({
         return new Date(value);
     },
     parseLiteral(ast) {
-        if (ast.kind === Kind.INT) {
-            return new Date(parseInt(ast.kind, 10));
-        }
-        return null;
+        return (ast.kind == Kind.STRING) ? new Date(ast.value) : undefined;
     }
 });
 
@@ -40,7 +37,6 @@ const resolvers = {
         signIn: user.signIn,
         viewProduct: products.viewProduct,
         changeAvatar: user.changeAvatar,
-        logout: user.logout,
         resetPassword: user.resetPassword
     }
 }

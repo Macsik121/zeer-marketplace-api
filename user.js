@@ -176,7 +176,7 @@ function getToken() {
     return token;
 }
 
-function verifyToken(_, {token}) {
+function verifyToken(_, { token }) {
     try {
         let error;
         if (token) {
@@ -214,11 +214,6 @@ async function changeAvatar(_, { name, avatar }) {
     }
 }
 
-function logout() {
-    token = '';
-    return token;
-}
-
 async function getSubscriptions(_, { name }) {
     try {
         const db = getDb();
@@ -250,6 +245,5 @@ module.exports = {
     getToken,
     verifyToken,
     changeAvatar,
-    logout,
     getSubscriptions
 };

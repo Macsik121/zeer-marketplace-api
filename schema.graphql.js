@@ -3,12 +3,6 @@
 const typeDefs = `
     scalar Date
 
-    type AnswerSort {
-        base: Boolean
-        paymentActivation: Boolean
-        config: Boolean
-    }
-
     type Status {
         isActive: Boolean
         isFreezed: Boolean
@@ -54,11 +48,15 @@ const typeDefs = `
     }
 
     type Answer {
-        sort: AnswerSort!
         title: String!
         answer: String!
-        usefulRate: Int!
+        usefulRate: Int
         rateCount: Int!
+    }
+
+    type Answers {
+        sort: String!
+        answers: [Answer]
     }
 
     type Characteristics {
@@ -95,7 +93,7 @@ const typeDefs = `
         verifyToken(token: String!): String!
         getSubscriptions(name: String!): Subscriptions
         getProduct(title: String!): Product!
-        getAnswers: [Answer!]!
+        getAnswers: [Answers]
     }
 
     type Mutation {

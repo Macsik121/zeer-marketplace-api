@@ -3,7 +3,7 @@ const products = [
         id: 1,
         title: 'hwid spoofer',
         productFor: 'Apex Legends',
-        costPerDay: 15,
+        costPerDay: 12,
         viewedToday: 2,
         buyings: [],
         workingTime: new Date(),
@@ -15,7 +15,7 @@ const products = [
             },
             {
                 version: '1,03',
-                created: new Date(),
+                created: new Date('2021-07-19T15:31:42.991+00:00'),
                 description: 'asdf'
             },
             {
@@ -48,14 +48,14 @@ const products = [
         id: 2,
         title: 'zeer-changer',
         productFor: 'CS:GO',
-        costPerDay: 15,
+        costPerDay: 10,
         viewedToday: 0,
         buyings: [],
         description: 'Действительно, алеаторика дает цикл...',
-        workingTime: new Date(),
         changes: [],
         imageURL: '/images/zeer-changer.png',
         imageURLdashboard: '/images/CS-GO.png',
+        workingTime: new Date('2021-07-19T15:32:46.991+00:00'),
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -136,58 +136,96 @@ const products = [
 
 const answers = [
     {
-        sort: {
-            base: true,
-        },
-        title: 'Миксолидийский что-то',
-        answer: 'Пентатоника имитирует хамбакер.',
-        usefulRate: 0,
-        rateCount: 0
+        sort: 'Базовые',
+        answers: [
+            {
+                title: 'Миксолидийский что-то',
+                answer: 'Пентатоника имитирует хамбакер.',
+                usefulRate: 0,
+                rateCount: 0        
+            },
+            {
+                title: 'Живая сессия имеет сонорный',
+                answer: 'Пентатоника имитирует хамбакер. Пентатоника имитирует хамбакер.',
+                usefulRate: 25,
+                rateCount: 0
+            },
+            {
+                title: 'Soem title right here',
+                answer: 'Ответ на вопрос здесь. Это просто тестовый ответ и я не знаю, что написать, поэтому пишу это',
+                usefulRate: 75,
+                rateCount: 0        
+            },
+            {
+                title: 'Заголовок Ответа',
+                answer: 'Ответ на вопрос. сорпов ан тевтО. Не знаю, что писать. ьтасип отч, юанз еН',
+                usefulRate: 100,
+                rateCount: 0
+            },
+            {
+                title: 'Как будет выглядить пятый элемент',
+                answer: 'Спам. Спам. Спам. Спам.',
+                usefulRate: 66,
+                rateCount: 0
+            }
+        ]
     },
     {
-        sort: {
-            base: true
-        },
-        title: 'Живая сессия имеет сонорный',
-        answer: 'Пентатоника имитирует хамбакер. Пентатоника имитирует хамбакер.',
-        usefulRate: 25,
-        rateCount: 0
+        sort: 'Оплата и активация',
+        answers: [
+            {
+                title: 'Мелодический аккорд современников',
+                answer: 'Пентатоника имитирует хамбакер. Пенатоника имитирует хамбакер. Пенатоника имитирует хамбакер.',
+                usefulRate: 0,
+                rateCount: 0
+            },
+            {
+                title: 'Название ответа на вопрос',
+                answer: '',
+                usefulRate: 32,
+                rateCount: 0
+            }
+        ]
     },
     {
-        sort: {
-            base: true
-        },
-        title: 'Soem title right here',
-        answer: 'Ответ на вопрос здесь. Это просто тестовый ответ и я не знаю, что написать, поэтому пишу это',
-        usefulRate: 75,
-        rateCount: 0
+        sort: 'Конфиги',
+        answers: [
+            {
+                title: 'I want something just like this',
+                answer: 'Пишем ответ на вопрос здесь',
+                usefulRate: 0,
+                rateCount: 0
+            },
+            {
+                title: 'Lorem ipsum dolor sit amet',
+                answer: 'Пример того, как будет выглядеть 76% одобрения пользователей',
+                usefulRate: 76,
+                rateCount: 0
+            }
+        ]
     },
     {
-        sort: {
-            base: true
-        },
-        title: 'Заголовок Ответа',
-        answer: 'Ответ на вопрос. сорпов ан тевтО. Не знаю, что писать. ьтасип отч, юанз еН',
-        usefulRate: 100,
-        rateCount: 0
-    },
-    {
-        sort: {
-            paymentActivation: true
-        },
-        title: 'Мелодический аккорд современников',
-        answer: 'Пентатоника имитирует хамбакер. Пенатоника имитирует хамбакер. Пенатоника имитирует хамбакер.',
-        usefulRate: 0,
-        rateCount: 0
-    },
-    {
-        sort: {
-            config: true
-        },
-        title: 'I want something just like this',
-        answer: 'Пишем ответ на вопрос здесь',
-        usefulRate: 0,
-        rateCount: 0
+        sort: 'Название раздела отображается вот так',
+        answers: [
+            {
+                title: 'Zeer: online marketplace',
+                answer: 'Делается огромный сайт...',
+                usefulRate: 51,
+                rateCount: 0
+            },
+            {
+                title: 'Второй ответ в этом разделе',
+                answer: '?',
+                usefulRate: 99,
+                rateCount: 0
+            },
+            {
+                title: 'Пример, как будут отображатся 3 ответа на вопрос в одном разделе',
+                answer: 'Суши, роллы. Суши, роллы. Текст. Текст. Текст.',
+                usefulRate: 66,
+                rateCount: 0
+            }
+        ]
     }
 ];
 
@@ -195,7 +233,6 @@ db.users.insertOne({email: ''});
 db.users.deleteOne({email: ''});
 
 db.products.drop();
-db.products.createIndex({ viewedToday: 1 });
 db.products.insertMany(products);
 
 db.answersFAQ.drop();
