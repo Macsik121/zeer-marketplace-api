@@ -28,12 +28,35 @@ const typeDefs = `
         overdue: [Subscription]
     }
 
+    type ActionLog {
+        date: Date!
+        name: String!
+        location: String!
+        IP: String!
+        browser: String!
+        OS: String!
+        action: String!
+    }
+
+    input ActionLogInput {
+        date: Date!
+        name: String!
+        location: String!
+        IP: String!
+        browser: String!
+        OS: String!
+        action: String!
+    }
+
     type User {
+        id: Int!
         name: String!
         email: String!
         password: String
         avatar: String
+        registeredDate: Date
         subscriptions: [Subscription!]!
+        isAdmin: Boolean
     }
 
     type Sign {
@@ -68,6 +91,26 @@ const typeDefs = `
         supportedAntiCheats: String!
     }
 
+    type ProductStatistics {
+        allUsersAmount: Int!
+        activeSubsOnproduct: Int!
+        locks: Int!
+        earnedToday: Int!
+    }
+
+    type ProductKey {
+        name: String!
+        expiredIn: Int!
+        activationsAmount: Int!
+        amountKeysToAdd: Int!
+    }
+
+    enum ProductsKeyTypes {
+        active
+        unactive
+        all
+    }
+
     type Product {
         id: Int
         title: String
@@ -78,12 +121,14 @@ const typeDefs = `
         imageURLdashboard: String
         avatar: String
         reloading: String
-        buyings: [User]
         workingTime: Date
+        buyings: [User]
         characteristics: Characteristics
         isBought: Boolean
         description: String
         changes: [ProductChange]
+        locks: Int
+        keys: [ProductKey]
     }
 
     type Query {
@@ -94,6 +139,9 @@ const typeDefs = `
         getSubscriptions(name: String!): Subscriptions
         getProduct(title: String!): Product!
         getAnswers: [Answers]
+        getUsers: [User!]!
+        actionsLogs: [ActionLog!]!
+        getKeys: [ProductKey!]!
     }
 
     type Mutation {
@@ -104,6 +152,8 @@ const typeDefs = `
         changeAvatar(name: String!, avatar: String!): User!
         logout: String!
         rateAnswer(title: String!): Answer!
+        createLog(log: ActionLogInput): ActionLog!
+        cleanLogs: String!
     }
 `;
 

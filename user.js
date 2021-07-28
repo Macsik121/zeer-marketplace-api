@@ -43,14 +43,16 @@ async function signUp(_, {email, name, password}) {
             }
         }
 
-        const avatarBGs = ['red', 'orange', 'green', 'blue', 'purple', '#1E75FF'];
+        const avatarBGs = ['#c00', '#f60', '#6f6', '#03c', '#33f', '#60c', '#1E75FF'];
         
         const createdUser = await db.collection('users').insertOne({
             name,
             email,
             password: hashedPassword,
             subscriptions: [],
-            avatar: avatarBGs[Math.floor(Math.random() * avatarBGs.length)]
+            avatar: avatarBGs[Math.floor(Math.random() * avatarBGs.length)],
+            isAdmin: false,
+            registeredDate: new Date()
         });
 
         const insertedId = createdUser.insertedId;
@@ -62,7 +64,8 @@ async function signUp(_, {email, name, password}) {
                 email: user.email,
                 id: user._id,
                 name: user.name,
-                avatar: user.avatar
+                avatar: user.avatar,
+                isAdmin: user.isAdmin
             },
             '!@secretKey: Morgenshtern - Show@!',
             {expiresIn: '3d'}
@@ -109,7 +112,8 @@ async function signIn(_, {email, password, rememberMe}, {res}) {
                     email: user.email,
                     id: user._id,
                     name: user.name,
-                    avatar: user.avatar
+                    avatar: user.avatar,
+                    isAdmin: user.isAdmin
                 },
                 '!@secretKey: Morgenshtern - Show@!'
             );
@@ -119,7 +123,8 @@ async function signIn(_, {email, password, rememberMe}, {res}) {
                     email: user.email,
                     id: user._id,
                     name: user.name,
-                    avatar: user.avatar
+                    avatar: user.avatar,
+                    isAdmin: user.isAdmin
                 },
                 '!@secretKey: Morgenshtern - Show@!',
                 {expiresIn: '3d'}
@@ -237,8 +242,15 @@ async function getSubscriptions(_, { name }) {
     }
 }
 
+async function getUsers() {
+    const db = getDb();
+
+    return await db.collection('users').find({}).toArray();
+}
+
 module.exports = {
     getUser,
+    getUsers,
     signUp,
     signIn,
     resetPassword,

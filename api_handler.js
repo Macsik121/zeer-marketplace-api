@@ -30,7 +30,8 @@ const resolvers = {
         user: user.getUser,
         verifyToken: user.verifyToken,
         getSubscriptions: user.getSubscriptions,
-        getAnswers: answers.getAnswers
+        getAnswers: answers.getAnswers,
+        getUsers: user.getUsers
     },
     Mutation: {
         signUp: user.signUp,
