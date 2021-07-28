@@ -3,6 +3,7 @@ const typeDefs = require('./schema.graphql');
 const products = require('./products');
 const user = require('./user');
 const answers = require('./answersFAQ');
+const admin = require('./admin');
 const { GraphQLScalarType, Kind } = require('graphql');
 
 const dateScalar = new GraphQLScalarType({
@@ -31,14 +32,16 @@ const resolvers = {
         verifyToken: user.verifyToken,
         getSubscriptions: user.getSubscriptions,
         getAnswers: answers.getAnswers,
-        getUsers: user.getUsers
+        getUsers: user.getUsers,
+        getActionsLogs: admin.getActionsLogs
     },
     Mutation: {
         signUp: user.signUp,
         signIn: user.signIn,
         viewProduct: products.viewProduct,
         changeAvatar: user.changeAvatar,
-        resetPassword: user.resetPassword
+        resetPassword: user.resetPassword,
+        createLog: admin.createLog
     }
 }
 

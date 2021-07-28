@@ -7,6 +7,20 @@ const products = [
         viewedToday: 2,
         buyings: [],
         workingTime: new Date(),
+        keys: {
+            active: [
+                {
+                    name: 'random_key_title',
+                    expiredIn: 3,
+                    activationsAmount: 1,
+                    amountKeysToAdd: 20
+                },
+                {
+                    name: 'random_key_title2',
+                    expiredInDays
+                }
+            ]
+        },
         changes: [
             {
                 version: '1,1',

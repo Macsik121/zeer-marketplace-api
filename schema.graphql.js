@@ -30,7 +30,7 @@ const typeDefs = `
 
     type ActionLog {
         date: Date!
-        name: String!
+        userName: String!
         location: String!
         IP: String!
         browser: String!
@@ -40,7 +40,7 @@ const typeDefs = `
 
     input ActionLogInput {
         date: Date!
-        name: String!
+        userName: String!
         location: String!
         IP: String!
         browser: String!
@@ -49,7 +49,7 @@ const typeDefs = `
     }
 
     type User {
-        id: Int!
+        id: Int
         name: String!
         email: String!
         password: String
@@ -100,15 +100,22 @@ const typeDefs = `
 
     type ProductKey {
         name: String!
-        expiredIn: Int!
+        expiredInDays: Int!
         activationsAmount: Int!
         amountKeysToAdd: Int!
     }
 
-    enum ProductsKeyTypes {
-        active
-        unactive
-        all
+    type ProductsKeyTypes {
+        active: [ProductKey]
+        unactive: [ProductKey]
+        all: [ProductKey]
+    }
+
+    input KeyInput {
+        name: String!
+        daysAmount: Int!
+        activationsAmount: Int!
+        keysToAddAmount: Int!
     }
 
     type Product {
@@ -140,7 +147,7 @@ const typeDefs = `
         getProduct(title: String!): Product!
         getAnswers: [Answers]
         getUsers: [User!]!
-        actionsLogs: [ActionLog!]!
+        getActionsLogs: [ActionLog!]!
         getKeys: [ProductKey!]!
     }
 
@@ -154,6 +161,8 @@ const typeDefs = `
         rateAnswer(title: String!): Answer!
         createLog(log: ActionLogInput): ActionLog!
         cleanLogs: String!
+        editUser(name: String!): User!
+        createKey(key: KeyInput!): ProductKey!
     }
 `;
 

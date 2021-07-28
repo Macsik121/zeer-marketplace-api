@@ -25,7 +25,9 @@ async function signUp(_, {email, name, password}) {
             await db.collection('users').findOne({email}) ||
             await db.collection('users').findOne({name})
         );
+        const allUsers = await db.collection('users').find({}).toArray();
         const hashedPassword = await bcrypt.hash(password, 12);
+        console.log(allUsers);
 
         if (existingUser && existingUser.name == name) {
             return {
@@ -46,7 +48,7 @@ async function signUp(_, {email, name, password}) {
         const avatarBGs = ['#c00', '#f60', '#6f6', '#03c', '#33f', '#60c', '#1E75FF'];
         
         const createdUser = await db.collection('users').insertOne({
-            id: await db.collection('users').find({}).toArray().length + 1,
+            id: allUsers.length + 1,
             name,
             email,
             password: hashedPassword,
