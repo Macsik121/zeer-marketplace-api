@@ -154,7 +154,6 @@ const typeDefs = `
         rateAnswer(title: String!): Answer!
         createLog(log: ActionLogInput): ActionLog!
         cleanLogs: String!
-        editUser(name: String!): User!
     }
 `;
 

@@ -46,7 +46,6 @@ async function signUp(_, {email, name, password}) {
         const avatarBGs = ['#c00', '#f60', '#6f6', '#03c', '#33f', '#60c', '#1E75FF'];
         
         const createdUser = await db.collection('users').insertOne({
-            id: await db.collection('users').find({}).toArray().length + 1,
             name,
             email,
             password: hashedPassword,
