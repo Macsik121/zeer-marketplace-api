@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const {getDb} = require('./db');
+const { getDb } = require('./db');
 const { sendMail } = require('./nodemailer');
 let token = '';
 
@@ -84,9 +84,8 @@ async function signUp(_, {email, name, password}) {
     }
 }
 
-async function signIn(_, {email, password, rememberMe}, {res}) {
+async function signIn(_, {email, password, rememberMe}) {
     try {
-        console.log(res);
         const db = getDb();
         const user = (
             await db.collection('users').findOne({email}) ||
@@ -211,12 +210,35 @@ function verifyToken(_, { token }) {
 async function changeAvatar(_, { name, avatar }) {
     try {
         const db = getDb();
-        console.log(avatar);
         const user = await db.collection('users').findOneAndUpdate(
             { name },
             { $set: { avatar } }
         );
         return user.value;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function changePassword(_, { name, oldPassword, newPassword }) {
+    try {
+        const db = getDb();
+        const user = await db.collection('users').findOne({ name });
+
+        if (!await bcrypt.compare(oldPassword, user.password)) {
+            return 'Old password does not match your current password';
+        }
+
+        if (await bcrypt.compare(newPassword, user.password)) {
+            return 'You can not change from the current password to the same';
+        }
+
+        await db.collection('users').updateOne(
+            { name },
+            { $set: { password: await bcrypt.hash(newPassword, 12) } }
+        );
+
+        return 'You successfully changed the password'
     } catch (error) {
         console.log(error);
     }
@@ -259,6 +281,7 @@ module.exports = {
     resetPassword,
     getToken,
     verifyToken,
+    changePassword,
     changeAvatar,
     getSubscriptions
 };

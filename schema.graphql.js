@@ -164,6 +164,7 @@ const typeDefs = `
         cleanLogs: String!
         editUser(name: String!): User!
         createKey(key: KeyInput!): ProductKey!
+        changePassword(name: String!, oldPassword: String!, newPassword: String!): String!
     }
 `;
 

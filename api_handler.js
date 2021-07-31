@@ -40,6 +40,7 @@ const resolvers = {
         signIn: user.signIn,
         viewProduct: products.viewProduct,
         changeAvatar: user.changeAvatar,
+        changePassword: user.changePassword,
         resetPassword: user.resetPassword,
         createLog: admin.createLog
     }
