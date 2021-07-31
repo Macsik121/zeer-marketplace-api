@@ -211,11 +211,11 @@ function verifyToken(_, { token }) {
 async function changeAvatar(_, { name, avatar }) {
     try {
         const db = getDb();
+        console.log(avatar);
         const user = await db.collection('users').findOneAndUpdate(
-            {name},
+            { name },
             { $set: { avatar } }
         );
-        console.log(user.value);
         return user.value;
     } catch (error) {
         console.log(error);

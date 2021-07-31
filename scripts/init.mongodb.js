@@ -17,7 +17,7 @@ const products = [
                 },
                 {
                     name: 'random_key_title2',
-                    expiredInDays
+                    expiredInDays: 3
                 }
             ]
         },

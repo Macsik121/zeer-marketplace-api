@@ -136,6 +136,7 @@ const typeDefs = `
         changes: [ProductChange]
         locks: Int
         keys: [ProductKey]
+        header: String!
     }
 
     type Query {
