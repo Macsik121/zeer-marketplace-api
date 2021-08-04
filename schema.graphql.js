@@ -123,26 +123,24 @@ const typeDefs = `
         title: String
         productFor: String
         costPerDay: Int
-        viewedToday: Int
         imageURL: String
         imageURLdashboard: String
         avatar: String
         reloading: String
         workingTime: Date
-        buyings: [User]
         characteristics: Characteristics
-        isBought: Boolean
         description: String
         changes: [ProductChange]
         locks: Int
         keys: [ProductKey]
         header: String!
         peopleBought: [User]!
+        timeBought: Int
     }
 
     type Query {
         products: [Product!]!
-        popularProducts(viewedToday: Int!): [Product!]!
+        popularProducts: [Product!]!
         user(name: String!): User!
         verifyToken(token: String!): String!
         getSubscriptions(name: String!): Subscriptions
@@ -157,7 +155,6 @@ const typeDefs = `
         signUp(email: String!, name: String!, password: String!): Sign!
         signIn(email: String!, password: String!, rememberMe: Boolean!): Sign!
         resetPassword(email: String!): Reset!
-        viewProduct(title: String!): Product
         changeAvatar(name: String!, avatar: String!): User!
         logout: String!
         rateAnswer(title: String!): Answer!

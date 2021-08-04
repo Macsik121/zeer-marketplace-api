@@ -10,29 +10,12 @@ async function getProducts() {
     }
 }
 
-async function getPopularProducts(_, {viewedToday}) {
+async function getPopularProducts() {
     try {
         const db = getDb();
-        const filter = { viewedToday: {} }
-        filter.viewedToday.$gte = viewedToday;
+        const filter = { timeBought: 30 }
         const popularProducts = await db.collection('products').find(filter).toArray();
         return popularProducts;    
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function viewProduct(_, { title }) {
-    try {
-        const db = getDb();
-        const product = await db
-            .collection('products')
-            .updateOne({title}, {$inc: {viewedToday: 1}}) || null;
-    
-        if (product) {
-            return await db.collection('products').findOne({title});
-        };
-        return product;
     } catch (error) {
         console.log(error);
     }
@@ -91,7 +74,6 @@ async function getProduct(_, {title}) {
 module.exports = {
     getProducts,
     getPopularProducts,
-    viewProduct,
     getProduct,
     buyProduct
 };

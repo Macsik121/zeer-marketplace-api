@@ -38,7 +38,6 @@ const resolvers = {
     Mutation: {
         signUp: user.signUp,
         signIn: user.signIn,
-        viewProduct: products.viewProduct,
         changeAvatar: user.changeAvatar,
         changePassword: user.changePassword,
         resetPassword: user.resetPassword,

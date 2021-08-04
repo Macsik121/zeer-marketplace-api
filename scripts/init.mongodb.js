@@ -4,10 +4,9 @@ const products = [
         title: 'hwid spoofer',
         productFor: 'Apex Legends',
         costPerDay: 12,
-        viewedToday: 2,
-        buyings: [],
         peopleBought: [],
         workingTime: new Date(),
+        timeBought: 0,
         keys: {
             active: [
                 {
@@ -56,22 +55,20 @@ const products = [
             gameMode: 'Любой',
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
-        },
-        isBought: false
+        }
     },
     {
         id: 2,
         title: 'zeer-changer',
         productFor: 'CS:GO',
         costPerDay: 10,
-        viewedToday: 0,
-        buyings: [],
         description: 'Действительно, алеаторика дает цикл...',
         changes: [],
         imageURL: '/images/zeer-changer.png',
         imageURLdashboard: '/images/CS-GO.png',
         workingTime: new Date('2021-07-19T15:32:46.991+00:00'),
         peopleBought: [],
+        timeBought: 0,
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -79,22 +76,20 @@ const products = [
             gameMode: 'Любой',
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
-        },
-        isBought: false
+        }
     },
     {
         id: 3,
         title: 'Damage Plus',
         productFor: 'Cross Fire',
         costPerDay: 15,
-        viewedToday: 0,
         description: 'Действительно, алеаторика дает цикл...',
         workingTime: new Date(),
-        buyings: [],
         changes: [],
         imageURL: '/images/tournament.png',
         imageURLdashboard: '/images/damage_plus.png',
         peopleBought: [],
+        timeBought: 0,
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -102,22 +97,20 @@ const products = [
             gameMode: 'Любой',
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
-        },
-        isBought: false
+        }
     },
     {
         id: 4,
         title: 'esp + wallhack',
         productFor: 'Unkown',
         costPerDay: 14,
-        viewedToday: 0,
         description: 'Действительно, алеаторика дает цикл...',
-        buyings: [],
         workingTime: new Date(),
         changes: [],
         imageURL: '/images/esp_wallhack.png',
         imageURLdashboard: '/images/esp_wallhack.png',
         peopleBought: [],
+        timeBought: 0,
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -126,21 +119,19 @@ const products = [
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
         },
-        isBought: false
     },
     {
         id: 5,
         title: 'tournament',
         productFor: 'PUBG',
         costPerDay: 15,
-        viewedToday: 0,
         description: 'Действительно, алеаторика дает цикл...',
         workingTime: new Date(),
-        buyings: [],
         changes: [],
         imageURL: '/images/tournament.png',
         importURLdashboard: '/images/CS-GO.png',
         peopleBought: [],
+        timeBought: 0,
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -149,7 +140,6 @@ const products = [
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
         },
-        isBought: false
     },
 ];
 
