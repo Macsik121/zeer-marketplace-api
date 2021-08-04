@@ -13,9 +13,39 @@ async function getProducts() {
 async function getPopularProducts() {
     try {
         const db = getDb();
-        const filter = { timeBought: { $gte: 30 } };
-        const popularProducts = await db.collection('products').find(filter).toArray();
-        return popularProducts;    
+        let popularProducts = (
+            await db
+                .collection('products')
+                .aggregate([
+                    {
+                        $match: {
+                            $or: [ { timeBought: { $gte: 30 } } ]
+                        }
+                    },
+                    {
+                        $sort: {
+                            timeBought: -1
+                        }
+                    }
+                ])
+                .toArray()
+        );
+        if (popularProducts.length < 1) {
+            popularProducts = (
+                await db
+                    .collection('products')
+                    .aggregate([
+                        {
+                            $sort: {
+                                timeBought: -1
+                            }
+                        }
+                    ])
+                    .toArray()
+            );
+            console.log(popularProducts);
+        }
+        return popularProducts;
     } catch (error) {
         console.log(error);
     }
@@ -59,7 +89,11 @@ async function buyProduct(_, { title, name }) {
                     }
                 } }
             );
-            await db.collection('products').updateOne({ title }, { $inc: { timeBought: 1 } });
+            await db.collection('products').findOneAndUpdate(
+                { title },
+                { $inc: { timeBought: 1 } },
+                { returnOriginal: false }
+            );
         }
         return boughtProduct ? boughtProduct.value : product;
     } catch(e) {
