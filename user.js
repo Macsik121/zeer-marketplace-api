@@ -210,11 +210,27 @@ function verifyToken(_, { token }) {
 async function changeAvatar(_, { name, avatar }) {
     try {
         const db = getDb();
-        const user = await db.collection('users').findOneAndUpdate(
+        let user = await db.collection('users').findOneAndUpdate(
             { name },
-            { $set: { avatar } }
+            { $set: { avatar } },
+            { returnOriginal: false }
         );
-        return user.value;
+        
+        user = user.value
+        const newToken = (
+            jwt.sign(
+                {
+                    email: user.email,
+                    id: user._id,
+                    name: user.name,
+                    avatar: user.avatar,
+                    isAdmin: user.isAdmin
+                },
+                '!@secretKey: Morgenshtern - Show@!',
+                {expiresIn: '3d'}
+            )
+        )
+        return newToken;
     } catch (error) {
         console.log(error);
     }

@@ -42,7 +42,8 @@ const resolvers = {
         changePassword: user.changePassword,
         resetPassword: user.resetPassword,
         createLog: admin.createLog,
-        buyProduct: products.buyProduct
+        buyProduct: products.buyProduct,
+        updateBoughtIcon: products.updateBoughtIcon
     }
 }
 

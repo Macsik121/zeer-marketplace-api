@@ -13,7 +13,7 @@ async function getProducts() {
 async function getPopularProducts() {
     try {
         const db = getDb();
-        const filter = { timeBought: 30 }
+        const filter = { timeBought: { $gte: 30 } };
         const popularProducts = await db.collection('products').find(filter).toArray();
         return popularProducts;    
     } catch (error) {
@@ -59,6 +59,7 @@ async function buyProduct(_, { title, name }) {
                     }
                 } }
             );
+            await db.collection('products').updateOne({ title }, { $inc: { timeBought: 1 } });
         }
         return boughtProduct ? boughtProduct.value : product;
     } catch(e) {
@@ -66,14 +67,37 @@ async function buyProduct(_, { title, name }) {
     }
 }
 
-async function getProduct(_, {title}) {
+async function getProduct(_, { title }) {
     const db = getDb();
     return await db.collection('products').findOne({title});
+}
+
+async function updateBoughtIcon(_, { name }) {
+    try {
+        const db = getDb();
+        const products = await db.collection('products').find().toArray();
+        const user = await db.collection('users').findOne({ name });
+        products.map(product => {
+            for(let i = 0; i < product.peopleBought.length; i++) {
+                const person = product.peopleBought[i];
+                if (person.name == name && person.avatar != user.avatar) {
+                    person.avatar = user.avatar;
+                    break;
+                }
+            }
+        });
+        await db.collection('products').drop();
+        const newProductsCollection = await db.collection('products').insertMany(products)
+        return newProductsCollection;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports = {
     getProducts,
     getPopularProducts,
     getProduct,
-    buyProduct
+    buyProduct,
+    updateBoughtIcon
 };

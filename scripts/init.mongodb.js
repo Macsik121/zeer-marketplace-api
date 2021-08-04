@@ -238,11 +238,9 @@ const answers = [
     }
 ];
 
-db.users.insertOne({email: ''});
-db.users.deleteOne({email: ''});
-
 db.products.drop();
 db.products.insertMany(products);
+db.products.createIndex({ timeBought: 1 })
 
 db.answersFAQ.drop();
 db.answersFAQ.insertMany(answers);

@@ -155,7 +155,7 @@ const typeDefs = `
         signUp(email: String!, name: String!, password: String!): Sign!
         signIn(email: String!, password: String!, rememberMe: Boolean!): Sign!
         resetPassword(email: String!): Reset!
-        changeAvatar(name: String!, avatar: String!): User!
+        changeAvatar(name: String!, avatar: String!): String!
         logout: String!
         rateAnswer(title: String!): Answer!
         createLog(log: ActionLogInput): ActionLog!
@@ -164,6 +164,7 @@ const typeDefs = `
         createKey(key: KeyInput!): ProductKey!
         changePassword(name: String!, oldPassword: String!, newPassword: String!): String!
         buyProduct(title: String!, name: String!): Product!
+        updateBoughtIcon(name: String!): [Product!]!
     }
 `;
 
