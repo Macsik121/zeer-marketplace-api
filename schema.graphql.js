@@ -15,19 +15,6 @@ const typeDefs = `
         description: String!
     }
 
-    type Subscription {
-        status: Status!
-        activelyUntil: Date!
-        title: String!
-        imageURL: String!
-    }
-
-    type Subscriptions {
-        all: [Subscription]
-        active: [Subscription]
-        overdue: [Subscription]
-    }
-
     type ActionLog {
         date: Date!
         userName: String!
@@ -46,17 +33,6 @@ const typeDefs = `
         browser: String!
         OS: String!
         action: String!
-    }
-
-    type User {
-        id: Int
-        name: String!
-        email: String!
-        password: String
-        avatar: String
-        registeredDate: Date
-        subscriptions: [Subscription!]!
-        isAdmin: Boolean
     }
 
     type Sign {
@@ -118,6 +94,30 @@ const typeDefs = `
         keysToAddAmount: Int!
     }
 
+    type Subscription {
+        status: Status!
+        activelyUntil: Date!
+        title: String!
+        imageURL: String!
+    }
+
+    type Subscriptions {
+        all: [Subscription]
+        active: [Subscription]
+        overdue: [Subscription]
+    }
+
+    type User {
+        id: Int
+        name: String!
+        email: String!
+        password: String
+        avatar: String
+        registeredDate: Date
+        subscriptions: [Subscription!]!
+        isAdmin: Boolean
+    }
+
     type Product {
         id: Int
         title: String
@@ -137,6 +137,7 @@ const typeDefs = `
         locks: Int
         keys: [ProductKey]
         header: String!
+        peopleBought: [User]!
     }
 
     type Query {
@@ -165,6 +166,7 @@ const typeDefs = `
         editUser(name: String!): User!
         createKey(key: KeyInput!): ProductKey!
         changePassword(name: String!, oldPassword: String!, newPassword: String!): String!
+        buyProduct(title: String!, name: String!): Product!
     }
 `;
 

@@ -3,7 +3,6 @@ const { getDb } = require('./db');
 async function getAnswers() {
     const db = getDb();
     const answers = await db.collection('answersFAQ').find({}).toArray();
-    answers.map(answer => console.log(answer));
     return answers;
 }
 

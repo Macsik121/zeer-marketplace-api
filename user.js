@@ -226,11 +226,11 @@ async function changePassword(_, { name, oldPassword, newPassword }) {
         const user = await db.collection('users').findOne({ name });
 
         if (!await bcrypt.compare(oldPassword, user.password)) {
-            return 'Old password does not match your current password';
+            return 'Ваш старый пароль неверный';
         }
 
         if (await bcrypt.compare(newPassword, user.password)) {
-            return 'You can not change from the current password to the same';
+            return 'Вы успешно поменяли пароль';
         }
 
         await db.collection('users').updateOne(
@@ -238,7 +238,7 @@ async function changePassword(_, { name, oldPassword, newPassword }) {
             { $set: { password: await bcrypt.hash(newPassword, 12) } }
         );
 
-        return 'You successfully changed the password'
+        return 'Вы успешно поменяли пароль'
     } catch (error) {
         console.log(error);
     }

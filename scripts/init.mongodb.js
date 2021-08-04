@@ -6,6 +6,7 @@ const products = [
         costPerDay: 12,
         viewedToday: 2,
         buyings: [],
+        peopleBought: [],
         workingTime: new Date(),
         keys: {
             active: [
@@ -70,6 +71,7 @@ const products = [
         imageURL: '/images/zeer-changer.png',
         imageURLdashboard: '/images/CS-GO.png',
         workingTime: new Date('2021-07-19T15:32:46.991+00:00'),
+        peopleBought: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -92,6 +94,7 @@ const products = [
         changes: [],
         imageURL: '/images/tournament.png',
         imageURLdashboard: '/images/damage_plus.png',
+        peopleBought: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -114,6 +117,7 @@ const products = [
         changes: [],
         imageURL: '/images/esp_wallhack.png',
         imageURLdashboard: '/images/esp_wallhack.png',
+        peopleBought: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -136,6 +140,7 @@ const products = [
         changes: [],
         imageURL: '/images/tournament.png',
         importURLdashboard: '/images/CS-GO.png',
+        peopleBought: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
