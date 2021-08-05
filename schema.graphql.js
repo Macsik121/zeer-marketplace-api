@@ -98,6 +98,7 @@ const typeDefs = `
         status: Status!
         activelyUntil: Date!
         title: String!
+        productFor: String!
         imageURL: String!
     }
 

@@ -102,7 +102,7 @@ const products = [
     {
         id: 4,
         title: 'esp + wallhack',
-        productFor: 'Unkown',
+        productFor: 'Unknown',
         costPerDay: 14,
         description: 'Действительно, алеаторика дает цикл...',
         workingTime: new Date(),
@@ -141,6 +141,36 @@ const products = [
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
         },
     },
+    {
+        id: 6,
+        title: 'Not HWID spoofer',
+        productFor: 'Not Apex Legends',
+        costPerDay: 20,
+        peopleBought: [],
+        workingTime: new Date(),
+        timeBought: 0,
+        keys: {},
+        changes: [
+            {
+                version: '1,01',
+                created: new Date(),
+                description: 'Фишка свободна. Попса, в том числе, просветляет сет.'
+            }
+        ],
+        imageURL: '/images/hwid-spoofer.png',
+        imageURLdashboard: '/images/apex-legends.png',
+        description: 'Lorem ipsum dolor sit amet consectetur...',
+        avatar: '/images/apex-logo.png',
+        reloading: 'week',
+        characteristics: {
+            version: 'Все у кого есть античит BE / EAC',
+            osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
+            cpuSupport: ['Intel', 'AMD'],
+            gameMode: 'Любой',
+            developer: 'Zeer',
+            supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
+        }
+    }
 ];
 
 const answers = [

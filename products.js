@@ -43,7 +43,21 @@ async function getPopularProducts() {
                     ])
                     .toArray()
             );
-            console.log(popularProducts);
+            // const popularProductsCopy = popularProducts.slice();
+            // popularProducts = [];
+            // for(let i = 0; i < popularProductsCopy.length; i++) {
+            //     if (i < 3) {
+            //         const product = popularProductsCopy[i]
+            //         if (product.timeBought > 0) {
+            //             popularProducts.unshift(product);
+            //         } else if (
+            //             product.timeBought < 0
+            //         ) {
+            //             popularProducts.unshift(product);
+            //         }    
+            //     }
+            // }
+            // console.log(popularProducts);
         }
         return popularProducts;
     } catch (error) {
@@ -85,6 +99,7 @@ async function buyProduct(_, { title, name }) {
                         },
                         activelyUntil,
                         title,
+                        productFor: product.productFor,
                         imageURL: product.imageURLdashboard
                     }
                 } }
