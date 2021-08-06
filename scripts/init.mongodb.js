@@ -1,3 +1,4 @@
+const currentDate = new Date();
 const products = [
     {
         id: 1,
@@ -7,6 +8,7 @@ const products = [
         peopleBought: [],
         workingTime: new Date(),
         timeBought: 0,
+        currentDate,
         keys: {
             active: [
                 {
@@ -69,6 +71,7 @@ const products = [
         workingTime: new Date('2021-07-19T15:32:46.991+00:00'),
         peopleBought: [],
         timeBought: 0,
+        currentDate,
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -90,6 +93,7 @@ const products = [
         imageURLdashboard: '/images/damage_plus.png',
         peopleBought: [],
         timeBought: 0,
+        currentDate,
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -111,6 +115,7 @@ const products = [
         imageURLdashboard: '/images/esp_wallhack.png',
         peopleBought: [],
         timeBought: 0,
+        currentDate,
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -129,9 +134,10 @@ const products = [
         workingTime: new Date(),
         changes: [],
         imageURL: '/images/tournament.png',
-        importURLdashboard: '/images/CS-GO.png',
+        imageURLdashboard: '/images/tournament.png',
         peopleBought: [],
         timeBought: 0,
+        currentDate,
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -150,6 +156,7 @@ const products = [
         workingTime: new Date(),
         timeBought: 0,
         keys: {},
+        currentDate,
         changes: [
             {
                 version: '1,01',

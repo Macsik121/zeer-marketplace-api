@@ -99,7 +99,7 @@ const typeDefs = `
         activelyUntil: Date!
         title: String!
         productFor: String!
-        imageURL: String!
+        imageURL: String
     }
 
     type Subscriptions {
@@ -115,7 +115,7 @@ const typeDefs = `
         password: String
         avatar: String
         registeredDate: Date
-        subscriptions: [Subscription!]!
+        subscriptions: [Subscription]!
         isAdmin: Boolean
     }
 
@@ -137,6 +137,7 @@ const typeDefs = `
         header: String!
         peopleBought: [User]!
         timeBought: Int
+        currentDate: Date
     }
 
     type Query {
@@ -166,6 +167,8 @@ const typeDefs = `
         changePassword(name: String!, oldPassword: String!, newPassword: String!): String!
         buyProduct(title: String!, name: String!): Product!
         updateBoughtIcon(name: String!): [Product!]!
+        freezeSubscription(name: String!, title: String!): User!
+        unfreezeSubscription(name: String!, title: String!): User!
     }
 `;
 

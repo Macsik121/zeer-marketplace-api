@@ -3,8 +3,19 @@ const {getDb} = require('./db');
 async function getProducts() {
     try {
         const db = getDb();
-        const products = db.collection('products').find().toArray();
-        return products;    
+        const products = await db.collection('products').find().toArray();
+        // let isUpdated = false;
+        // products.map(product => {
+        //     if (new Date(product.currentDate).getDate() - new Date().getDate() <= 1) {
+        //         isUpdated = true;
+        //         product.currentDate = new Date();
+        //         product.timeBought = 0;
+        //     }
+        // });
+        // if (isUpdated) {
+        //     await db.collection('products').updateMany({}, { $set: { timeBought: 0 } })
+        // }
+        return products;
     } catch (error) {
         console.log(error);
     }
@@ -44,21 +55,20 @@ async function getPopularProducts() {
                     .toArray()
             );
             // const popularProductsCopy = popularProducts.slice();
-            // popularProducts = [];
-            // for(let i = 0; i < popularProductsCopy.length; i++) {
-            //     if (i < 3) {
-            //         const product = popularProductsCopy[i]
-            //         if (product.timeBought > 0) {
-            //             popularProducts.unshift(product);
-            //         } else if (
-            //             product.timeBought < 0
-            //         ) {
-            //             popularProducts.unshift(product);
-            //         }    
+            // let notBoughtTimes = popularProductsCopy.length;
+            // let resultTimes = 0;
+            // popularProductsCopy.map(product => {
+            //     if (product.timeBought < 1) {
+            //         resultTimes++;
             //     }
+            // });
+            // if (resultTimes == notBoughtTimes) {
+            //     popularProductsCopy.map((product, i) => {
+            //         popularProducts.unshift(product);
+            //     });
             // }
-            // console.log(popularProducts);
         }
+        console.log(popularProducts);
         return popularProducts;
     } catch (error) {
         console.log(error);
@@ -104,11 +114,12 @@ async function buyProduct(_, { title, name }) {
                     }
                 } }
             );
-            await db.collection('products').findOneAndUpdate(
+            const res = await db.collection('products').findOneAndUpdate(
                 { title },
                 { $inc: { timeBought: 1 } },
                 { returnOriginal: false }
             );
+            console.log(res.value);
         }
         return boughtProduct ? boughtProduct.value : product;
     } catch(e) {
@@ -143,10 +154,68 @@ async function updateBoughtIcon(_, { name }) {
     }
 }
 
+async function freezeSubscripiton(_, { name, title }) {
+    try {
+        const db = getDb();
+        const user = await db.collection('users').findOne({ name });
+        user.subscriptions = user.subscriptions.map(sub => {
+            if (sub.title == title) {
+                sub.status = {
+                    isActive: false,
+                    isExpired: false,
+                    isFreezed: true
+                };
+            }
+            return sub;
+        });
+        const newUser = (
+            await db.collection('users').findOneAndUpdate(
+                { name },
+                { $set: { subscriptions: user.subscriptions } },
+                { returnNewDocument: true }
+            )
+        )
+        return newUser.value;
+    } catch (error) {
+        console.log();
+    }
+}
+
+async function unfreezeSubscription(_, { name, title }) {
+    try {
+        const db = getDb();
+        const user = await db.collection('users').findOne({ name });
+        console.log(user);
+        user.subscriptions.map(sub => {
+            console.log(sub.title);
+            if (sub.title == title) {
+                sub.status = {
+                    isActive: true,
+                    isExpired: false,
+                    isFreezed: false
+                };
+            }
+            return sub;
+        });
+        const newUser = (
+            await db.collection('users').findOneAndUpdate(
+                { name },
+                { $set: { subscriptions: user.subscriptions } },
+                { returnNewDocument: true }
+            )
+        )
+        return newUser.value;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProducts,
     getPopularProducts,
     getProduct,
     buyProduct,
-    updateBoughtIcon
+    updateBoughtIcon,
+    freezeSubscripiton,
+    unfreezeSubscription
 };

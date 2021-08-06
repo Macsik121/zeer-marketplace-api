@@ -286,7 +286,7 @@ async function getSubscriptions(_, { name }) {
 async function getUsers() {
     const db = getDb();
 
-    return await db.collection('users').find({}).toArray();
+    return await db.collection('users').find().toArray();
 }
 
 module.exports = {
