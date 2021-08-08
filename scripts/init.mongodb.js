@@ -1,4 +1,5 @@
 const currentDate = new Date();
+const logo = '/images/trash.jpg';
 const products = [
     {
         id: 1,
@@ -46,10 +47,11 @@ const products = [
             }
         ],
         imageURL: '/images/hwid-spoofer.png',
-        imageURLdashboard: '/images/apex-legends.png',
-        description: 'Действительно, алеаторика дает цикл...',
-        avatar: '/images/apex-logo.png',
-        reloading: 'week',
+        imageURLdashboard: '/images/morgh.jpg',
+        description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
+        logo,
+        reloading: 'Еженедельно',
+        locks: 0,
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -64,14 +66,17 @@ const products = [
         title: 'zeer-changer',
         productFor: 'CS:GO',
         costPerDay: 10,
-        description: 'Действительно, алеаторика дает цикл...',
+        description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
         changes: [],
         imageURL: '/images/zeer-changer.png',
-        imageURLdashboard: '/images/CS-GO.png',
+        imageURLdashboard: "/images/i'm10.jpg",
         workingTime: new Date('2021-07-19T15:32:46.991+00:00'),
         peopleBought: [],
         timeBought: 0,
         currentDate,
+        locks: 0,
+        logo,
+        reloading: 'Еженедельно',
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -86,14 +91,17 @@ const products = [
         title: 'Damage Plus',
         productFor: 'Cross Fire',
         costPerDay: 15,
-        description: 'Действительно, алеаторика дает цикл...',
+        description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
         workingTime: new Date(),
         changes: [],
         imageURL: '/images/tournament.png',
-        imageURLdashboard: '/images/damage_plus.png',
+        logo,
+        imageURLdashboard: '/images/graphics-card.jpg',
         peopleBought: [],
         timeBought: 0,
         currentDate,
+        locks: 0,
+        reloading: 'Еженедельно',
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -108,14 +116,17 @@ const products = [
         title: 'esp + wallhack',
         productFor: 'Unknown',
         costPerDay: 14,
-        description: 'Действительно, алеаторика дает цикл...',
+        description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
         workingTime: new Date(),
         changes: [],
         imageURL: '/images/esp_wallhack.png',
         imageURLdashboard: '/images/esp_wallhack.png',
+        logo,
         peopleBought: [],
         timeBought: 0,
         currentDate,
+        locks: 0,
+        reloading: 'Еженедельно',
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -130,14 +141,17 @@ const products = [
         title: 'tournament',
         productFor: 'PUBG',
         costPerDay: 15,
-        description: 'Действительно, алеаторика дает цикл...',
+        description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
         workingTime: new Date(),
         changes: [],
         imageURL: '/images/tournament.png',
         imageURLdashboard: '/images/tournament.png',
+        logo,
         peopleBought: [],
         timeBought: 0,
         currentDate,
+        reloading: 'Еженедельно',
+        locks: 0,
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -150,7 +164,7 @@ const products = [
     {
         id: 6,
         title: 'Not HWID spoofer',
-        productFor: 'Not Apex Legends',
+        productFor: 'Apex',
         costPerDay: 20,
         peopleBought: [],
         workingTime: new Date(),
@@ -165,10 +179,11 @@ const products = [
             }
         ],
         imageURL: '/images/hwid-spoofer.png',
-        imageURLdashboard: '/images/apex-legends.png',
-        description: 'Lorem ipsum dolor sit amet consectetur...',
-        avatar: '/images/apex-logo.png',
-        reloading: 'week',
+        imageURLdashboard: '/images/graphics-card.jpg',
+        description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
+        logo,
+        reloading: 'Еженедельно',
+        locks: 0,
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -177,7 +192,62 @@ const products = [
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
         }
-    }
+    },
+    {
+        id: 7,
+        title: 'hwid spofer2',
+        productFor: 'Apex Legends',
+        costPerDay: 12,
+        peopleBought: [],
+        workingTime: new Date(),
+        timeBought: 0,
+        currentDate,
+        keys: {
+            active: [
+                {
+                    name: 'random_key_title',
+                    expiredIn: 3,
+                    activationsAmount: 1,
+                    amountKeysToAdd: 20
+                },
+                {
+                    name: 'random_key_title2',
+                    expiredInDays: 3
+                }
+            ]
+        },
+        changes: [
+            {
+                version: '1,1',
+                created: new Date(),
+                description: 'I want something just like this'
+            },
+            {
+                version: '1,03',
+                created: new Date('2021-07-19T15:31:42.991+00:00'),
+                description: 'asdf'
+            },
+            {
+                version: '1,02',
+                created: new Date(),
+                description: 'asdf'
+            }
+        ],
+        imageURL: '/images/hwid-spoofer.png',
+        imageURLdashboard: '/images/morgh.jpg',
+        description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
+        logo,
+        reloading: 'Еженедельно',
+        locks: 0,
+        characteristics: {
+            version: 'Все у кого есть античит BE / EAC',
+            osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
+            cpuSupport: ['Intel', 'AMD'],
+            gameMode: 'Любой',
+            developer: 'Zeer',
+            supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
+        }
+    },
 ];
 
 const answers = [

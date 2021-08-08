@@ -126,7 +126,7 @@ const typeDefs = `
         costPerDay: Int
         imageURL: String
         imageURLdashboard: String
-        avatar: String
+        logo: String
         reloading: String
         workingTime: Date
         characteristics: Characteristics

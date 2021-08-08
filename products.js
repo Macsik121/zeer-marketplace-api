@@ -21,7 +21,7 @@ async function getProducts() {
     }
 }
 
-async function getPopularProducts() {
+async function getPopularProducts(_, { name }) {
     try {
         const db = getDb();
         let popularProducts = (
@@ -68,6 +68,14 @@ async function getPopularProducts() {
             //     });
             // }
         }
+        // let updateProducts = false;
+        // popularProducts.map(product => {
+        //     product.subscriptions.map(sub => {
+        //         if () {
+
+        //         }
+        //     });
+        // });
         console.log(popularProducts);
         return popularProducts;
     } catch (error) {
