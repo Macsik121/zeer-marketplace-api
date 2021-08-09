@@ -293,7 +293,6 @@ async function getResetRequests(_, { name }) {
         const db = getDb();
         const user = await db.collection('users').findOne({ name });
 
-
         return user.resetRequests;
     } catch (error) {
         console.log(error);

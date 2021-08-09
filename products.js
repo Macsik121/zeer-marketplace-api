@@ -3,19 +3,7 @@ const {getDb} = require('./db');
 async function getProducts() {
     try {
         const db = getDb();
-        const products = await db.collection('products').find().toArray();
-        // let isUpdated = false;
-        // products.map(product => {
-        //     if (new Date(product.currentDate).getDate() - new Date().getDate() <= 1) {
-        //         isUpdated = true;
-        //         product.currentDate = new Date();
-        //         product.timeBought = 0;
-        //     }
-        // });
-        // if (isUpdated) {
-        //     await db.collection('products').updateMany({}, { $set: { timeBought: 0 } })
-        // }
-        return products;
+        return await db.collection('products').find().toArray();
     } catch (error) {
         console.log(error);
     }
@@ -41,19 +29,19 @@ async function getPopularProducts(_, { name }) {
                 ])
                 .toArray()
         );
-        if (popularProducts.length < 1) {
-            popularProducts = (
-                await db
-                    .collection('products')
-                    .aggregate([
-                        {
-                            $sort: {
-                                timeBought: -1
-                            }
-                        }
-                    ])
-                    .toArray()
-            );
+        // if (popularProducts.length < 1) {
+        //     popularProducts = (
+        //         await db
+        //             .collection('products')
+        //             .aggregate([
+        //                 {
+        //                     $sort: {
+        //                         timeBought: -1
+        //                     }
+        //                 }
+        //             ])
+        //             .toArray()
+        //     );
             // const popularProductsCopy = popularProducts.slice();
             // let notBoughtTimes = popularProductsCopy.length;
             // let resultTimes = 0;
@@ -67,7 +55,7 @@ async function getPopularProducts(_, { name }) {
             //         popularProducts.unshift(product);
             //     });
             // }
-        }
+        // }
         // let updateProducts = false;
         // popularProducts.map(product => {
         //     product.subscriptions.map(sub => {

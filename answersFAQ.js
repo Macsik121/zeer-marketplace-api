@@ -2,8 +2,7 @@ const { getDb } = require('./db');
 
 async function getAnswers() {
     const db = getDb();
-    const answers = await db.collection('answersFAQ').find({}).toArray();
-    return answers;
+    return await db.collection('answersFAQ').find({}).toArray();
 }
 
 async function rateAnswer(_, {title}) {
@@ -12,4 +11,4 @@ async function rateAnswer(_, {title}) {
     await db.collection('answersFAQ').updateOne({title}, {$set: {}});
 }
 
-module.exports = {getAnswers};
+module.exports = { getAnswers };
