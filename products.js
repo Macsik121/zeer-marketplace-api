@@ -29,41 +29,20 @@ async function getPopularProducts(_, { name }) {
                 ])
                 .toArray()
         );
-        // if (popularProducts.length < 1) {
-        //     popularProducts = (
-        //         await db
-        //             .collection('products')
-        //             .aggregate([
-        //                 {
-        //                     $sort: {
-        //                         timeBought: -1
-        //                     }
-        //                 }
-        //             ])
-        //             .toArray()
-        //     );
-            // const popularProductsCopy = popularProducts.slice();
-            // let notBoughtTimes = popularProductsCopy.length;
-            // let resultTimes = 0;
-            // popularProductsCopy.map(product => {
-            //     if (product.timeBought < 1) {
-            //         resultTimes++;
-            //     }
-            // });
-            // if (resultTimes == notBoughtTimes) {
-            //     popularProductsCopy.map((product, i) => {
-            //         popularProducts.unshift(product);
-            //     });
-            // }
-        // }
-        // let updateProducts = false;
-        // popularProducts.map(product => {
-        //     product.subscriptions.map(sub => {
-        //         if () {
-
-        //         }
-        //     });
-        // });
+        if (popularProducts.length < 1) {
+            popularProducts = (
+                await db
+                    .collection('products')
+                    .aggregate([
+                        {
+                            $sort: {
+                                timeBought: -1
+                            }
+                        }
+                    ])
+                    .toArray()
+            );
+        }
         return popularProducts;
     } catch (error) {
         console.log(error);
