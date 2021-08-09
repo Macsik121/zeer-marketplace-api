@@ -27,7 +27,6 @@ async function signUp(_, {email, name, password}) {
         );
         const allUsers = await db.collection('users').find({}).toArray();
         const hashedPassword = await bcrypt.hash(password, 12);
-        console.log(allUsers);
 
         if (existingUser && existingUser.name == name) {
             return {
@@ -289,6 +288,51 @@ async function getUsers() {
     return await db.collection('users').find().toArray();
 }
 
+async function getResetRequests(_, { name }) {
+    try {
+        const db = getDb();
+        const user = await db.collection('users').findOne({ name });
+
+
+        return user.resetRequests;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function makeResetRequest(_, { name, reason }) {
+    try {
+        const db = getDb();
+
+        const user = await db.collection('users').findOne({ name });
+        user.resetRequests.unshift({
+            number: ++user.resetRequests.slice().length,
+            reason,
+            date: new Date(),
+            status: 'waiting'
+        });
+
+        const updatedUser = (
+            await db
+                .collection('users')
+                .findOneAndUpdate(
+                    { name },
+                    {
+                        $set: {
+                            resetRequests: user.resetRequests
+                        }
+                    },
+                    { returnOriginal: false }
+                )
+        );
+        const { resetRequests } = updatedUser.value;
+
+        return resetRequests[resetRequests.length - 1];
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getUser,
     getUsers,
@@ -299,5 +343,7 @@ module.exports = {
     verifyToken,
     changePassword,
     changeAvatar,
-    getSubscriptions
+    getSubscriptions,
+    makeResetRequest,
+    getResetRequests
 };

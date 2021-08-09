@@ -94,6 +94,19 @@ const typeDefs = `
         keysToAddAmount: Int!
     }
 
+    enum ResetStatus {
+        waiting
+        done
+        unsuccessful
+    }
+
+    type ResetRequest {
+        number: Int!
+        reason: String!
+        date: Date!
+        status: ResetStatus!
+    }
+
     type Subscription {
         status: Status!
         activelyUntil: Date!
@@ -117,6 +130,7 @@ const typeDefs = `
         registeredDate: Date
         subscriptions: [Subscription]!
         isAdmin: Boolean
+        resetRequests: [ResetRequest]!
     }
 
     type Product {
@@ -151,6 +165,7 @@ const typeDefs = `
         getUsers: [User!]!
         getActionsLogs: [ActionLog!]!
         getKeys: [ProductKey!]!
+        getResetRequests(name: String!): [ResetRequest]!
     }
 
     type Mutation {
@@ -169,6 +184,7 @@ const typeDefs = `
         updateBoughtIcon(name: String!): [Product!]!
         freezeSubscription(name: String!, title: String!): User!
         unfreezeSubscription(name: String!, title: String!): User!
+        makeResetRequest(name: String!, reason: String!): ResetRequest!
     }
 `;
 

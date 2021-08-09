@@ -76,7 +76,6 @@ async function getPopularProducts(_, { name }) {
         //         }
         //     });
         // });
-        console.log(popularProducts);
         return popularProducts;
     } catch (error) {
         console.log(error);
@@ -127,11 +126,10 @@ async function buyProduct(_, { title, name }) {
                 { $inc: { timeBought: 1 } },
                 { returnOriginal: false }
             );
-            console.log(res.value);
         }
         return boughtProduct ? boughtProduct.value : product;
-    } catch(e) {
-        console.log(e);
+    } catch (error) {
+        console.log(error);
     }
 }
 
@@ -185,7 +183,7 @@ async function freezeSubscripiton(_, { name, title }) {
         )
         return newUser.value;
     } catch (error) {
-        console.log();
+        console.log(error);
     }
 }
 

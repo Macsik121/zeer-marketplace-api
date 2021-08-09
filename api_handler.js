@@ -33,7 +33,8 @@ const resolvers = {
         getSubscriptions: user.getSubscriptions,
         getAnswers: answers.getAnswers,
         getUsers: user.getUsers,
-        getActionsLogs: admin.getActionsLogs
+        getActionsLogs: admin.getActionsLogs,
+        getResetRequests: user.getResetRequests
     },
     Mutation: {
         signUp: user.signUp,
@@ -45,7 +46,8 @@ const resolvers = {
         buyProduct: products.buyProduct,
         updateBoughtIcon: products.updateBoughtIcon,
         freezeSubscription: products.freezeSubscripiton,
-        unfreezeSubscription: products.unfreezeSubscription
+        unfreezeSubscription: products.unfreezeSubscription,
+        makeResetRequest: user.makeResetRequest
     }
 }
 
