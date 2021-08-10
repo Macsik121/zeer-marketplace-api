@@ -54,7 +54,8 @@ async function signUp(_, {email, name, password}) {
             subscriptions: [],
             avatar: avatarBGs[Math.floor(Math.random() * avatarBGs.length)],
             isAdmin: false,
-            registeredDate: new Date()
+            registeredDate: new Date(),
+            resetRequests: []
         });
 
         const insertedId = createdUser.insertedId;
