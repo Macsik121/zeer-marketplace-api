@@ -11,6 +11,15 @@ async function getUser(_, { name }) {
             await db.collection('users').findOne({name}) ||
             await db.collection('users').findOne({email: name})
         )
+        if (!user) {
+            return {
+                name: '',
+                id: 0,
+                email: '',
+                subscriptions: [],
+                resetRequests: []
+            }
+        }
     
         return user;    
     } catch (error) {
@@ -18,7 +27,7 @@ async function getUser(_, { name }) {
     }
 }
 
-async function signUp(_, {email, name, password}) {
+async function signUp(_, { email, name, password }) {
     try {
         const db = getDb();
         const existingUser = (
@@ -46,8 +55,11 @@ async function signUp(_, {email, name, password}) {
 
         const avatarBGs = ['#c00', '#f60', '#6f6', '#03c', '#33f', '#60c', '#1E75FF'];
         
+        const id = ++allUsers[allUsers.length - 1].id || 1;
+        console.log(id);
+
         const createdUser = await db.collection('users').insertOne({
-            id: allUsers.length + 1,
+            id,
             name,
             email,
             password: hashedPassword,
@@ -286,7 +298,18 @@ async function getSubscriptions(_, { name }) {
 async function getUsers() {
     const db = getDb();
 
-    return await db.collection('users').find().toArray();
+    return (
+        await db
+            .collection('users')
+            .aggregate([
+                {
+                    $sort: {
+                        id: -1
+                    }
+                }
+            ])
+            .toArray()
+    );
 }
 
 async function getResetRequests(_, { name }) {
@@ -333,6 +356,25 @@ async function makeResetRequest(_, { name, reason }) {
     }
 }
 
+async function deleteUser(_, { name }) {
+    try {
+        const db = getDb();
+        await db.collection('users').deleteOne({ name });
+
+        return `Вы успешно удалили пользователя с именем ${name}`
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function editUser(_, args) {
+    try {
+        const db = getDb();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getUser,
     getUsers,
@@ -345,5 +387,6 @@ module.exports = {
     changeAvatar,
     getSubscriptions,
     makeResetRequest,
-    getResetRequests
+    getResetRequests,
+    deleteUser
 };

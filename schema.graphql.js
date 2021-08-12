@@ -185,6 +185,7 @@ const typeDefs = `
         freezeSubscription(name: String!, title: String!): User!
         unfreezeSubscription(name: String!, title: String!): User!
         makeResetRequest(name: String!, reason: String!): ResetRequest!
+        deleteUser(name: String!): String!
     }
 `;
 

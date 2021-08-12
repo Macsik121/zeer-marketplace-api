@@ -47,7 +47,8 @@ const resolvers = {
         updateBoughtIcon: products.updateBoughtIcon,
         freezeSubscription: products.freezeSubscripiton,
         unfreezeSubscription: products.unfreezeSubscription,
-        makeResetRequest: user.makeResetRequest
+        makeResetRequest: user.makeResetRequest,
+        deleteUser: user.deleteUser
     }
 }
 
