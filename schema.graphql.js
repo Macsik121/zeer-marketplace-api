@@ -147,7 +147,7 @@ const typeDefs = `
         description: String
         changes: [ProductChange]
         locks: Int
-        keys: [ProductKey]
+        keys: ProductsKeyTypes
         header: String!
         peopleBought: [User]!
         timeBought: Int

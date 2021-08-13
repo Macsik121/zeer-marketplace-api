@@ -6,21 +6,21 @@ const products = [
         title: 'hwid spoofer',
         productFor: 'Apex Legends',
         costPerDay: 12,
-        peopleBought: [],
         workingTime: new Date(),
         timeBought: 0,
         currentDate,
+        peopleBought: [],
         keys: {
             active: [
                 {
                     name: 'random_key_title',
-                    expiredIn: 3,
+                    expiredInDays: 3,
                     activationsAmount: 1,
-                    amountKeysToAdd: 20
                 },
                 {
                     name: 'random_key_title2',
-                    expiredInDays: 3
+                    expiredInDays: 3,
+                    activationsAmount: 3
                 }
             ]
         },
@@ -71,10 +71,10 @@ const products = [
         imageURL: '/images/zeer-changer.png',
         imageURLdashboard: "/images/i'm10.jpg",
         workingTime: new Date('2021-07-19T15:32:46.991+00:00'),
-        peopleBought: [],
         timeBought: 0,
         currentDate,
         locks: 0,
+        peopleBought: [],
         logo,
         reloading: 'Еженедельно',
         characteristics: {
@@ -97,10 +97,10 @@ const products = [
         imageURL: '/images/tournament.png',
         logo,
         imageURLdashboard: '/images/graphics-card.jpg',
-        peopleBought: [],
         timeBought: 0,
         currentDate,
         locks: 0,
+        peopleBought: [],
         reloading: 'Еженедельно',
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
@@ -122,10 +122,10 @@ const products = [
         imageURL: '/images/esp_wallhack.png',
         imageURLdashboard: '/images/esp_wallhack.png',
         logo,
-        peopleBought: [],
         timeBought: 0,
         currentDate,
         locks: 0,
+        peopleBought: [],
         reloading: 'Еженедельно',
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
@@ -147,11 +147,11 @@ const products = [
         imageURL: '/images/tournament.png',
         imageURLdashboard: '/images/tournament.png',
         logo,
-        peopleBought: [],
         timeBought: 0,
         currentDate,
         reloading: 'Еженедельно',
         locks: 0,
+        peopleBought: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -166,7 +166,6 @@ const products = [
         title: 'Not HWID spoofer',
         productFor: 'Apex',
         costPerDay: 20,
-        peopleBought: [],
         workingTime: new Date(),
         timeBought: 0,
         keys: {},
@@ -184,6 +183,7 @@ const products = [
         logo,
         reloading: 'Еженедельно',
         locks: 0,
+        peopleBought: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -198,7 +198,6 @@ const products = [
         title: 'hwid spofer2',
         productFor: 'Apex Legends',
         costPerDay: 12,
-        peopleBought: [],
         workingTime: new Date(),
         timeBought: 0,
         currentDate,
@@ -206,13 +205,13 @@ const products = [
             active: [
                 {
                     name: 'random_key_title',
-                    expiredIn: 3,
-                    activationsAmount: 1,
-                    amountKeysToAdd: 20
+                    expiredInDays: 3,
+                    activationsAmount: 1
                 },
                 {
                     name: 'random_key_title2',
-                    expiredInDays: 3
+                    expiredInDays: 3,
+                    activationsAmount: 2
                 }
             ]
         },
@@ -239,6 +238,7 @@ const products = [
         logo,
         reloading: 'Еженедельно',
         locks: 0,
+        peopleBought: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
