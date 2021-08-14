@@ -75,10 +75,10 @@ const typeDefs = `
     }
 
     type ProductKey {
-        name: String!
-        expiredInDays: Int!
-        activationsAmount: Int!
-        amountKeysToAdd: Int!
+        name: String
+        expiredInDays: Date
+        activationsAmount: Int
+        keysAmount: Int
     }
 
     type ProductsKeyTypes {
@@ -178,7 +178,7 @@ const typeDefs = `
         createLog(log: ActionLogInput): ActionLog!
         cleanLogs: String!
         editUser(name: String!): User!
-        createKey(key: KeyInput!): ProductKey!
+        createKey(key: KeyInput!, title: String!): ProductKey!
         changePassword(name: String!, oldPassword: String!, newPassword: String!): String!
         buyProduct(title: String!, name: String!): Product!
         updateBoughtIcon(name: String!): [Product!]!

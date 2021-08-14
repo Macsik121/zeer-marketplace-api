@@ -8,8 +8,8 @@ async function getUser(_, { name }) {
     try {
         const db = getDb();
         const user = (
-            await db.collection('users').findOne({name}) ||
-            await db.collection('users').findOne({email: name})
+            await db.collection('users').findOne({ name }) ||
+            await db.collection('users').findOne({ email: name })
         )
         if (!user) {
             return {

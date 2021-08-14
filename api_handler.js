@@ -48,7 +48,8 @@ const resolvers = {
         freezeSubscription: products.freezeSubscripiton,
         unfreezeSubscription: products.unfreezeSubscription,
         makeResetRequest: user.makeResetRequest,
-        deleteUser: user.deleteUser
+        deleteUser: user.deleteUser,
+        createKey: products.createKey
     }
 }
 

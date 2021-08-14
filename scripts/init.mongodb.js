@@ -11,18 +11,9 @@ const products = [
         currentDate,
         peopleBought: [],
         keys: {
-            active: [
-                {
-                    name: 'random_key_title',
-                    expiredInDays: 3,
-                    activationsAmount: 1,
-                },
-                {
-                    name: 'random_key_title2',
-                    expiredInDays: 3,
-                    activationsAmount: 3
-                }
-            ]
+            all: [],
+            active: [],
+            unactive: []
         },
         changes: [
             {
@@ -77,6 +68,11 @@ const products = [
         peopleBought: [],
         logo,
         reloading: 'Еженедельно',
+        keys: {
+            all: [],
+            active: [],
+            unactive: []
+        },
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -102,6 +98,11 @@ const products = [
         locks: 0,
         peopleBought: [],
         reloading: 'Еженедельно',
+        keys: {
+            all: [],
+            active: [],
+            unactive: []
+        },
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -127,6 +128,11 @@ const products = [
         locks: 0,
         peopleBought: [],
         reloading: 'Еженедельно',
+        keys: {
+            all: [],
+            active: [],
+            unactive: []
+        },
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -152,6 +158,11 @@ const products = [
         reloading: 'Еженедельно',
         locks: 0,
         peopleBought: [],
+        keys: {
+            all: [],
+            active: [],
+            unactive: []
+        },
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -168,7 +179,11 @@ const products = [
         costPerDay: 20,
         workingTime: new Date(),
         timeBought: 0,
-        keys: {},
+        keys: {
+            all: [],
+            active: [],
+            unactive: []
+        },
         currentDate,
         changes: [
             {
@@ -202,18 +217,9 @@ const products = [
         timeBought: 0,
         currentDate,
         keys: {
-            active: [
-                {
-                    name: 'random_key_title',
-                    expiredInDays: 3,
-                    activationsAmount: 1
-                },
-                {
-                    name: 'random_key_title2',
-                    expiredInDays: 3,
-                    activationsAmount: 2
-                }
-            ]
+            all: [],
+            active: [],
+            unactive: []
         },
         changes: [
             {

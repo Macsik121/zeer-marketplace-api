@@ -183,6 +183,50 @@ async function unfreezeSubscription(_, { name, title }) {
     }
 }
 
+async function createKey(_, { key, title }) {
+    try {
+        const db = getDb();
+        let {
+            name,
+            daysAmount,
+            activationsAmount,
+            keysToAddAmount
+        } = key;
+
+        let expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + daysAmount);
+        
+        const keysToAdd = {
+            name,
+            expiredInDays: expirationDate,
+            activationsAmount,
+            keysAmount: keysToAddAmount
+        };
+
+        const updatedProduct = (
+            await db
+                .collection('products')
+                .findOneAndUpdate(
+                    { title },
+                    {
+                        $push: {
+                            "keys.all": keysToAdd,
+                            "keys.active": keysToAdd
+                        }
+                    },
+                    {
+                        returnOriginal: false,
+                        multi: true
+                    }
+                )
+        )
+        const { all } = updatedProduct.value.keys;
+        return all[all.length - 1];
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProducts,
     getPopularProducts,
@@ -190,5 +234,6 @@ module.exports = {
     buyProduct,
     updateBoughtIcon,
     freezeSubscripiton,
-    unfreezeSubscription
+    unfreezeSubscription,
+    createKey
 };
