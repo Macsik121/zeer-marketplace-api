@@ -74,17 +74,30 @@ const typeDefs = `
         earnedToday: Int!
     }
 
+    type ProductPromocode {
+        name: String!
+        discountPercent: Int!
+        activationsAmount: Int!
+        isUsed: Boolean!
+    }
+
     type ProductKey {
         name: String
         expiredInDays: Date
         activationsAmount: Int
         keysAmount: Int
+        isUsed: Boolean!
     }
 
     type ProductsKeyTypes {
         active: [ProductKey]
         unactive: [ProductKey]
         all: [ProductKey]
+    }
+
+    type CreateKey {
+        key: ProductKey
+        message: String
     }
 
     input KeyInput {
@@ -152,6 +165,7 @@ const typeDefs = `
         peopleBought: [User]!
         timeBought: Int
         currentDate: Date
+        promocodes: [ProductPromocode]!
     }
 
     type Query {
@@ -166,6 +180,7 @@ const typeDefs = `
         getActionsLogs: [ActionLog!]!
         getKeys: [ProductKey!]!
         getResetRequests(name: String!): [ResetRequest]!
+        getPromocodes: [Product]!
     }
 
     type Mutation {
@@ -178,7 +193,9 @@ const typeDefs = `
         createLog(log: ActionLogInput): ActionLog!
         cleanLogs: String!
         editUser(name: String!): User!
-        createKey(key: KeyInput!, title: String!): ProductKey!
+        createKey(key: KeyInput!, title: String!): CreateKey
+        deleteKey(keyName: String!, title: String!): String!
+        deleteAllKeys(title: String!): String!
         changePassword(name: String!, oldPassword: String!, newPassword: String!): String!
         buyProduct(title: String!, name: String!): Product!
         updateBoughtIcon(name: String!): [Product!]!

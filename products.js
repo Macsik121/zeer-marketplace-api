@@ -193,6 +193,25 @@ async function createKey(_, { key, title }) {
             keysToAddAmount
         } = key;
 
+        const product = await db.collection('products').findOne({ title });
+        let isKeyExist = false;
+        console.log(product.keys)
+        if (product.keys.all.length > 0) {
+            for(let i = 0; i < product.keys.all.length; i++) {
+                const currentProduct = product.keys.all[i];
+                if (currentProduct.name == name) isKeyExist = true;
+            }
+        } else {
+            isKeyExist = false;
+        }
+
+        if (isKeyExist) {
+            return {
+                key: { name: '', daysAmount: 0, activationsAmount: 0, keysToAddAmount: 0 },
+                message: 'Такой ключ уже существует'
+            }
+        }
+
         let expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + daysAmount);
         
@@ -200,7 +219,8 @@ async function createKey(_, { key, title }) {
             name,
             expiredInDays: expirationDate,
             activationsAmount,
-            keysAmount: keysToAddAmount
+            keysAmount: keysToAddAmount,
+            isUsed: false
         };
 
         const updatedProduct = (
@@ -221,7 +241,67 @@ async function createKey(_, { key, title }) {
                 )
         )
         const { all } = updatedProduct.value.keys;
-        return all[all.length - 1];
+        return {
+            key: all[all.length - 1],
+            message: 'Вы успешно создали ключ'
+        };
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function deleteKey(_, { keyName, title }) {
+    try {
+        const db = getDb();
+
+        await db
+            .collection('products')
+            .updateOne(
+                { title },
+                {
+                    $pull: {
+                        'keys.all': { name: keyName },
+                        'keys.active': { name: keyName },
+                        'keys.unactive': { name: keyName }
+                    }
+                }
+            );
+        return 'Ключь успешно удалён';
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function deleteAllKeys(_, { title }) {
+    try {
+        const db = getDb();
+
+        await db
+            .collection('products')
+            .updateOne(
+                { title },
+                {
+                    $set: {
+                        keys: {
+                            all: [],
+                            active: [],
+                            unactive: []
+                        }
+                    }
+                }
+            );
+        
+        return `Вы успешно удалил все ключи у продукта ${title}`
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function createPromocode() {
+    try {
+        const db = getDb();
+
+        
     } catch (error) {
         console.log(error);
     }
@@ -235,5 +315,8 @@ module.exports = {
     updateBoughtIcon,
     freezeSubscripiton,
     unfreezeSubscription,
-    createKey
+    createKey,
+    deleteKey,
+    deleteAllKeys,
+    createPromocode
 };

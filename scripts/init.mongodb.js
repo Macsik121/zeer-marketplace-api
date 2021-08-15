@@ -43,6 +43,7 @@ const products = [
         logo,
         reloading: 'Еженедельно',
         locks: 0,
+        promocodes: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -73,6 +74,7 @@ const products = [
             active: [],
             unactive: []
         },
+        promocodes: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -103,6 +105,7 @@ const products = [
             active: [],
             unactive: []
         },
+        promocodes: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -133,6 +136,7 @@ const products = [
             active: [],
             unactive: []
         },
+        promocodes: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -163,6 +167,7 @@ const products = [
             active: [],
             unactive: []
         },
+        promocodes: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -199,6 +204,7 @@ const products = [
         reloading: 'Еженедельно',
         locks: 0,
         peopleBought: [],
+        promocodes: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -245,6 +251,7 @@ const products = [
         reloading: 'Еженедельно',
         locks: 0,
         peopleBought: [],
+        promocodes: [],
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
