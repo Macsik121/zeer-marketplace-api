@@ -105,7 +105,7 @@ const typeDefs = `
 
     type ProductKey {
         name: String
-        expiredInDays: Date
+        expiredInDays: Int
         activationsAmount: Int
         keysAmount: Int
         isUsed: Boolean!

@@ -195,7 +195,7 @@ async function createKey(_, { key, title }) {
 
         const product = await db.collection('products').findOne({ title });
         let isKeyExist = false;
-        console.log(product.keys)
+
         if (product.keys.all.length > 0) {
             for(let i = 0; i < product.keys.all.length; i++) {
                 const currentProduct = product.keys.all[i];
@@ -211,13 +211,10 @@ async function createKey(_, { key, title }) {
                 message: 'Такой ключ уже существует'
             }
         }
-
-        let expirationDate = new Date();
-        expirationDate.setDate(expirationDate.getDate() + daysAmount);
         
         const keysToAdd = {
             name,
-            expiredInDays: expirationDate,
+            expiredInDays: daysAmount,
             activationsAmount,
             keysAmount: keysToAddAmount,
             isUsed: false
@@ -324,7 +321,7 @@ async function createPromocode(_, { promocode, title }) {
                 name: '',
                 discountPercent: 0,
                 activationsAmount: 0,
-                expirationDays: new Date(),
+                expirationDays: 0,
                 isUsed: false
             };    
         }
