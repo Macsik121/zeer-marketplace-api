@@ -102,7 +102,7 @@ async function buyProduct(_, { title, name }) {
 
 async function getProduct(_, { title }) {
     const db = getDb();
-    return await db.collection('products').findOne({title});
+    return await db.collection('products').findOne({ title });;
 }
 
 async function updateBoughtIcon(_, { name }) {
@@ -297,11 +297,68 @@ async function deleteAllKeys(_, { title }) {
     }
 }
 
-async function createPromocode() {
+async function createPromocode(_, { promocode, title }) {
     try {
         const db = getDb();
 
-        
+        const {
+            name,
+            discountPercent,
+            activationsAmount,
+            expirationDays,
+            isUsed
+        } = promocode;
+
+        const product = await db.collection('products').findOne({ title });
+        let promocodeExists = false;
+
+        if (product && product.promocodes) {
+            for (let i = 0; i < product.promocodes.all.length; i++) {
+                const promo = product.promocodes.all[i];
+                if (promo.name == promocode.name) promocodeExists = true;
+            }
+        }
+
+        if (promocodeExists) {
+            return {
+                name: '',
+                discountPercent: 0,
+                activationsAmount: 0,
+                expirationDays: new Date(),
+                isUsed: false
+            };    
+        }
+
+        const updatedProduct = (
+            await db
+                .collection('products')
+                .findOneAndUpdate(
+                    { title },
+                    {
+                        $push: {
+                            'promocodes.all': {
+                                name,
+                                discountPercent,
+                                activationsAmount,
+                                expirationDays,
+                                isUsed
+                            },
+                            'promocodes.active': {
+                                name,
+                                discountPercent,
+                                activationsAmount,
+                                expirationDays,
+                                isUsed
+                            }
+                        }
+                    },
+                    { returnOriginal: false }
+                )
+        )
+
+        const newPromos = updatedProduct.value.promocodes.all;
+
+        return newPromos[newPromos.length - 1];
     } catch (error) {
         console.log(error);
     }

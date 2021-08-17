@@ -46,6 +46,13 @@ const typeDefs = `
         message: String!
     }
 
+    input AnswerInput {
+        title: String!
+        answer: String!
+        usefulRate: Int
+        rateCount: Int!
+    }
+
     type Answer {
         title: String!
         answer: String!
@@ -78,6 +85,21 @@ const typeDefs = `
         name: String!
         discountPercent: Int!
         activationsAmount: Int!
+        expirationDays: Date!
+        isUsed: Boolean!
+    }
+
+    type ProductPromocodes {
+        all: [ProductPromocode]
+        active: [ProductPromocode]
+        unactive: [ProductPromocode]
+    }
+
+    input ProductPromocodeInput {
+        name: String!
+        discountPercent: Int!
+        activationsAmount: Int!
+        expirationDays: Date!
         isUsed: Boolean!
     }
 
@@ -165,7 +187,7 @@ const typeDefs = `
         peopleBought: [User]!
         timeBought: Int
         currentDate: Date
-        promocodes: [ProductPromocode]!
+        promocodes: ProductPromocodes
     }
 
     type Query {
@@ -203,6 +225,11 @@ const typeDefs = `
         unfreezeSubscription(name: String!, title: String!): User!
         makeResetRequest(name: String!, reason: String!): ResetRequest!
         deleteUser(name: String!): String!
+        createPromocode(promocode: ProductPromocodeInput!, title: String!): ProductPromocode!
+        createAnswerSort(sort: String!): Answers!
+        deleteAnswerSort(sort: String!): String!
+        createAnswer(sort: String!, answer: AnswerInput!): Answer!
+        deleteAnswer(sort: String!, title: String!): String!
     }
 `;
 

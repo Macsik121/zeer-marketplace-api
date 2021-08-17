@@ -51,7 +51,12 @@ const resolvers = {
         deleteUser: user.deleteUser,
         createKey: products.createKey,
         deleteKey: products.deleteKey,
-        deleteAllKeys: products.deleteAllKeys
+        deleteAllKeys: products.deleteAllKeys,
+        createPromocode: products.createPromocode,
+        createAnswerSort: answers.createAnswerSort,
+        deleteAnswerSort: answers.deleteAnswerSort,
+        createAnswer: answers.createAnswer,
+        deleteAnswer: answers.deleteAnswer
     }
 }
 

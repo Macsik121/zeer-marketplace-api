@@ -43,7 +43,11 @@ const products = [
         logo,
         reloading: 'Еженедельно',
         locks: 0,
-        promocodes: [],
+        promocodes: {
+            all: [],
+            active: [],
+            unactive: []
+        },
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -74,7 +78,11 @@ const products = [
             active: [],
             unactive: []
         },
-        promocodes: [],
+        promocodes: {
+            all: [],
+            active: [],
+            unactive: []
+        },
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -105,7 +113,11 @@ const products = [
             active: [],
             unactive: []
         },
-        promocodes: [],
+        promocodes: {
+            all: [],
+            active: [],
+            unactive: []
+        },
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -136,7 +148,11 @@ const products = [
             active: [],
             unactive: []
         },
-        promocodes: [],
+        promocodes: {
+            all: [],
+            active: [],
+            unactive: []
+        },
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -167,7 +183,11 @@ const products = [
             active: [],
             unactive: []
         },
-        promocodes: [],
+        promocodes: {
+            all: [],
+            active: [],
+            unactive: []
+        },
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -204,7 +224,11 @@ const products = [
         reloading: 'Еженедельно',
         locks: 0,
         peopleBought: [],
-        promocodes: [],
+        promocodes: {
+            all: [],
+            active: [],
+            unactive: []
+        },
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
@@ -251,7 +275,11 @@ const products = [
         reloading: 'Еженедельно',
         locks: 0,
         peopleBought: [],
-        promocodes: [],
+        promocodes: {
+            all: [],
+            active: [],
+            unactive: []
+        },
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
