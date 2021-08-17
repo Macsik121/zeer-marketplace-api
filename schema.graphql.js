@@ -203,6 +203,7 @@ const typeDefs = `
         getKeys: [ProductKey!]!
         getResetRequests(name: String!): [ResetRequest]!
         getPromocodes: [Product]!
+        getSort(sort: String!): Answers!
     }
 
     type Mutation {

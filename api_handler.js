@@ -34,7 +34,8 @@ const resolvers = {
         getAnswers: answers.getAnswers,
         getUsers: user.getUsers,
         getActionsLogs: admin.getActionsLogs,
-        getResetRequests: user.getResetRequests
+        getResetRequests: user.getResetRequests,
+        getSort: answers.getSort
     },
     Mutation: {
         signUp: user.signUp,

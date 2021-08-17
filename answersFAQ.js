@@ -88,10 +88,21 @@ async function deleteAnswer(_, { sort, title }) {
     }
 }
 
+async function getSort(_, { sort }) {
+    try {
+        const db = getDb();
+
+        return await db.collection('answersFAQ').findOne({ sort });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getAnswers,
     createAnswerSort,
     deleteAnswerSort,
     createAnswer,
-    deleteAnswer
+    deleteAnswer,
+    getSort
 };
