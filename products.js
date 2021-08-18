@@ -204,21 +204,44 @@ async function createKey(_, { key, title }) {
         } else {
             isKeyExist = false;
         }
-
-        if (isKeyExist) {
-            return {
-                key: { name: '', daysAmount: 0, activationsAmount: 0, keysToAddAmount: 0 },
-                message: 'Такой ключ уже существует'
-            }
-        }
         
         const keysToAdd = {
             name,
             expiredInDays: daysAmount,
-            activationsAmount,
+            activationsAmount: 0,
             keysAmount: keysToAddAmount,
             isUsed: false
         };
+
+        if (isKeyExist) {
+            const result = (
+                await db
+                    .collection('products')
+                    .findOneAndUpdate(
+                        { title },
+                        {
+                            $inc: {
+                                'keys.all.$[key].keysAmount': keysToAddAmount
+                            }
+                        },
+                        {
+                            returnOriginal: false,
+                            arrayFilters: [
+                                {
+                                    key: name
+                                }
+                            ]
+                        }
+                    )
+            )
+
+            const { all } = result.value.keys;
+
+            return {
+                key: all[all.length - 1],
+                message: `Вы успешно добавили ${keysToAddAmount} ключей`
+            };
+        }
 
         const updatedProduct = (
             await db
@@ -361,6 +384,89 @@ async function createPromocode(_, { promocode, title }) {
     }
 }
 
+async function activateKey(_, { keyName, username }) {
+    try {
+        const db = getDb();
+
+        const allProducts = await db.collection('products').find().toArray();
+        let keyExists = false;
+        let message = '';
+        let matchedProduct = {};
+        let matchedKey = {};
+        for(let i = 0; i < allProducts.length; i++) {
+            const product = allProducts[i];
+            for(let j = 0; j < product.keys.all.length; j++) {
+                const key = product.keys.all[j];
+                let name;
+                if (!key) name = '';
+                else name = key.name;
+
+                if (name == keyName && key.activationsAmount < key.keysAmount) {
+                    keyExists = true;
+                    matchedProduct = product;
+                    matchedKey = key;
+                    product.keys.unactive.map(unactiveKey => {
+                        if (message != '' && unactiveKey.name == keyName) {
+                            message = 'Этот ключ уже нельзя активировать, так как количество ключей ограничено';
+                        } else {
+                            return;
+                        }
+                    });
+                } else if (key.activationsAmount >= key.keysAmount) {
+
+                }
+            }
+        }
+
+        if (message == '' && keyExists) {
+            matchedKey.isUsed = true;
+            buyProduct(_, { title: matchedProduct.title, name: username });
+            // await db
+            //     .collection('products')
+            //     .updateOne(
+            //         { title: matchedProduct.title },
+            //         {
+            //             $set: {
+            //                 'keys.all.$': {...matchedKey}
+            //             }
+            //         }
+            //     )
+            await db
+                .collection('products')
+                .updateOne(
+                    { title: matchedProduct.title },
+                    {
+                        $pull: {
+                            'keys.active': {
+                                name: matchedKey.name
+                            }
+                        }
+                    }
+                )
+
+            await db
+                .collection('products')
+                .updateOne(
+                    { title: matchedProduct.title },
+                    {
+                        $push: {
+                            'keys.unactive': matchedKey
+                        }
+                    }
+                )
+            message = `Поздравляем, вы успешно активировали ключ. Теперь у вас появилась подписка на ${matchedProduct.title}`;
+        }
+
+        if (keyExists) {
+            return message;
+        } else {
+            return 'Такого ключа не существует';
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProducts,
     getPopularProducts,
@@ -372,5 +478,6 @@ module.exports = {
     createKey,
     deleteKey,
     deleteAllKeys,
-    createPromocode
+    createPromocode,
+    activateKey
 };

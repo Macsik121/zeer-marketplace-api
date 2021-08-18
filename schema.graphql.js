@@ -1,5 +1,3 @@
-// working in Product is how much time a subscription exists
-
 const typeDefs = `
     scalar Date
 
@@ -231,6 +229,7 @@ const typeDefs = `
         deleteAnswerSort(sort: String!): String!
         createAnswer(sort: String!, answer: AnswerInput!): Answer!
         deleteAnswer(sort: String!, title: String!): String!
+        activateKey(keyName: String!, username: String!): String!
     }
 `;
 

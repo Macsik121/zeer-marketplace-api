@@ -57,7 +57,8 @@ const resolvers = {
         createAnswerSort: answers.createAnswerSort,
         deleteAnswerSort: answers.deleteAnswerSort,
         createAnswer: answers.createAnswer,
-        deleteAnswer: answers.deleteAnswer
+        deleteAnswer: answers.deleteAnswer,
+        activateKey: products.activateKey
     }
 }
 
