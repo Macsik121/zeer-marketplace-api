@@ -405,32 +405,42 @@ async function activateKey(_, { keyName, username }) {
                     keyExists = true;
                     matchedProduct = product;
                     matchedKey = key;
+                    matchedKey.activationsAmount++;
+                    matchedKey.isUsed = true;
                     product.keys.unactive.map(unactiveKey => {
                         if (message != '' && unactiveKey.name == keyName) {
                             message = 'Этот ключ уже нельзя активировать, так как количество ключей ограничено';
-                        } else {
-                            return;
                         }
                     });
-                } else if (key.activationsAmount >= key.keysAmount) {
-
+                } else if (key.activationsAmount > key.keysAmount) {
+                    message = 'Количество активаций на этот ключ законичлось';
                 }
             }
         }
 
         if (message == '' && keyExists) {
-            matchedKey.isUsed = true;
             buyProduct(_, { title: matchedProduct.title, name: username });
-            // await db
-            //     .collection('products')
-            //     .updateOne(
-            //         { title: matchedProduct.title },
-            //         {
-            //             $set: {
-            //                 'keys.all.$': {...matchedKey}
-            //             }
-            //         }
-            //     )
+            await db
+                .collection('products')
+                .updateOne(
+                    { title: matchedProduct.title },
+                    {
+                        $set: {
+                            'keys.all.$[key]': {
+                                ...matchedKey
+                            }
+                        }
+                    },
+                    {
+                        arrayFilters: [
+                            {
+                                'key.name': {
+                                    $eq: matchedKey.name
+                                }
+                            }
+                        ]
+                    }
+                )
             await db
                 .collection('products')
                 .updateOne(
