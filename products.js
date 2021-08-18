@@ -49,7 +49,15 @@ async function getPopularProducts(_, { name }) {
     }
 }
 
-async function buyProduct(_, { title, name }) {
+async function buyProduct(
+        _,
+        {
+            title,
+            name,
+            dateToSet = 7,
+            subscriptionExists = false
+        }
+    ) {
     try {
         const db = getDb();
         const user = await db.collection('users').findOne({ name });
@@ -65,15 +73,17 @@ async function buyProduct(_, { title, name }) {
             }
         }
         if (!userExists) {
-            boughtProduct = await db.collection('products').findOneAndUpdate(
+            boughtProduct = (
+                await db.collection('products').findOneAndUpdate(
                     { title },
                     { $push: { peopleBought: user } },
                     {
                         returnOriginal: false
                     }
+                )
             );
-            const activelyUntil = new Date();
-            activelyUntil.setDate(activelyUntil.getDate() + 7);
+            let activelyUntil = new Date();
+            activelyUntil.setDate(activelyUntil.getDate() + dateToSet);
             await db.collection('users').updateOne(
                 { name },
                 { $push: {
@@ -93,6 +103,42 @@ async function buyProduct(_, { title, name }) {
                 { $inc: { timeBought: 1 } },
                 { returnOriginal: false }
             );
+        } else {
+            let subIndex = 0;
+            for(let i = 0; i < user.subscriptions.length; i++) {
+                const currentSub = user.subscriptions[i];
+                if (currentSub.title == product.title) {
+                    subIndex == i;
+                    break;
+                }
+            }
+            activelyUntil = new Date(user.subscriptions[subIndex].activelyUntil);
+            activelyUntil.setDate(activelyUntil.getDate() + 30);
+            product.activelyUntil = activelyUntil;
+            console.log(product);
+            await db
+                .collection('users')
+                .updateOne(
+                    { name },
+                    {
+                        $set: {
+                            'subscriptions.all.$[key]': {
+                                status: { isActive: true },
+                                activelyUntil,
+                                title: product.title,
+                                productFor: product.productFor,
+                                imageURL: product.imageURL
+                            }
+                        }
+                    },
+                    {
+                        arrayFilters: [{
+                            'key.title': {
+                                $eq: title
+                            }
+                        }]
+                    }
+                )
         }
         return boughtProduct ? boughtProduct.value : product;
     } catch (error) {
@@ -158,9 +204,7 @@ async function unfreezeSubscription(_, { name, title }) {
     try {
         const db = getDb();
         const user = await db.collection('users').findOne({ name });
-        console.log(user);
         user.subscriptions.map(sub => {
-            console.log(sub.title);
             if (sub.title == title) {
                 sub.status = {
                     isActive: true,
@@ -419,7 +463,15 @@ async function activateKey(_, { keyName, username }) {
         }
 
         if (message == '' && keyExists) {
-            buyProduct(_, { title: matchedProduct.title, name: username });
+            buyProduct(
+                _,
+                {
+                    title: matchedProduct.title,
+                    name: username,
+                    dateToSet: 30,
+                    subscriptionExists: true
+                }
+            );
             await db
                 .collection('products')
                 .updateOne(
@@ -441,29 +493,30 @@ async function activateKey(_, { keyName, username }) {
                         ]
                     }
                 )
-            await db
-                .collection('products')
-                .updateOne(
-                    { title: matchedProduct.title },
-                    {
-                        $pull: {
-                            'keys.active': {
-                                name: matchedKey.name
+            if (matchedKey) {
+                await db
+                    .collection('products')
+                    .updateOne(
+                        { title: matchedProduct.title },
+                        {
+                            $pull: {
+                                'keys.active': {
+                                    name: matchedKey.name
+                                }
                             }
                         }
-                    }
-                )
-
-            await db
-                .collection('products')
-                .updateOne(
-                    { title: matchedProduct.title },
-                    {
-                        $push: {
-                            'keys.unactive': matchedKey
+                    )
+                await db
+                    .collection('products')
+                    .updateOne(
+                        { title: matchedProduct.title },
+                        {
+                            $push: {
+                                'keys.unactive': matchedKey
+                            }
                         }
-                    }
-                )
+                    )
+            }
             message = `Поздравляем, вы успешно активировали ключ. Теперь у вас появилась подписка на ${matchedProduct.title}`;
         }
 
