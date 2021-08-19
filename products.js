@@ -98,7 +98,7 @@ async function buyProduct(
                     }
                 } }
             );
-            const res = await db.collection('products').findOneAndUpdate(
+            await db.collection('products').findOneAndUpdate(
                 { title },
                 { $inc: { timeBought: 1 } },
                 { returnOriginal: false }
@@ -108,33 +108,27 @@ async function buyProduct(
             for(let i = 0; i < user.subscriptions.length; i++) {
                 const currentSub = user.subscriptions[i];
                 if (currentSub.title == product.title) {
-                    subIndex == i;
+                    subIndex = i;
                     break;
                 }
             }
+            let activelyUntil;
             activelyUntil = new Date(user.subscriptions[subIndex].activelyUntil);
             activelyUntil.setDate(activelyUntil.getDate() + 30);
             product.activelyUntil = activelyUntil;
-            console.log(product);
             await db
                 .collection('users')
                 .updateOne(
                     { name },
                     {
                         $set: {
-                            'subscriptions.all.$[key]': {
-                                status: { isActive: true },
-                                activelyUntil,
-                                title: product.title,
-                                productFor: product.productFor,
-                                imageURL: product.imageURL
-                            }
+                            'subscriptions.$[key].activelyUntil': activelyUntil
                         }
                     },
                     {
                         arrayFilters: [{
                             'key.title': {
-                                $eq: title
+                                $eq: product.title
                             }
                         }]
                     }
@@ -493,7 +487,30 @@ async function activateKey(_, { keyName, username }) {
                         ]
                     }
                 )
-            if (matchedKey) {
+
+            await db
+                .collection('products')
+                .updateOne(
+                    { title: matchedProduct.title },
+                    {
+                        $set: {
+                            'keys.active.$[key]': {
+                                ...matchedKey
+                            }
+                        }
+                    },
+                    {
+                        arrayFilters: [
+                            {
+                                'key.name': {
+                                    $eq: matchedKey.name
+                                }
+                            }
+                        ]
+                    }
+                )
+            
+            if (matchedKey.activationsAmount >= matchedKey.keysAmount) {
                 await db
                     .collection('products')
                     .updateOne(
