@@ -47,8 +47,6 @@ const typeDefs = `
     input AnswerInput {
         title: String!
         answer: String!
-        usefulRate: Int
-        rateCount: Int!
     }
 
     type Answer {
@@ -56,6 +54,7 @@ const typeDefs = `
         answer: String!
         usefulRate: Int
         rateCount: Int!
+        dateOfCreation: Date!
     }
 
     type Answers {

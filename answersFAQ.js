@@ -50,7 +50,12 @@ async function createAnswer(_, { sort, answer }) {
                     { sort },
                     {
                         $push: {
-                            answers: answer
+                            answers: {
+                                ...answer,
+                                usefulRate: 0,
+                                rateCount: 0,
+                                dateOfCreation: new Date()
+                            }
                         }
                     },
                     { returnOriginal: false }
