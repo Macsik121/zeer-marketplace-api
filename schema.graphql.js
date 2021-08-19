@@ -82,6 +82,7 @@ const typeDefs = `
         name: String!
         discountPercent: Int!
         activationsAmount: Int!
+        promocodesAmount: Int!
         expirationDays: Date!
         isUsed: Boolean!
     }

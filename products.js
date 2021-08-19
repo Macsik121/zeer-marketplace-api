@@ -397,7 +397,8 @@ async function createPromocode(_, { promocode, title }) {
                             'promocodes.all': {
                                 name,
                                 discountPercent,
-                                activationsAmount,
+                                activationsAmount: 0,
+                                promocodesAmount: activationsAmount,
                                 expirationDays,
                                 isUsed
                             },
