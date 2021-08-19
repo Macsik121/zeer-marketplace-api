@@ -225,6 +225,8 @@ const typeDefs = `
         makeResetRequest(name: String!, reason: String!): ResetRequest!
         deleteUser(name: String!): String!
         createPromocode(promocode: ProductPromocodeInput!, title: String!): ProductPromocode!
+        deletePromocode(productTitle: String!, promocodeTitle: String!): String!
+        deleteAllPromocodes(title: String!): Product!
         createAnswerSort(sort: String!): Answers!
         deleteAnswerSort(sort: String!): String!
         createAnswer(sort: String!, answer: AnswerInput!): Answer!

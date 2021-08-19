@@ -54,6 +54,8 @@ const resolvers = {
         deleteKey: products.deleteKey,
         deleteAllKeys: products.deleteAllKeys,
         createPromocode: products.createPromocode,
+        deletePromocode: products.deletePromocode,
+        deleteAllPromocodes: products.deleteAllPromocodes,
         createAnswerSort: answers.createAnswerSort,
         deleteAnswerSort: answers.deleteAnswerSort,
         createAnswer: answers.createAnswer,

@@ -422,6 +422,60 @@ async function createPromocode(_, { promocode, title }) {
     }
 }
 
+async function deletePromocode(_, { productTitle, promocodeTitle }) {
+    try {
+        const db = getDb();
+
+        await db
+            .collection('products')
+            .updateOne(
+                { title: productTitle },
+                {
+                    $pull: {
+                        'promocodes.all': {
+                            name: promocodeTitle
+                        },
+                        'promocodes.active': {
+                            name: promocodeTitle
+                        }
+                    }
+                }
+            )
+
+        return 'Промокод успешно удалён'
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function deleteAllPromocodes(_, { title }) {
+    try {
+        const db = getDb();
+
+        const result = (
+            await db
+                .collection('products')
+                .findOneAndUpdate(
+                    { title },
+                    {
+                        $set: {
+                            promocodes: {
+                                all: [],
+                                active: [],
+                                unactive: []
+                            }
+                        }
+                    },
+                    { returnOriginal: false }
+                )
+        );
+        
+        return result.value;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 async function activateKey(_, { keyName, username }) {
     try {
         const db = getDb();
@@ -558,6 +612,8 @@ module.exports = {
     createKey,
     deleteKey,
     deleteAllKeys,
+    deleteAllPromocodes,
+    activateKey,
     createPromocode,
-    activateKey
+    deletePromocode
 };
