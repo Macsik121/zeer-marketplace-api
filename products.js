@@ -251,58 +251,81 @@ async function createKey(_, { key, title }) {
             isUsed: false
         };
 
+        let updatedProduct = {};
+
         if (isKeyExist) {
-            const result = (
+            console.log(key);
+            updatedProduct = (
                 await db
                     .collection('products')
                     .findOneAndUpdate(
                         { title },
                         {
                             $inc: {
-                                'keys.all.$[key].keysAmount': keysToAddAmount
+                                'keys.all.$[key].keysAmount': activationsAmount
                             }
                         },
                         {
                             returnOriginal: false,
                             arrayFilters: [
                                 {
-                                    key: name
+                                    'key.name': {
+                                        $eq: name
+                                    }
                                 }
                             ]
                         }
                     )
+                    // .findOneAndUpdate(
+                    //     { title },
+                    //     {
+                    //         $inc: {
+                    //             'keys.all.$[key].keysAmount': keysToAddAmount
+                    //         }
+                    //     },
+                    //     {
+                    //         returnOriginal: false,
+                    //         arrayFilters: [
+                    //             {
+                    //                 'key.name': {
+                    //                     $eq: 'pwQZj-OZw5r'
+                    //                 }
+                    //             }
+                    //         ]
+                    //     }
+                    // )
             )
 
-            const { all } = result.value.keys;
-
+            const { all } = updatedProduct.value.keys;
             return {
                 key: all[all.length - 1],
                 message: `Вы успешно добавили ${keysToAddAmount} ключей`
             };
-        }
-
-        const updatedProduct = (
-            await db
-                .collection('products')
-                .findOneAndUpdate(
-                    { title },
-                    {
-                        $push: {
-                            "keys.all": keysToAdd,
-                            "keys.active": keysToAdd
+        } else {
+            updatedProduct = (
+                await db
+                    .collection('products')
+                    .findOneAndUpdate(
+                        { title },
+                        {
+                            $push: {
+                                "keys.all": keysToAdd,
+                                "keys.active": keysToAdd
+                            }
+                        },
+                        {
+                            returnOriginal: false,
+                            multi: true
                         }
-                    },
-                    {
-                        returnOriginal: false,
-                        multi: true
-                    }
-                )
-        )
-        const { all } = updatedProduct.value.keys;
-        return {
-            key: all[all.length - 1],
-            message: 'Вы успешно создали ключ'
-        };
+                    )
+            )
+
+            const { all } = updatedProduct.value.keys;
+            return {
+                key: all[all.length - 1],
+                message: 'Вы успешно создали ключ'
+            };
+        }
     } catch (error) {
         console.log(error);
     }
@@ -512,12 +535,13 @@ async function activateKey(_, { keyName, username }) {
         }
 
         if (message == '' && keyExists) {
+            console.log(matchedKey);
             buyProduct(
                 _,
                 {
                     title: matchedProduct.title,
                     name: username,
-                    dateToSet: 30,
+                    dateToSet: matchedKey.expiredInDays,
                     subscriptionExists: true
                 }
             );
