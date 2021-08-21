@@ -114,7 +114,7 @@ async function buyProduct(
             }
             let activelyUntil;
             activelyUntil = new Date(user.subscriptions[subIndex].activelyUntil);
-            activelyUntil.setDate(activelyUntil.getDate() + 30);
+            activelyUntil.setDate(activelyUntil.getDate() + dateToSet);
             product.activelyUntil = activelyUntil;
             await db
                 .collection('users')
@@ -509,6 +509,7 @@ async function activateKey(_, { keyName, username }) {
         let message = '';
         let matchedProduct = {};
         let matchedKey = {};
+        
         for(let i = 0; i < allProducts.length; i++) {
             const product = allProducts[i];
             for(let j = 0; j < product.keys.all.length; j++) {
