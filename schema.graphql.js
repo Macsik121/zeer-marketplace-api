@@ -158,6 +158,12 @@ const typeDefs = `
         overdue: [Subscription]
     }
 
+    type UserStatus {
+        isAdmin: Boolean
+        simpleUser: Boolean
+        isBanned: Boolean
+    }
+
     type User {
         id: Int
         name: String!
@@ -166,7 +172,7 @@ const typeDefs = `
         avatar: String
         registeredDate: Date
         subscriptions: [Subscription]!
-        isAdmin: Boolean
+        status: UserStatus
         resetRequests: [ResetRequest]!
     }
 

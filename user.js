@@ -66,7 +66,11 @@ async function signUp(_, { email, name, password, navigator }) {
             password: hashedPassword,
             subscriptions: [],
             avatar: avatarBGs[Math.floor(Math.random() * avatarBGs.length)],
-            isAdmin: false,
+            status: {
+                simpleUser: true,
+                isAdmin: false,
+                isBanned: false
+            },
             registeredDate: new Date(),
             resetRequests: []
         });
@@ -136,7 +140,7 @@ async function signIn(_, { email, password, rememberMe, navigator }) {
                     id: user._id,
                     name: user.name,
                     avatar: user.avatar,
-                    isAdmin: user.isAdmin
+                    status: user.status
                 },
                 '!@secretKey: Morgenshtern - Show@!'
             );
@@ -147,7 +151,7 @@ async function signIn(_, { email, password, rememberMe, navigator }) {
                     id: user._id,
                     name: user.name,
                     avatar: user.avatar,
-                    isAdmin: user.isAdmin
+                    status: user.status
                 },
                 '!@secretKey: Morgenshtern - Show@!',
                 { expiresIn: '3d' }
