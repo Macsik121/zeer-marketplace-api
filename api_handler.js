@@ -4,6 +4,7 @@ const products = require('./products');
 const user = require('./user');
 const answers = require('./answersFAQ');
 const admin = require('./admin');
+const actionLogs = require('./action-logs');
 const { GraphQLScalarType, Kind } = require('graphql');
 
 const dateScalar = new GraphQLScalarType({
@@ -33,9 +34,9 @@ const resolvers = {
         getSubscriptions: user.getSubscriptions,
         getAnswers: answers.getAnswers,
         getUsers: user.getUsers,
-        getActionsLogs: admin.getActionsLogs,
         getResetRequests: user.getResetRequests,
-        getSort: answers.getSort
+        getSort: answers.getSort,
+        getActionLogs: actionLogs.actionLogs
     },
     Mutation: {
         signUp: user.signUp,
@@ -43,7 +44,6 @@ const resolvers = {
         changeAvatar: user.changeAvatar,
         changePassword: user.changePassword,
         resetPassword: user.resetPassword,
-        createLog: admin.createLog,
         buyProduct: products.buyProduct,
         updateBoughtIcon: products.updateBoughtIcon,
         freezeSubscription: products.freezeSubscripiton,
@@ -60,7 +60,9 @@ const resolvers = {
         deleteAnswerSort: answers.deleteAnswerSort,
         createAnswer: answers.createAnswer,
         deleteAnswer: answers.deleteAnswer,
-        activateKey: products.activateKey
+        activateKey: products.activateKey,
+        createLog: actionLogs.createLog,
+        cleanLogs: actionLogs.cleanLogs
     }
 }
 

@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { getDb } = require('./db');
 const { sendMail } = require('./nodemailer');
+const createActionLog = require('./createLog');
+const createLog = require('./createLog');
 let token = '';
 
 async function getUser(_, { name }) {
@@ -27,7 +29,7 @@ async function getUser(_, { name }) {
     }
 }
 
-async function signUp(_, { email, name, password }) {
+async function signUp(_, { email, name, password, navigator }) {
     try {
         const db = getDb();
         const existingUser = (
@@ -56,7 +58,6 @@ async function signUp(_, { email, name, password }) {
         const avatarBGs = ['#c00', '#f60', '#6f6', '#03c', '#33f', '#60c', '#1E75FF'];
         
         const id = ++allUsers[allUsers.length - 1].id || 1;
-        console.log(id);
 
         const createdUser = await db.collection('users').insertOne({
             id,
@@ -73,6 +74,14 @@ async function signUp(_, { email, name, password }) {
         const insertedId = createdUser.insertedId;
 
         const user = await db.collection('users').findOne({_id: insertedId})
+
+        createActionLog(
+            {
+                name: user.name,
+                action: 'Регистрация на сайте'
+            },
+            navigator
+        );
 
         token = jwt.sign(
             {
@@ -96,7 +105,7 @@ async function signUp(_, { email, name, password }) {
     }
 }
 
-async function signIn(_, {email, password, rememberMe}) {
+async function signIn(_, { email, password, rememberMe, navigator }) {
     try {
         const db = getDb();
         const user = (
@@ -141,9 +150,17 @@ async function signIn(_, {email, password, rememberMe}) {
                     isAdmin: user.isAdmin
                 },
                 '!@secretKey: Morgenshtern - Show@!',
-                {expiresIn: '3d'}
+                { expiresIn: '3d' }
             )
         }
+
+        createActionLog(
+            {
+                name: user.name,
+                action: 'Вход в аккаунт на сайте'
+            },
+            navigator
+        );
 
         return {
             user,
@@ -155,7 +172,7 @@ async function signIn(_, {email, password, rememberMe}) {
     }
 }
 
-async function resetPassword(_, {email}) {
+async function resetPassword(_, { email }) {
     try {
         const db = getDb();
         const characters = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z", 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'g', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
@@ -323,7 +340,7 @@ async function getResetRequests(_, { name }) {
     }
 }
 
-async function makeResetRequest(_, { name, reason }) {
+async function makeResetRequest(_, { name, reason, navigator }) {
     try {
         const db = getDb();
 
@@ -349,6 +366,14 @@ async function makeResetRequest(_, { name, reason }) {
                 )
         );
         const { resetRequests } = updatedUser.value;
+
+        createLog(
+            {
+                name: user.name,
+                action: 'Подача заявки на сброс привязки'
+            },
+            navigator
+        );
 
         return resetRequests[resetRequests.length - 1];
     } catch (error) {

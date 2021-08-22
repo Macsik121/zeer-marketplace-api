@@ -1,6 +1,11 @@
 const typeDefs = `
     scalar Date
 
+    input NavigatorInput {
+        userAgent: String!
+        platform: String!
+    }
+
     type Status {
         isActive: Boolean
         isFreezed: Boolean
@@ -14,22 +19,21 @@ const typeDefs = `
     }
 
     type ActionLog {
+        id: Int!
         date: Date!
-        userName: String!
+        name: String!
         location: String!
         IP: String!
         browser: String!
-        OS: String!
+        platform: String!
         action: String!
     }
 
     input ActionLogInput {
         date: Date!
-        userName: String!
+        name: String!
         location: String!
         IP: String!
-        browser: String!
-        OS: String!
         action: String!
     }
 
@@ -197,41 +201,71 @@ const typeDefs = `
         getProduct(title: String!): Product!
         getAnswers: [Answers]
         getUsers: [User!]!
-        getActionsLogs: [ActionLog!]!
         getKeys: [ProductKey!]!
         getResetRequests(name: String!): [ResetRequest]!
         getPromocodes: [Product]!
         getSort(sort: String!): Answers!
+        getActionLogs: [ActionLog]!
     }
 
     type Mutation {
-        signUp(email: String!, name: String!, password: String!): Sign!
-        signIn(email: String!, password: String!, rememberMe: Boolean!): Sign!
+        signUp(
+            email: String!,
+            name: String!,
+            password: String!,
+            navigator: NavigatorInput
+        ): Sign!
+        signIn(
+            email: String!,
+            password: String!,
+            rememberMe: Boolean!,
+            navigator: NavigatorInput
+        ): Sign!
         resetPassword(email: String!): Reset!
         changeAvatar(name: String!, avatar: String!): String!
-        logout: String!
+        logout(navigator: NavigatorInput): String!
         rateAnswer(title: String!): Answer!
-        createLog(log: ActionLogInput): ActionLog!
+        createLog(log: ActionLogInput, navigator: NavigatorInput): ActionLog!
         cleanLogs: String!
         editUser(name: String!): User!
-        createKey(key: KeyInput!, title: String!): CreateKey
-        deleteKey(keyName: String!, title: String!): String!
-        deleteAllKeys(title: String!): String!
+        createKey(
+            key: KeyInput!,
+            title: String!,
+            navigator: NavigatorInput,
+            username: String!
+        ): CreateKey
+        deleteKey(
+            keyName: String!,
+            title: String!,
+            navigator: NavigatorInput,
+            name: String!
+        ): String!
+        deleteAllKeys(title: String!, navigator: NavigatorInput): String!
         changePassword(name: String!, oldPassword: String!, newPassword: String!): String!
-        buyProduct(title: String!, name: String!): Product!
+        buyProduct(title: String!, name: String!, navigator: NavigatorInput): Product!
         updateBoughtIcon(name: String!): [Product!]!
         freezeSubscription(name: String!, title: String!): User!
         unfreezeSubscription(name: String!, title: String!): User!
-        makeResetRequest(name: String!, reason: String!): ResetRequest!
+        makeResetRequest(name: String!, reason: String!, navigator: NavigatorInput): ResetRequest!
         deleteUser(name: String!): String!
-        createPromocode(promocode: ProductPromocodeInput!, title: String!): ProductPromocode!
-        deletePromocode(productTitle: String!, promocodeTitle: String!): String!
-        deleteAllPromocodes(title: String!): Product!
+        createPromocode(
+            promocode: ProductPromocodeInput!,
+            title: String!,
+            navigator: NavigatorInput,
+            username: String!
+        ): ProductPromocode!
+        deletePromocode(
+            productTitle: String!,
+            promocodeTitle: String!,
+            navigator: NavigatorInput,
+            name: String!
+        ): String!
+        deleteAllPromocodes(title: String!, navigator: NavigatorInput): Product!
         createAnswerSort(sort: String!): Answers!
         deleteAnswerSort(sort: String!): String!
         createAnswer(sort: String!, answer: AnswerInput!): Answer!
         deleteAnswer(sort: String!, title: String!): String!
-        activateKey(keyName: String!, username: String!): String!
+        activateKey(keyName: String!, username: String!, navigator: NavigatorInput): String!
     }
 `;
 

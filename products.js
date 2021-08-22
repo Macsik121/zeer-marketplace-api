@@ -1,4 +1,5 @@
-const {getDb} = require('./db');
+const { getDb } = require('./db');
+const createLog = require('./createLog');
 
 async function getProducts() {
     try {
@@ -55,7 +56,9 @@ async function buyProduct(
             title,
             name,
             dateToSet = 7,
-            subscriptionExists = false
+            subscriptionExists = false,
+            navigator,
+            inActivateKey = false
         }
     ) {
     try {
@@ -133,6 +136,15 @@ async function buyProduct(
                         }]
                     }
                 )
+        }
+        if (!inActivateKey) {
+            createLog(
+                {
+                    name: user.name,
+                    action: `Покупка продукта ${title}`
+                },
+                navigator
+            );    
         }
         return boughtProduct ? boughtProduct.value : product;
     } catch (error) {
@@ -221,7 +233,7 @@ async function unfreezeSubscription(_, { name, title }) {
     }
 }
 
-async function createKey(_, { key, title }) {
+async function createKey(_, { key, title, navigator, username }) {
     try {
         const db = getDb();
         let {
@@ -254,7 +266,6 @@ async function createKey(_, { key, title }) {
         let updatedProduct = {};
 
         if (isKeyExist) {
-            console.log(key);
             updatedProduct = (
                 await db
                     .collection('products')
@@ -276,27 +287,18 @@ async function createKey(_, { key, title }) {
                             ]
                         }
                     )
-                    // .findOneAndUpdate(
-                    //     { title },
-                    //     {
-                    //         $inc: {
-                    //             'keys.all.$[key].keysAmount': keysToAddAmount
-                    //         }
-                    //     },
-                    //     {
-                    //         returnOriginal: false,
-                    //         arrayFilters: [
-                    //             {
-                    //                 'key.name': {
-                    //                     $eq: 'pwQZj-OZw5r'
-                    //                 }
-                    //             }
-                    //         ]
-                    //     }
-                    // )
             )
 
             const { all } = updatedProduct.value.keys;
+            
+            createLog(
+                {
+                    name: username,
+                    action: `Добавление ключа ${name}`
+                },
+                navigator
+            );
+
             return {
                 key: all[all.length - 1],
                 message: `Вы успешно добавили ${keysToAddAmount} ключей`
@@ -321,6 +323,15 @@ async function createKey(_, { key, title }) {
             )
 
             const { all } = updatedProduct.value.keys;
+
+            createLog(
+                {
+                    name: username,
+                    action: `Добавление ключа ${name}`
+                },
+                navigator
+            );
+
             return {
                 key: all[all.length - 1],
                 message: 'Вы успешно создали ключ'
@@ -331,7 +342,7 @@ async function createKey(_, { key, title }) {
     }
 }
 
-async function deleteKey(_, { keyName, title }) {
+async function deleteKey(_, { keyName, title, navigator, name }) {
     try {
         const db = getDb();
 
@@ -347,6 +358,14 @@ async function deleteKey(_, { keyName, title }) {
                     }
                 }
             );
+        
+        createLog(
+            {
+                name,
+                action: `Удаление ключа ${keyName}`
+            },
+            navigator
+        );
         return 'Ключь успешно удалён';
     } catch (error) {
         console.log(error);
@@ -378,7 +397,7 @@ async function deleteAllKeys(_, { title }) {
     }
 }
 
-async function createPromocode(_, { promocode, title }) {
+async function createPromocode(_, { promocode, title, navigator, username }) {
     try {
         const db = getDb();
 
@@ -440,13 +459,21 @@ async function createPromocode(_, { promocode, title }) {
 
         const newPromos = updatedProduct.value.promocodes.all;
 
+        createLog(
+            {
+                name: username,
+                action: `Создание промокода ${name}`
+            },
+            navigator
+        );
+
         return newPromos[newPromos.length - 1];
     } catch (error) {
         console.log(error);
     }
 }
 
-async function deletePromocode(_, { productTitle, promocodeTitle }) {
+async function deletePromocode(_, { productTitle, promocodeTitle, navigator, name }) {
     try {
         const db = getDb();
 
@@ -466,6 +493,14 @@ async function deletePromocode(_, { productTitle, promocodeTitle }) {
                 }
             )
 
+        createLog(
+            {
+                name,
+                action: `Удаление промокода ${promocodeTitle}`
+            },
+            navigator
+        );
+        
         return 'Промокод успешно удалён'
     } catch (error) {
         console.log(error);
@@ -500,7 +535,7 @@ async function deleteAllPromocodes(_, { title }) {
     }
 }
 
-async function activateKey(_, { keyName, username }) {
+async function activateKey(_, { keyName, username, navigator }) {
     try {
         const db = getDb();
 
@@ -536,14 +571,15 @@ async function activateKey(_, { keyName, username }) {
         }
 
         if (message == '' && keyExists) {
-            console.log(matchedKey);
             buyProduct(
                 _,
                 {
                     title: matchedProduct.title,
                     name: username,
                     dateToSet: matchedKey.expiredInDays,
-                    subscriptionExists: true
+                    subscriptionExists: true,
+                    navigator,
+                    inActivateKey: true
                 }
             );
             await db
@@ -618,6 +654,13 @@ async function activateKey(_, { keyName, username }) {
         }
 
         if (keyExists) {
+            createLog(
+                {
+                    name: username,
+                    action: 'Активирование ключа'
+                },
+                navigator
+            );
             return message;
         } else {
             return 'Такого ключа не существует';

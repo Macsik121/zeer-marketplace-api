@@ -15,4 +15,4 @@ function getDb() {
     return db;
 }
 
-module.exports = {connectToDb, getDb};
+module.exports = { connectToDb, getDb };
