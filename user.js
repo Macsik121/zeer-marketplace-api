@@ -344,16 +344,37 @@ async function getResetRequests(_, { name }) {
     }
 }
 
-async function makeResetRequest(_, { name, reason, navigator }) {
+async function makeResetRequest(
+    _,
+    {
+        name,
+        reason,
+        ip = 'localhost',
+        location = 'Москва',
+        navigator
+    }
+) {
     try {
         const db = getDb();
 
-        const user = await db.collection('users').findOne({ name });
+        const users = await db.collection('users').find().toArray();
+        let id = 1;
+        let user = {};
+        users.map(currentUser => {
+            if (currentUser.name == name) {
+                user = currentUser;
+            }
+            currentUser.resetRequests && currentUser.resetRequests.map(request => id++);
+        });
         user.resetRequests.unshift({
+            id,
+            owner: name,
             number: ++user.resetRequests.slice().length,
             reason,
             date: new Date(),
-            status: 'waiting'
+            status: 'waiting',
+            ip,
+            location
         });
 
         const updatedUser = (
@@ -404,6 +425,118 @@ async function editUser(_, args) {
     }
 }
 
+async function getResetBindings() {
+    try {
+        const db = getDb();
+
+        const users = (
+            await db
+                .collection('users')
+                .aggregate([
+                    {
+                        $sort: {
+                            id: -1
+                        }
+                    }
+                ])
+                .toArray()
+        );
+        const resetBindings = [];
+        users.map(user => {
+            user.resetRequests.map(reset => {
+                resetBindings.unshift(reset);
+            });
+        });
+        
+        return resetBindings;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function acceptResetBinding(_, { name, number }) {
+    try {
+        const db = getDb();
+
+        const user = await db.collection('users').findOne({ name });
+        user.resetRequests.map(request => {
+            if (request.number == number) {
+                request.status = 'done';
+            }
+        });
+
+        const updatedUser = (
+            await db
+                .collection('users')
+                .findOneAndUpdate(
+                    { name },
+                    {
+                        $set: {
+                            resetRequests: user.resetRequests
+                        }
+                    },
+                    { returnOriginal: false }
+                )
+        );
+
+        const { resetRequests } = updatedUser.value;
+        return resetRequests[resetRequests.length - 1];
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function rejectResetRequest(_, { name, number }) {
+    try {
+        const db = getDb();
+
+        await db
+            .collection('users')
+            .updateOne(
+                { name },
+                {
+                    $set: {
+                        'resetRequests.$[request].status': 'unsuccessful'
+                    }
+                },
+                {
+                    arrayFilters: [
+                        {
+                            'request.number': {
+                                $eq: number
+                            }
+                        }
+                    ]
+                }
+            );
+        
+        return 'Сброс привязки был успешно отколнён';
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function deleteAllResetRequests() {
+    try {
+        const db = getDb();
+
+        await db
+            .collection('users')
+            .updateMany(
+                {},
+                {
+                    $set: {
+                        resetRequests: []
+                    }
+                }
+            );
+
+        return 'Все запросы на сброс привязки успешно удалены';
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getUser,
     getUsers,
@@ -417,5 +550,9 @@ module.exports = {
     getSubscriptions,
     makeResetRequest,
     getResetRequests,
-    deleteUser
+    deleteUser,
+    getResetBindings,
+    acceptResetBinding,
+    rejectResetRequest,
+    deleteAllResetRequests
 };

@@ -138,10 +138,14 @@ const typeDefs = `
     }
 
     type ResetRequest {
+        id: Int!
         number: Int!
         reason: String!
         date: Date!
         status: ResetStatus!
+        owner: String!
+        ip: String!
+        location: String!
     }
 
     type Subscription {
@@ -171,9 +175,9 @@ const typeDefs = `
         password: String
         avatar: String
         registeredDate: Date
-        subscriptions: [Subscription]!
+        subscriptions: [Subscription]
         status: UserStatus
-        resetRequests: [ResetRequest]!
+        resetRequests: [ResetRequest]
     }
 
     type Product {
@@ -212,6 +216,7 @@ const typeDefs = `
         getPromocodes: [Product]!
         getSort(sort: String!): Answers!
         getActionLogs: [ActionLog]!
+        getAllBindings: [ResetRequest]!
     }
 
     type Mutation {
@@ -272,6 +277,9 @@ const typeDefs = `
         createAnswer(sort: String!, answer: AnswerInput!): Answer!
         deleteAnswer(sort: String!, title: String!): String!
         activateKey(keyName: String!, username: String!, navigator: NavigatorInput): String!
+        acceptResetBinding(name: String!, number: Int!): ResetRequest!
+        rejectResetBinding(name: String!, number: Int!): String!
+        deleteAllResetRequests: String!
     }
 `;
 

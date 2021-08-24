@@ -3,7 +3,6 @@ const typeDefs = require('./schema.graphql');
 const products = require('./products');
 const user = require('./user');
 const answers = require('./answersFAQ');
-const admin = require('./admin');
 const actionLogs = require('./action-logs');
 const { GraphQLScalarType, Kind } = require('graphql');
 
@@ -36,7 +35,8 @@ const resolvers = {
         getUsers: user.getUsers,
         getResetRequests: user.getResetRequests,
         getSort: answers.getSort,
-        getActionLogs: actionLogs.actionLogs
+        getActionLogs: actionLogs.actionLogs,
+        getAllBindings: user.getResetBindings
     },
     Mutation: {
         signUp: user.signUp,
@@ -62,7 +62,10 @@ const resolvers = {
         deleteAnswer: answers.deleteAnswer,
         activateKey: products.activateKey,
         createLog: actionLogs.createLog,
-        cleanLogs: actionLogs.cleanLogs
+        cleanLogs: actionLogs.cleanLogs,
+        acceptResetBinding: user.acceptResetBinding,
+        rejectResetBinding: user.rejectResetRequest,
+        deleteAllResetRequests: user.deleteAllResetRequests
     }
 }
 
