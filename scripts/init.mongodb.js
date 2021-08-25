@@ -6,7 +6,7 @@ const products = [
         title: 'hwid spoofer',
         productFor: 'Apex Legends',
         costPerDay: 12,
-        workingTime: new Date(),
+        workingTime: 'Больше 1 года',
         timeBought: 0,
         currentDate,
         peopleBought: [],
@@ -51,7 +51,7 @@ const products = [
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
-            cpuSupport: ['Intel', 'AMD'],
+            cpuSupport: 'Intel / AMD',
             gameMode: 'Любой',
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
@@ -66,7 +66,7 @@ const products = [
         changes: [],
         imageURL: '/images/zeer-changer.png',
         imageURLdashboard: "/images/i'm10.jpg",
-        workingTime: new Date('2021-07-19T15:32:46.991+00:00'),
+        workingTime: 'Больше 1 года',
         timeBought: 0,
         currentDate,
         locks: 0,
@@ -86,7 +86,7 @@ const products = [
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
-            cpuSupport: ['Intel', 'AMD'],
+            cpuSupport: 'Intel / AMD',
             gameMode: 'Любой',
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
@@ -98,7 +98,7 @@ const products = [
         productFor: 'Cross Fire',
         costPerDay: 15,
         description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
-        workingTime: new Date(),
+        workingTime: 'Больше 1 года',
         changes: [],
         imageURL: '/images/tournament.png',
         logo,
@@ -121,7 +121,7 @@ const products = [
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
-            cpuSupport: ['Intel', 'AMD'],
+            cpuSupport: 'Intel / AMD',
             gameMode: 'Любой',
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
@@ -133,7 +133,7 @@ const products = [
         productFor: 'Unknown',
         costPerDay: 14,
         description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
-        workingTime: new Date(),
+        workingTime: 'Больше 1 года',
         changes: [],
         imageURL: '/images/esp_wallhack.png',
         imageURLdashboard: '/images/esp_wallhack.png',
@@ -156,7 +156,7 @@ const products = [
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
-            cpuSupport: ['Intel', 'AMD'],
+            cpuSupport: 'Intel / AMD',
             gameMode: 'Любой',
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
@@ -168,7 +168,7 @@ const products = [
         productFor: 'PUBG',
         costPerDay: 15,
         description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
-        workingTime: new Date(),
+        workingTime: 'Больше 1 года',
         changes: [],
         imageURL: '/images/tournament.png',
         imageURLdashboard: '/images/tournament.png',
@@ -191,7 +191,7 @@ const products = [
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
-            cpuSupport: ['Intel', 'AMD'],
+            cpuSupport: 'Intel / AMD',
             gameMode: 'Любой',
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
@@ -202,7 +202,7 @@ const products = [
         title: 'Not HWID spoofer',
         productFor: 'Apex',
         costPerDay: 20,
-        workingTime: new Date(),
+        workingTime: 'Больше 1 года',
         timeBought: 0,
         keys: {
             all: [],
@@ -232,7 +232,7 @@ const products = [
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
-            cpuSupport: ['Intel', 'AMD'],
+            cpuSupport: 'Intel / AMD',
             gameMode: 'Любой',
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
@@ -243,7 +243,7 @@ const products = [
         title: 'hwid spofer2',
         productFor: 'Apex Legends',
         costPerDay: 12,
-        workingTime: new Date(),
+        workingTime: 'Больше 1 года',
         timeBought: 0,
         currentDate,
         keys: {
@@ -283,7 +283,7 @@ const products = [
         characteristics: {
             version: 'Все у кого есть античит BE / EAC',
             osSupport: 'Windows (x64 only): Windows 10 Only (stable build)',
-            cpuSupport: ['Intel', 'AMD'],
+            cpuSupport: 'Intel / AMD',
             gameMode: 'Любой',
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
@@ -388,7 +388,6 @@ const answers = [
 
 db.products.drop();
 db.products.insertMany(products);
-db.products.createIndex({ timeBought: 1 })
 
 db.answersFAQ.drop();
 db.answersFAQ.insertMany(answers);

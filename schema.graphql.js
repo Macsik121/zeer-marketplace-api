@@ -12,7 +12,19 @@ const typeDefs = `
         isExpired: Boolean
     }
 
+    input StatusInput {
+        isActive: Boolean
+        isFreezed: Boolean
+        isExpired: Boolean
+    }
+
     type ProductChange {
+        version: String!
+        created: Date!
+        description: String!
+    }
+
+    input ProductChangeInput {
         version: String!
         created: Date!
         description: String!
@@ -69,7 +81,16 @@ const typeDefs = `
     type Characteristics {
         version: String!
         osSupport: String!
-        cpuSupport: [String!]!
+        cpuSupport: String!
+        gameMode: String!
+        developer: String!
+        supportedAntiCheats: String!
+    }
+
+    input CharacteristicsInput {
+        version: String!
+        osSupport: String!
+        cpuSupport: String!
         gameMode: String!
         developer: String!
         supportedAntiCheats: String!
@@ -78,7 +99,7 @@ const typeDefs = `
     type ProductStatistics {
         allUsersAmount: Int!
         activeSubsOnproduct: Int!
-        locks: Int!
+        locks: Float!
         earnedToday: Int!
     }
 
@@ -91,21 +112,36 @@ const typeDefs = `
         isUsed: Boolean!
     }
 
+    input ProductPromocodeInput {
+        name: String!
+        discountPercent: Int!
+        activationsAmount: Int!
+        promocodesAmount: Int!
+        expirationDays: Date!
+        isUsed: Boolean!
+    }
+    
     type ProductPromocodes {
         all: [ProductPromocode]
         active: [ProductPromocode]
         unactive: [ProductPromocode]
     }
 
-    input ProductPromocodeInput {
-        name: String!
-        discountPercent: Int!
-        activationsAmount: Int!
-        expirationDays: Date!
-        isUsed: Boolean!
+    input ProductPromocodesInput {
+        all: [ProductPromocodeInput]
+        active: [ProductPromocodeInput]
+        unactive: [ProductPromocodeInput]
     }
 
     type ProductKey {
+        name: String
+        expiredInDays: Int
+        activationsAmount: Int
+        keysAmount: Int
+        isUsed: Boolean!
+    }
+
+    input ProductKeyInput {
         name: String
         expiredInDays: Int
         activationsAmount: Int
@@ -117,6 +153,12 @@ const typeDefs = `
         active: [ProductKey]
         unactive: [ProductKey]
         all: [ProductKey]
+    }
+
+    input ProductsKeyTypesInput {
+        active: [ProductKeyInput]
+        unactive: [ProductKeyInput]
+        all: [ProductKeyInput]
     }
 
     type CreateKey {
@@ -148,8 +190,27 @@ const typeDefs = `
         location: String!
     }
 
+    input ResetRequestInput {
+        id: Int!
+        number: Int!
+        reason: String!
+        date: Date!
+        status: ResetStatus!
+        owner: String!
+        ip: String!
+        location: String!
+    }
+
     type Subscription {
         status: Status!
+        activelyUntil: Date!
+        title: String!
+        productFor: String!
+        imageURL: String
+    }
+
+    input SubscriptionInput {
+        status: StatusInput!
         activelyUntil: Date!
         title: String!
         productFor: String!
@@ -168,6 +229,12 @@ const typeDefs = `
         isBanned: Boolean
     }
 
+    input UserStatusInput {
+        isAdmin: Boolean
+        simpleUser: Boolean
+        isBanned: Boolean
+    }
+
     type User {
         id: Int
         name: String!
@@ -180,6 +247,18 @@ const typeDefs = `
         resetRequests: [ResetRequest]
     }
 
+    input UserInput {
+        id: Int
+        name: String!
+        email: String!
+        password: String
+        avatar: String
+        registeredDate: Date
+        subscriptions: [SubscriptionInput]
+        status: UserStatusInput
+        resetRequests: [ResetRequestInput]
+    }
+
     type Product {
         id: Int
         title: String
@@ -189,17 +268,37 @@ const typeDefs = `
         imageURLdashboard: String
         logo: String
         reloading: String
-        workingTime: Date
+        workingTime: String
         characteristics: Characteristics
         description: String
         changes: [ProductChange]
         locks: Int
         keys: ProductsKeyTypes
-        header: String!
         peopleBought: [User]!
         timeBought: Int
         currentDate: Date
         promocodes: ProductPromocodes
+    }
+
+    input ProductInput {
+        id: Int
+        title: String
+        productFor: String
+        costPerDay: Int
+        imageURL: String
+        imageURLdashboard: String
+        logo: String
+        reloading: String
+        workingTime: String
+        characteristics: CharacteristicsInput
+        description: String
+        changes: [ProductChangeInput]
+        locks: Int
+        keys: ProductsKeyTypesInput
+        peopleBought: [UserInput]!
+        timeBought: Int
+        currentDate: Date
+        promocodes: ProductPromocodesInput
     }
 
     type Query {
@@ -280,6 +379,7 @@ const typeDefs = `
         acceptResetBinding(name: String!, number: Int!): ResetRequest!
         rejectResetBinding(name: String!, number: Int!): String!
         deleteAllResetRequests: String!
+        editProduct(product: ProductInput!): Product!
     }
 `;
 

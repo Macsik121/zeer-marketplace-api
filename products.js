@@ -670,6 +670,21 @@ async function activateKey(_, { keyName, username, navigator }) {
     }
 }
 
+async function editProduct(_, { product }) {
+    try {
+        const db = getDb();
+
+        const result = await db.collection('products').replaceOne(
+            { title: product.title },
+            product
+        );
+
+        return result.ops[0];
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProducts,
     getPopularProducts,
@@ -684,5 +699,6 @@ module.exports = {
     deleteAllPromocodes,
     activateKey,
     createPromocode,
-    deletePromocode
+    deletePromocode,
+    editProduct
 };

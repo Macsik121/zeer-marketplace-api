@@ -65,7 +65,8 @@ const resolvers = {
         cleanLogs: actionLogs.cleanLogs,
         acceptResetBinding: user.acceptResetBinding,
         rejectResetBinding: user.rejectResetRequest,
-        deleteAllResetRequests: user.deleteAllResetRequests
+        deleteAllResetRequests: user.deleteAllResetRequests,
+        editProduct: products.editProduct
     }
 }
 
