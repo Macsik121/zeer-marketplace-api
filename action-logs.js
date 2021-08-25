@@ -1,5 +1,5 @@
 const { getDb } = require('./db');
-const fetch = require('../ui/node_modules/isomorphic-fetch');
+const fetch = require('isomorphic-fetch');
 const detectBrowser = require('./detectBrowser');
 
 async function actionLogs() {
