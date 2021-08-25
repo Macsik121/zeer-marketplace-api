@@ -1,4 +1,5 @@
 const { getDb } = require('./db');
+const fetch = require('../ui/node_modules/isomorphic-fetch');
 const detectBrowser = require('./detectBrowser');
 
 async function actionLogs() {
@@ -42,6 +43,10 @@ async function createLog(
 
         const browser = detectBrowser(userAgent);
         const actionLogs = await db.collection('actionLogs').find().toArray();
+        let result = await fetch('http://ip-api.com/json');
+        result = await result.json();
+        IP = result.query;
+        location = result.city;
 
         const actionLog = {
             id: ++actionLogs.length,

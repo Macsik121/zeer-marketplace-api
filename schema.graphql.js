@@ -260,7 +260,7 @@ const typeDefs = `
     }
 
     type Product {
-        id: Int
+        id: String
         title: String
         productFor: String
         costPerDay: Int
@@ -272,19 +272,19 @@ const typeDefs = `
         characteristics: Characteristics
         description: String
         changes: [ProductChange]
-        locks: Int
+        locks: String
         keys: ProductsKeyTypes
         peopleBought: [User]!
-        timeBought: Int
+        timeBought: Float
         currentDate: Date
         promocodes: ProductPromocodes
     }
 
     input ProductInput {
-        id: Int
+        id: String
         title: String
         productFor: String
-        costPerDay: Int
+        costPerDay: Int!
         imageURL: String
         imageURLdashboard: String
         logo: String
@@ -293,7 +293,7 @@ const typeDefs = `
         characteristics: CharacteristicsInput
         description: String
         changes: [ProductChangeInput]
-        locks: Int
+        locks: String
         keys: ProductsKeyTypesInput
         peopleBought: [UserInput]!
         timeBought: Int
@@ -323,7 +323,8 @@ const typeDefs = `
             email: String!,
             name: String!,
             password: String!,
-            navigator: NavigatorInput
+            navigator: NavigatorInput,
+            IP: String!
         ): Sign!
         signIn(
             email: String!,
@@ -380,6 +381,8 @@ const typeDefs = `
         rejectResetBinding(name: String!, number: Int!): String!
         deleteAllResetRequests: String!
         editProduct(product: ProductInput!): Product!
+        deleteProduct(title: String!): String!
+        createProduct(product: ProductInput!): Product!
     }
 `;
 

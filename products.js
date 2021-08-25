@@ -685,6 +685,28 @@ async function editProduct(_, { product }) {
     }
 }
 
+async function deleteProduct(_, { title }) {
+    try {
+        const db = getDb();
+
+        await db.collection('products').deleteOne({ title });
+        return 'Продукт успешно удалён';
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function createProduct(_, { product }) {
+    try {
+        const db = getDb();
+
+        const result = await db.collection('products').insertOne(product);
+        return result;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProducts,
     getPopularProducts,
@@ -700,5 +722,7 @@ module.exports = {
     activateKey,
     createPromocode,
     deletePromocode,
-    editProduct
+    editProduct,
+    deleteProduct,
+    createProduct
 };

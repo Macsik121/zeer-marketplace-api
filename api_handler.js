@@ -66,7 +66,9 @@ const resolvers = {
         acceptResetBinding: user.acceptResetBinding,
         rejectResetBinding: user.rejectResetRequest,
         deleteAllResetRequests: user.deleteAllResetRequests,
-        editProduct: products.editProduct
+        editProduct: products.editProduct,
+        createProduct: products.createProduct,
+        deleteProduct: products.deleteProduct
     }
 }
 
