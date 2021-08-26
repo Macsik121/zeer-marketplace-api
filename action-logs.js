@@ -44,6 +44,7 @@ async function createLog(
         const browser = detectBrowser(userAgent);
         const actionLogs = await db.collection('actionLogs').find().toArray();
         let result = await fetch('http://www.geoplugin.net/json.gp');
+        console.log(result);
         result = await result.json();
         IP = result.geoplugin_request;
         location = result.geoplugin_city;
