@@ -43,11 +43,11 @@ async function createLog(
 
         const browser = detectBrowser(userAgent);
         const actionLogs = await db.collection('actionLogs').find().toArray();
-        let result = await fetch('http://www.geoplugin.net/json.gp');
+        let result = await fetch('https://api.ipgeolocation.io/ipgeo?apiKey=146a180ed0c74c7283d34c95c717aaaa');
         result = await result.json();
-        console.log(result.geoplugin_city, result.geoplugin_request);
-        IP = result.geoplugin_request;
-        location = result.geoplugin_city;
+        console.log(result);
+        IP = result.ip;
+        location = result.city;
 
         const actionLog = {
             id: ++actionLogs.length,
