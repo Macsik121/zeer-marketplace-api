@@ -116,7 +116,6 @@ const typeDefs = `
         name: String!
         discountPercent: Int!
         activationsAmount: Int!
-        promocodesAmount: Int!
         expirationDays: Date!
         isUsed: Boolean!
     }
@@ -238,7 +237,7 @@ const typeDefs = `
     type User {
         id: Int
         name: String!
-        email: String!
+        email: String
         password: String
         avatar: String
         registeredDate: Date
@@ -250,7 +249,6 @@ const typeDefs = `
     input UserInput {
         id: Int
         name: String!
-        email: String!
         password: String
         avatar: String
         registeredDate: Date
@@ -281,7 +279,9 @@ const typeDefs = `
     }
 
     input ProductInput {
-        id: String
+        id: Int
+        oldTitle: String
+        newTitle: String
         title: String
         productFor: String
         costPerDay: Int!

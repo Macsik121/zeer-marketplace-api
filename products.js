@@ -79,10 +79,15 @@ async function buyProduct(
             boughtProduct = (
                 await db.collection('products').findOneAndUpdate(
                     { title },
-                    { $push: { peopleBought: user } },
                     {
-                        returnOriginal: false
-                    }
+                        $push: {
+                            peopleBought: {
+                                avatar: user.avatar,
+                                name: user.name
+                            }
+                        }
+                    },
+                    { returnOriginal: false }
                 )
             );
             let activelyUntil = new Date();
@@ -673,13 +678,40 @@ async function activateKey(_, { keyName, username, navigator }) {
 async function editProduct(_, { product }) {
     try {
         const db = getDb();
+        const {
+            description,
+            characteristics,
+            reloading,
+            oldTitle,
+            newTitle,
+            costPerDay,
+            productFor,
+            imageURLdashboard,
+            logo,
+            workingTime
+        } = product;
 
-        const result = await db.collection('products').replaceOne(
-            { title: product.title },
-            product
+        const result = await db.collection('products').findOneAndUpdate(
+            { title: oldTitle },
+            {
+                $set: {
+                    description,
+                    characteristics,
+                    reloading,
+                    title: newTitle,
+                    costPerDay,
+                    productFor,
+                    imageURLdashboard,
+                    logo,
+                    workingTime
+                }
+            },
+            { returnOriginal: false }
         );
 
-        return result.ops[0];
+        console.log(result.value);
+
+        return result.value;
     } catch (error) {
         console.log(error);
     }
@@ -699,9 +731,11 @@ async function deleteProduct(_, { title }) {
 async function createProduct(_, { product }) {
     try {
         const db = getDb();
+        const products = await db.collection('products').find().toArray();
+        product.id = products.length + 1;
 
         const result = await db.collection('products').insertOne(product);
-        return result;
+            return result.ops[0];
     } catch (error) {
         console.log(error);
     }
