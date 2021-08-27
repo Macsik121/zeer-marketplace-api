@@ -88,12 +88,12 @@ const typeDefs = `
     }
 
     input CharacteristicsInput {
-        version: String!
-        osSupport: String!
-        cpuSupport: String!
-        gameMode: String!
-        developer: String!
-        supportedAntiCheats: String!
+        version: String
+        osSupport: String
+        cpuSupport: String
+        gameMode: String
+        developer: String
+        supportedAntiCheats: String
     }
 
     type ProductStatistics {
@@ -258,7 +258,7 @@ const typeDefs = `
     }
 
     type Product {
-        id: String
+        id: Int
         title: String
         productFor: String
         costPerDay: Int

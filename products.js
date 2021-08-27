@@ -709,8 +709,6 @@ async function editProduct(_, { product }) {
             { returnOriginal: false }
         );
 
-        console.log(result.value);
-
         return result.value;
     } catch (error) {
         console.log(error);
@@ -735,7 +733,7 @@ async function createProduct(_, { product }) {
         product.id = products.length + 1;
 
         const result = await db.collection('products').insertOne(product);
-            return result.ops[0];
+        return result.ops[0];
     } catch (error) {
         console.log(error);
     }

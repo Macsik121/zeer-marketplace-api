@@ -43,10 +43,10 @@ async function createLog(
 
         const browser = detectBrowser(userAgent);
         const actionLogs = await db.collection('actionLogs').find().toArray();
-        let result = await fetch('https://api.ipgeolocation.io/ipgeo?apiKey=146a180ed0c74c7283d34c95c717aaaa');
+        let result = await fetch('http://ip-api.com/json');
         result = await result.json();
         console.log(result);
-        IP = result.ip;
+        IP = result.query;
         location = result.city;
 
         const actionLog = {
