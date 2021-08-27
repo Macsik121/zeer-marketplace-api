@@ -50,7 +50,7 @@ const resolvers = {
         unfreezeSubscription: products.unfreezeSubscription,
         makeResetRequest: user.makeResetRequest,
         deleteUser: user.deleteUser,
-        createKey: products.createKey,
+        createKeys: products.createKeys,
         deleteKey: products.deleteKey,
         deleteAllKeys: products.deleteAllKeys,
         createPromocode: products.createPromocode,

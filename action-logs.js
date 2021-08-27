@@ -45,7 +45,6 @@ async function createLog(
         const actionLogs = await db.collection('actionLogs').find().toArray();
         let result = await fetch('http://ip-api.com/json');
         result = await result.json();
-        console.log(result);
         IP = result.query;
         location = result.city;
 

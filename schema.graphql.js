@@ -136,7 +136,7 @@ const typeDefs = `
         name: String
         expiredInDays: Int
         activationsAmount: Int
-        keysAmount: Int
+        usedAmount: Int
         isUsed: Boolean!
     }
 
@@ -144,7 +144,7 @@ const typeDefs = `
         name: String
         expiredInDays: Int
         activationsAmount: Int
-        keysAmount: Int
+        usedAmount: Int
         isUsed: Boolean!
     }
 
@@ -160,13 +160,8 @@ const typeDefs = `
         all: [ProductKeyInput]
     }
 
-    type CreateKey {
-        key: ProductKey
-        message: String
-    }
-
     input KeyInput {
-        name: String!
+        name: [String!]!
         daysAmount: Int!
         activationsAmount: Int!
         keysToAddAmount: Int!
@@ -339,12 +334,12 @@ const typeDefs = `
         createLog(log: ActionLogInput, navigator: NavigatorInput): ActionLog!
         cleanLogs: String!
         editUser(name: String!): User!
-        createKey(
+        createKeys(
             key: KeyInput!,
             title: String!,
             navigator: NavigatorInput,
             username: String!
-        ): CreateKey
+        ): String!
         deleteKey(
             keyName: String!,
             title: String!,

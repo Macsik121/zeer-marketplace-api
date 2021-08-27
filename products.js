@@ -55,10 +55,8 @@ async function buyProduct(
         {
             title,
             name,
-            dateToSet = 7,
-            subscriptionExists = false,
-            navigator,
-            inActivateKey = false
+            dateToSet = 30,
+            navigator
         }
     ) {
     try {
@@ -142,15 +140,13 @@ async function buyProduct(
                     }
                 )
         }
-        if (!inActivateKey) {
-            createLog(
-                {
-                    name: user.name,
-                    action: `Покупка продукта ${title}`
-                },
-                navigator
-            );    
-        }
+        createLog(
+            {
+                name: user.name,
+                action: `Покупка продукта ${title}`
+            },
+            navigator
+        );
         return boughtProduct ? boughtProduct.value : product;
     } catch (error) {
         console.log(error);
@@ -238,7 +234,7 @@ async function unfreezeSubscription(_, { name, title }) {
     }
 }
 
-async function createKey(_, { key, title, navigator, username }) {
+async function createKeys(_, { key, title, navigator, username }) {
     try {
         const db = getDb();
         let {
@@ -251,20 +247,19 @@ async function createKey(_, { key, title, navigator, username }) {
         const product = await db.collection('products').findOne({ title });
         let isKeyExist = false;
 
-        if (product.keys.all.length > 0) {
-            for(let i = 0; i < product.keys.all.length; i++) {
-                const currentProduct = product.keys.all[i];
-                if (currentProduct.name == name) isKeyExist = true;
-            }
-        } else {
-            isKeyExist = false;
-        }
+        // if (product.keys.all.length > 0) {
+        //     for(let i = 0; i < product.keys.all.length; i++) {
+        //         const currentProductName = product.keys.all[i].name;
+        //         const currentName 
+        //         if (currentProduct.name == name) isKeyExist = true;
+        //     }
+        // }
         
         const keysToAdd = {
             name,
             expiredInDays: daysAmount,
-            activationsAmount: 0,
-            keysAmount: keysToAddAmount,
+            activationsAmount,
+            usedAmount: 0,
             isUsed: false
         };
 
@@ -278,7 +273,7 @@ async function createKey(_, { key, title, navigator, username }) {
                         { title },
                         {
                             $inc: {
-                                'keys.all.$[key].keysAmount': activationsAmount
+                                'keys.all.$[key].usedAmount': 1
                             }
                         },
                         {
@@ -304,43 +299,32 @@ async function createKey(_, { key, title, navigator, username }) {
                 navigator
             );
 
-            return {
-                key: all[all.length - 1],
-                message: `Вы успешно добавили ${keysToAddAmount} ключей`
-            };
+            return `Вы успешно добавили ${keysToAddAmount} ключей`
         } else {
-            updatedProduct = (
+            for (let i = 0; i < name.length; i++) {
+                keysToAdd.name = name[i];
                 await db
                     .collection('products')
-                    .findOneAndUpdate(
+                    .updateOne(
                         { title },
                         {
                             $push: {
                                 "keys.all": keysToAdd,
                                 "keys.active": keysToAdd
                             }
-                        },
-                        {
-                            returnOriginal: false,
-                            multi: true
                         }
                     )
-            )
-
-            const { all } = updatedProduct.value.keys;
+            }
 
             createLog(
                 {
                     name: username,
-                    action: `Добавление ключа ${name}`
+                    action: `Добавление ключей ${name.map(currName => `${currName}, `)}`
                 },
                 navigator
             );
 
-            return {
-                key: all[all.length - 1],
-                message: 'Вы успешно создали ключ'
-            };
+            return 'Вы успешно создали ключ'
         }
     } catch (error) {
         console.log(error);
@@ -558,18 +542,18 @@ async function activateKey(_, { keyName, username, navigator }) {
                 if (!key) name = '';
                 else name = key.name;
 
-                if (name == keyName && key.activationsAmount < key.keysAmount) {
+                if (name == keyName && key.usedAmount < key.activationsAmount) {
                     keyExists = true;
                     matchedProduct = product;
                     matchedKey = key;
-                    matchedKey.activationsAmount++;
+                    matchedKey.usedAmount++;
                     matchedKey.isUsed = true;
                     product.keys.unactive.map(unactiveKey => {
                         if (message != '' && unactiveKey.name == keyName) {
                             message = 'Этот ключ уже нельзя активировать, так как количество ключей ограничено';
                         }
                     });
-                } else if (key.activationsAmount > key.keysAmount) {
+                } else if (key.usedAmount > key.activationsAmount) {
                     message = 'Количество активаций на этот ключ законичлось';
                 }
             }
@@ -631,7 +615,7 @@ async function activateKey(_, { keyName, username, navigator }) {
                     }
                 )
             
-            if (matchedKey.activationsAmount >= matchedKey.keysAmount) {
+            if (matchedKey.usedAmount >= matchedKey.activationsAmount) {
                 await db
                     .collection('products')
                     .updateOne(
@@ -747,7 +731,7 @@ module.exports = {
     updateBoughtIcon,
     freezeSubscripiton,
     unfreezeSubscription,
-    createKey,
+    createKeys,
     deleteKey,
     deleteAllKeys,
     deleteAllPromocodes,
