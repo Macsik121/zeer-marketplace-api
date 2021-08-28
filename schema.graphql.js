@@ -378,6 +378,9 @@ const typeDefs = `
         editProduct(product: ProductInput!): Product!
         deleteProduct(title: String!): String!
         createProduct(product: ProductInput!): Product!
+        createNews(title: String!, change: ProductChangeInput!): String!
+        deleteNews(title: String!, chagneTitle: String!): String!
+        deleteAllNews(title: String!): String!
     }
 `;
 

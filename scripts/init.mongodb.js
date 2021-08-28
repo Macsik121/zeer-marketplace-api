@@ -299,31 +299,36 @@ const answers = [
                 title: 'Миксолидийский что-то',
                 answer: 'Пентатоника имитирует хамбакер.',
                 usefulRate: 0,
-                rateCount: 0        
+                rateCount: 0,
+                dateOfCreation: new Date()
             },
             {
                 title: 'Живая сессия имеет сонорный',
                 answer: 'Пентатоника имитирует хамбакер. Пентатоника имитирует хамбакер.',
                 usefulRate: 25,
-                rateCount: 0
+                rateCount: 0,
+                dateOfCreation: new Date()
             },
             {
                 title: 'Soem title right here',
                 answer: 'Ответ на вопрос здесь. Это просто тестовый ответ и я не знаю, что написать, поэтому пишу это',
                 usefulRate: 75,
-                rateCount: 0        
+                rateCount: 0,
+                dateOfCreation: new Date()
             },
             {
                 title: 'Заголовок Ответа',
                 answer: 'Ответ на вопрос. сорпов ан тевтО. Не знаю, что писать. ьтасип отч, юанз еН',
                 usefulRate: 100,
-                rateCount: 0
+                rateCount: 0,
+                dateOfCreation: new Date()
             },
             {
                 title: 'Как будет выглядить пятый элемент',
                 answer: 'Спам. Спам. Спам. Спам.',
                 usefulRate: 66,
-                rateCount: 0
+                rateCount: 0,
+                dateOfCreation: new Date()
             }
         ]
     },
@@ -334,13 +339,15 @@ const answers = [
                 title: 'Мелодический аккорд современников',
                 answer: 'Пентатоника имитирует хамбакер. Пенатоника имитирует хамбакер. Пенатоника имитирует хамбакер.',
                 usefulRate: 0,
-                rateCount: 0
+                rateCount: 0,
+                dateOfCreation: new Date()
             },
             {
                 title: 'Название ответа на вопрос',
                 answer: '',
                 usefulRate: 32,
-                rateCount: 0
+                rateCount: 0,
+                dateOfCreation: new Date()
             }
         ]
     },
@@ -351,13 +358,15 @@ const answers = [
                 title: 'I want something just like this',
                 answer: 'Пишем ответ на вопрос здесь',
                 usefulRate: 0,
-                rateCount: 0
+                rateCount: 0,
+                dateOfCreation: new Date()
             },
             {
                 title: 'Lorem ipsum dolor sit amet',
                 answer: 'Пример того, как будет выглядеть 76% одобрения пользователей',
                 usefulRate: 76,
-                rateCount: 0
+                rateCount: 0,
+                dateOfCreation: new Date()
             }
         ]
     },
@@ -368,19 +377,22 @@ const answers = [
                 title: 'Zeer: online marketplace',
                 answer: 'Делается огромный сайт...',
                 usefulRate: 51,
-                rateCount: 0
+                rateCount: 0,
+                dateOfCreation: new Date()
             },
             {
                 title: 'Второй ответ в этом разделе',
                 answer: '?',
                 usefulRate: 99,
-                rateCount: 0
+                rateCount: 0,
+                dateOfCreation: new Date()
             },
             {
                 title: 'Пример, как будут отображатся 3 ответа на вопрос в одном разделе',
                 answer: 'Суши, роллы. Суши, роллы. Текст. Текст. Текст.',
                 usefulRate: 66,
-                rateCount: 0
+                rateCount: 0,
+                dateOfCreation: new Date()
             }
         ]
     }

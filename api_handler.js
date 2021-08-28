@@ -68,7 +68,10 @@ const resolvers = {
         deleteAllResetRequests: user.deleteAllResetRequests,
         editProduct: products.editProduct,
         createProduct: products.createProduct,
-        deleteProduct: products.deleteProduct
+        deleteProduct: products.deleteProduct,
+        createNews: products.createNews,
+        deleteNews: products.deleteNews,
+        deleteAllNews: products.deleteAllNews
     }
 }
 

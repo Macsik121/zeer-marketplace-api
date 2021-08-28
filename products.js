@@ -723,6 +723,59 @@ async function createProduct(_, { product }) {
     }
 }
 
+async function createNews(_, { title, change }) {
+    try {
+        const db = getDb();
+
+        await db
+            .collection('products')
+            .updateOne(
+                { title },
+                {
+                    $push: {
+                        changes: change
+                    }
+                }
+            )
+        
+        return `Новость у продукта ${title} успешно создана`;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function deleteNews(_, { title, changeTitle }) {
+    try {
+        const db = getDb();
+
+        await db.collection('products').updateOne(
+            { title },
+            {
+                $pull: {
+                    changes: {
+                        description: changeTitle
+                    }
+                }
+            }
+        );
+
+        return `Новость успешно удалена`;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function deleteAllNews(_, { title }) {
+    try {
+        const db = getDb();
+
+        await db.collection('products').updateOne({ title }, { $set: { changes: [] } });
+        return `Новости у продукта ${title} были успешно удалены`;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProducts,
     getPopularProducts,
@@ -740,5 +793,8 @@ module.exports = {
     deletePromocode,
     editProduct,
     deleteProduct,
-    createProduct
+    createProduct,
+    createNews,
+    deleteNews,
+    deleteAllNews
 };
