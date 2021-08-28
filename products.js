@@ -319,7 +319,10 @@ async function createKeys(_, { key, title, navigator, username }) {
             createLog(
                 {
                     name: username,
-                    action: `Добавление ключей ${name.map(currName => `${currName}, `)}`
+                    action: `Добавление ключей ${name.map((currName, i) => {
+                        if (i == 0) return currName;
+                        return ` ${currName}`
+                    })}`
                 },
                 navigator
             );
