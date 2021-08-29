@@ -729,6 +729,8 @@ async function createProduct(_, { product }) {
 async function createNews(_, { title, change }) {
     try {
         const db = getDb();
+        const product = await db.collection('products').findOne({ title });
+        change.id = product.changes.length + 1;
 
         await db
             .collection('products')
@@ -756,7 +758,7 @@ async function deleteNews(_, { title, changeTitle }) {
             {
                 $pull: {
                     changes: {
-                        description: changeTitle
+                        id: changeTitle
                     }
                 }
             }

@@ -19,6 +19,7 @@ const typeDefs = `
     }
 
     type ProductChange {
+        id: Int!
         version: String!
         created: Date!
         description: String!
@@ -318,8 +319,7 @@ const typeDefs = `
             email: String!,
             name: String!,
             password: String!,
-            navigator: NavigatorInput,
-            IP: String!
+            navigator: NavigatorInput
         ): Sign!
         signIn(
             email: String!,
@@ -379,7 +379,7 @@ const typeDefs = `
         deleteProduct(title: String!): String!
         createProduct(product: ProductInput!): Product!
         createNews(title: String!, change: ProductChangeInput!): String!
-        deleteNews(title: String!, chagneTitle: String!): String!
+        deleteNews(title: String!, changeTitle: Int!): String!
         deleteAllNews(title: String!): String!
     }
 `;

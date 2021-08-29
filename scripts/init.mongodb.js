@@ -15,28 +15,7 @@ const products = [
             active: [],
             unactive: []
         },
-        changes: [
-            {
-                version: '1,1',
-                created: new Date(),
-                description: 'I want something just like this'
-            },
-            {
-                version: '1,03',
-                created: new Date('2021-07-19T15:31:42.991+00:00'),
-                description: 'asdf'
-            },
-            {
-                version: '1,02',
-                created: new Date(),
-                description: 'asdf'
-            },
-            {
-                version: '1,01',
-                created: new Date(),
-                description: 'Фишка свободна. Попса, в том числе, просветляет сет.'
-            }
-        ],
+        changes: [],
         imageURL: '/images/hwid-spoofer.png',
         imageURLdashboard: '/images/morgh.jpg',
         description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
@@ -210,13 +189,7 @@ const products = [
             unactive: []
         },
         currentDate,
-        changes: [
-            {
-                version: '1,01',
-                created: new Date(),
-                description: 'Фишка свободна. Попса, в том числе, просветляет сет.'
-            }
-        ],
+        changes: [],
         imageURL: '/images/hwid-spoofer.png',
         imageURLdashboard: '/images/graphics-card.jpg',
         description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
@@ -251,23 +224,7 @@ const products = [
             active: [],
             unactive: []
         },
-        changes: [
-            {
-                version: '1,1',
-                created: new Date(),
-                description: 'I want something just like this'
-            },
-            {
-                version: '1,03',
-                created: new Date('2021-07-19T15:31:42.991+00:00'),
-                description: 'asdf'
-            },
-            {
-                version: '1,02',
-                created: new Date(),
-                description: 'asdf'
-            }
-        ],
+        changes: [],
         imageURL: '/images/hwid-spoofer.png',
         imageURLdashboard: '/images/morgh.jpg',
         description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
