@@ -71,7 +71,8 @@ const resolvers = {
         deleteProduct: products.deleteProduct,
         createNews: products.createNews,
         deleteNews: products.deleteNews,
-        deleteAllNews: products.deleteAllNews
+        deleteAllNews: products.deleteAllNews,
+        disableProduct: products.disableProduct
     }
 }
 

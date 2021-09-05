@@ -253,10 +253,29 @@ const typeDefs = `
         resetRequests: [ResetRequestInput]
     }
 
+    type ProductCost {
+        perDay: Int!
+        perMonth: Int!
+        perYear: Int!
+    }
+
+    enum ProductStatus {
+        undetect
+        onupdate
+        detect
+    }
+    
+    input ProductCostInput {
+        perDay: Int!
+        perMonth: Int!
+        perYear: Int!
+    }
+
     type Product {
         id: Int
         title: String
         productFor: String
+        cost: ProductCost
         costPerDay: Int
         imageURL: String
         imageURLdashboard: String
@@ -269,9 +288,10 @@ const typeDefs = `
         locks: String
         keys: ProductsKeyTypes
         peopleBought: [User]!
-        timeBought: Float
+        timeBought: Int
         currentDate: Date
         promocodes: ProductPromocodes
+        status: ProductStatus
     }
 
     input ProductInput {
@@ -295,6 +315,8 @@ const typeDefs = `
         timeBought: Int
         currentDate: Date
         promocodes: ProductPromocodesInput
+        status: ProductStatus
+        cost: ProductCostInput
     }
 
     type Query {
@@ -381,6 +403,7 @@ const typeDefs = `
         createNews(title: String!, change: ProductChangeInput!): String!
         deleteNews(title: String!, changeTitle: Int!): String!
         deleteAllNews(title: String!): String!
+        disableProduct(title: String!): String!
     }
 `;
 

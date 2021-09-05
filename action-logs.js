@@ -43,9 +43,9 @@ async function createLog(
 
         const browser = detectBrowser(userAgent);
         const actionLogs = await db.collection('actionLogs').find().toArray();
-        let result = await fetch('https://ipgeolocation.abstractapi.com/v1/?api_key=8423621d952f41eb83c631a00c56811f');
+        let result = await fetch('http://ip-api.com/json');
         result = await result.json();
-        IP = result.ip_address;
+        IP = result.query;
         location = result.city;
 
         const actionLog = {
@@ -58,7 +58,6 @@ async function createLog(
             platform,
             action
         };
-        console.log(actionLog)
 
         await db.collection('actionLogs').insertOne(actionLog);
         return actionLog;

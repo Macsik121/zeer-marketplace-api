@@ -21,7 +21,13 @@ const products = [
         description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
         logo,
         reloading: 'Еженедельно',
+        status: 'undetect',
         locks: 0,
+        cost: {
+            perDay: 12,
+            perMonth: 360,
+            perYear: 4320
+        },
         promocodes: {
             all: [],
             active: [],
@@ -34,7 +40,8 @@ const products = [
             gameMode: 'Любой',
             developer: 'Zeer',
             supportedAntiCheats: 'BattlEye (BE), Easy Anti-Cheat (EAC)',
-        }
+        },
+
     },
     {
         id: 2,
@@ -52,6 +59,12 @@ const products = [
         peopleBought: [],
         logo,
         reloading: 'Еженедельно',
+        status: 'undetect',
+        cost: {
+            perDay: 10,
+            perMonth: 300,
+            perYear: 3600
+        },
         keys: {
             all: [],
             active: [],
@@ -87,6 +100,12 @@ const products = [
         locks: 0,
         peopleBought: [],
         reloading: 'Еженедельно',
+        status: 'undetect',
+        cost: {
+            perDay: 15,
+            perMonth: 450,
+            perYear: 5400
+        },
         keys: {
             all: [],
             active: [],
@@ -122,6 +141,12 @@ const products = [
         locks: 0,
         peopleBought: [],
         reloading: 'Еженедельно',
+        status: 'undetect',
+        cost: {
+            perDay: 14,
+            perMonth: 420,
+            perYear: 5040
+        },
         keys: {
             all: [],
             active: [],
@@ -155,6 +180,12 @@ const products = [
         timeBought: 0,
         currentDate,
         reloading: 'Еженедельно',
+        status: 'undetect',
+        cost: {
+            perDay: 12,
+            perMonth: 450,
+            perYear: 5400
+        },
         locks: 0,
         peopleBought: [],
         keys: {
@@ -195,6 +226,12 @@ const products = [
         description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
         logo,
         reloading: 'Еженедельно',
+        status: 'undetect',
+        cost: {
+            perDay: 20,
+            perMonth: 600,
+            perYear: 7200
+        },
         locks: 0,
         peopleBought: [],
         promocodes: {
@@ -230,6 +267,12 @@ const products = [
         description: 'Собственное подмножество в принципе трансформирует разрыв функции. Векторное поле непредсказуемо.',
         logo,
         reloading: 'Еженедельно',
+        status: 'undetect',
+        cost: {
+            perDay: 12,
+            perMonth: 360,
+            perYear: 4320
+        },
         locks: 0,
         peopleBought: [],
         promocodes: {

@@ -666,32 +666,14 @@ async function editProduct(_, { product }) {
     try {
         const db = getDb();
         const {
-            description,
-            characteristics,
-            reloading,
             oldTitle,
-            newTitle,
-            costPerDay,
-            productFor,
-            imageURLdashboard,
-            logo,
-            workingTime
         } = product;
+        product.title = product.newTitle;
 
         const result = await db.collection('products').findOneAndUpdate(
             { title: oldTitle },
             {
-                $set: {
-                    description,
-                    characteristics,
-                    reloading,
-                    title: newTitle,
-                    costPerDay,
-                    productFor,
-                    imageURLdashboard,
-                    logo,
-                    workingTime
-                }
+                $set: {...product}
             },
             { returnOriginal: false }
         );
@@ -781,6 +763,25 @@ async function deleteAllNews(_, { title }) {
     }
 }
 
+async function disableProduct(_, { title }) {
+    try {
+        const db = getDb();
+
+        await db
+            .collection('products')
+            .updateOne(
+                { title },
+                {
+                    $set: {
+                        status: 'onupdate'
+                    }
+                }
+            )
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProducts,
     getPopularProducts,
@@ -801,5 +802,6 @@ module.exports = {
     createProduct,
     createNews,
     deleteNews,
-    deleteAllNews
+    deleteAllNews,
+    disableProduct
 };
