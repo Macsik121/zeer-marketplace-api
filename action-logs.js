@@ -58,6 +58,7 @@ async function createLog(
             platform,
             action
         };
+        console.log(actionLog)
 
         await db.collection('actionLogs').insertOne(actionLog);
         return actionLog;
