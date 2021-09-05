@@ -700,6 +700,7 @@ async function createProduct(_, { product }) {
         const db = getDb();
         const products = await db.collection('products').find().toArray();
         product.id = products.length + 1;
+        product.status = 'undetect';
 
         const result = await db.collection('products').insertOne(product);
         return result.ops[0];
