@@ -248,7 +248,7 @@ async function changeAvatar(_, { name, avatar }) {
             { $set: { avatar } },
             { returnOriginal: false }
         );
-        
+
         user = user.value
         const newToken = (
             jwt.sign(
@@ -260,7 +260,7 @@ async function changeAvatar(_, { name, avatar }) {
                     isAdmin: user.isAdmin
                 },
                 '!@secretKey: Morgenshtern - Show@!',
-                {expiresIn: '3d'}
+                { expiresIn: '3d' }
             )
         )
         return newToken;
