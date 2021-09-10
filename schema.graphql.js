@@ -271,11 +271,24 @@ const typeDefs = `
         perYear: Int!
     }
 
+    type Cost {
+        cost: Int!
+        costPer: String!
+        menuText: String!
+    }
+
+    input CostInput {
+        cost: Int!
+        costPer: String!
+        menuText: String!
+    }
+
     type Product {
         id: Int
         title: String
         productFor: String
         cost: ProductCost
+        allCost: [Cost]
         costPerDay: Int
         imageURL: String
         imageURLdashboard: String
@@ -317,6 +330,7 @@ const typeDefs = `
         promocodes: ProductPromocodesInput
         status: ProductStatus
         cost: ProductCostInput
+        allCost: [CostInput]
     }
 
     type Query {
@@ -404,6 +418,8 @@ const typeDefs = `
         deleteNews(title: String!, changeTitle: Int!): String!
         deleteAllNews(title: String!): String!
         disableProduct(title: String!): String!
+        addCost(title: String!, cost: CostInput!): String!
+        deleteCost(title: String!, costTitle: String!): String!
     }
 `;
 

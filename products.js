@@ -1,16 +1,19 @@
 const { getDb } = require('./db');
 const createLog = require('./createLog');
+const updateDate = require('./update-date');
 
 async function getProducts() {
     try {
         const db = getDb();
-        return await db.collection('products').find().toArray();
+        const products = await db.collection('products').find().toArray();
+        updateDate(products, db);
+        return products;
     } catch (error) {
         console.log(error);
     }
 }
 
-async function getPopularProducts(_, { name }) {
+async function getPopularProducts() {
     try {
         const db = getDb();
         let popularProducts = (
@@ -30,6 +33,7 @@ async function getPopularProducts(_, { name }) {
                 ])
                 .toArray()
         );
+        updateDate(popularProducts, db);
         if (popularProducts.length < 1) {
             popularProducts = (
                 await db
@@ -37,7 +41,8 @@ async function getPopularProducts(_, { name }) {
                     .aggregate([
                         {
                             $sort: {
-                                timeBought: -1
+                                timeBought: -1,
+                                id: 1
                             }
                         }
                     ])
@@ -104,11 +109,6 @@ async function buyProduct(
                     }
                 } }
             );
-            await db.collection('products').findOneAndUpdate(
-                { title },
-                { $inc: { timeBought: 1 } },
-                { returnOriginal: false }
-            );
         } else {
             let subIndex = 0;
             for(let i = 0; i < user.subscriptions.length; i++) {
@@ -140,6 +140,11 @@ async function buyProduct(
                     }
                 )
         }
+        await db.collection('products').findOneAndUpdate(
+            { title },
+            { $inc: { timeBought: 1 } },
+            { returnOriginal: false }
+        );
         createLog(
             {
                 name: user.name,
@@ -155,7 +160,9 @@ async function buyProduct(
 
 async function getProduct(_, { title }) {
     const db = getDb();
-    return await db.collection('products').findOne({ title });;
+    const product = await db.collection('products').findOne({ title });
+    updateDate(product, db);
+    return product;
 }
 
 async function updateBoughtIcon(_, { name }) {
@@ -783,6 +790,50 @@ async function disableProduct(_, { title }) {
     }
 }
 
+async function addCost(_, { cost, title }) {
+    try {
+        const db = getDb();
+
+        await db
+            .collection('products')
+            .updateOne(
+                { title },
+                {
+                    $push: {
+                        allCost: cost
+                    }
+                }
+            )
+
+        return 'Everything is ok, cost is added';
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function deleteCost(_, { costTitle, title }) {
+    try {
+        const db = getDb();
+
+        await db
+            .collection('products')
+            .updateOne(
+                { title },
+                {
+                    $pull: {
+                        allCost: {
+                            menuText: costTitle
+                        }
+                    }
+                }
+            );
+
+        return 'Everything happened pretty well';
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProducts,
     getPopularProducts,
@@ -804,5 +855,7 @@ module.exports = {
     createNews,
     deleteNews,
     deleteAllNews,
-    disableProduct
+    disableProduct,
+    addCost,
+    deleteCost
 };

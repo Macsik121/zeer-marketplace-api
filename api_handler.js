@@ -72,7 +72,9 @@ const resolvers = {
         createNews: products.createNews,
         deleteNews: products.deleteNews,
         deleteAllNews: products.deleteAllNews,
-        disableProduct: products.disableProduct
+        disableProduct: products.disableProduct,
+        addCost: products.addCost,
+        deleteCost: products.deleteCost
     }
 }
 

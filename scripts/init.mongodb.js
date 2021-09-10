@@ -23,11 +23,28 @@ const products = [
         reloading: 'Еженедельно',
         status: 'undetect',
         locks: 0,
-        cost: {
-            perDay: 12,
-            perMonth: 360,
-            perYear: 4320
-        },
+        allCost: [
+            {
+                cost: 228,
+                costPer: 'Неделя',
+                menuText: 'Еженедельно'
+            },
+            {
+                cost: 12,
+                costPer: 'День',
+                menuText: 'Ежеквартально'
+            },
+            {
+                cost: 4320,
+                costPer: 'Ежегодно',
+                menuText: 'Ежегодно'
+            },
+            {
+                cost: 360,
+                costPer: 'Месяц',
+                menuText: 'Ежемесячно'
+            }
+        ],
         promocodes: {
             all: [],
             active: [],
@@ -60,11 +77,28 @@ const products = [
         logo,
         reloading: 'Еженедельно',
         status: 'undetect',
-        cost: {
-            perDay: 10,
-            perMonth: 300,
-            perYear: 3600
-        },
+        allCost: [
+            {
+                cost: 228,
+                costPer: 'Неделя',
+                menuText: 'Еженедельно'
+            },
+            {
+                cost: 12,
+                costPer: 'День',
+                menuText: 'Ежеквартально'
+            },
+            {
+                cost: 4320,
+                costPer: 'Ежегодно',
+                menuText: 'Ежегодно'
+            },
+            {
+                cost: 360,
+                costPer: 'Месяц',
+                menuText: 'Ежемесячно'
+            }
+        ],
         keys: {
             all: [],
             active: [],
@@ -101,11 +135,28 @@ const products = [
         peopleBought: [],
         reloading: 'Еженедельно',
         status: 'undetect',
-        cost: {
-            perDay: 15,
-            perMonth: 450,
-            perYear: 5400
-        },
+        allCost: [
+            {
+                cost: 228,
+                costPer: 'Неделя',
+                menuText: 'Еженедельно'
+            },
+            {
+                cost: 12,
+                costPer: 'День',
+                menuText: 'Ежеквартально'
+            },
+            {
+                cost: 4320,
+                costPer: 'Ежегодно',
+                menuText: 'Ежегодно'
+            },
+            {
+                cost: 360,
+                costPer: 'Месяц',
+                menuText: 'Ежемесячно'
+            }
+        ],
         keys: {
             all: [],
             active: [],
@@ -142,11 +193,28 @@ const products = [
         peopleBought: [],
         reloading: 'Еженедельно',
         status: 'undetect',
-        cost: {
-            perDay: 14,
-            perMonth: 420,
-            perYear: 5040
-        },
+        allCost: [
+            {
+                cost: 228,
+                costPer: 'Неделя',
+                menuText: 'Еженедельно'
+            },
+            {
+                cost: 12,
+                costPer: 'День',
+                menuText: 'Ежеквартально'
+            },
+            {
+                cost: 4320,
+                costPer: 'Ежегодно',
+                menuText: 'Ежегодно'
+            },
+            {
+                cost: 360,
+                costPer: 'Месяц',
+                menuText: 'Ежемесячно'
+            }
+        ],
         keys: {
             all: [],
             active: [],
@@ -181,11 +249,28 @@ const products = [
         currentDate,
         reloading: 'Еженедельно',
         status: 'undetect',
-        cost: {
-            perDay: 12,
-            perMonth: 450,
-            perYear: 5400
-        },
+        allCost: [
+            {
+                cost: 228,
+                costPer: 'Неделя',
+                menuText: 'Еженедельно'
+            },
+            {
+                cost: 12,
+                costPer: 'День',
+                menuText: 'Ежеквартально'
+            },
+            {
+                cost: 4320,
+                costPer: 'Ежегодно',
+                menuText: 'Ежегодно'
+            },
+            {
+                cost: 360,
+                costPer: 'Месяц',
+                menuText: 'Ежемесячно'
+            }
+        ],
         locks: 0,
         peopleBought: [],
         keys: {
@@ -227,11 +312,28 @@ const products = [
         logo,
         reloading: 'Еженедельно',
         status: 'undetect',
-        cost: {
-            perDay: 20,
-            perMonth: 600,
-            perYear: 7200
-        },
+        allCost: [
+            {
+                cost: 228,
+                costPer: 'Неделя',
+                menuText: 'Еженедельно'
+            },
+            {
+                cost: 12,
+                costPer: 'День',
+                menuText: 'Ежеквартально'
+            },
+            {
+                cost: 4320,
+                costPer: 'Ежегодно',
+                menuText: 'Ежегодно'
+            },
+            {
+                cost: 360,
+                costPer: 'Месяц',
+                menuText: 'Ежемесячно'
+            }
+        ],
         locks: 0,
         peopleBought: [],
         promocodes: {
@@ -268,11 +370,28 @@ const products = [
         logo,
         reloading: 'Еженедельно',
         status: 'undetect',
-        cost: {
-            perDay: 12,
-            perMonth: 360,
-            perYear: 4320
-        },
+        allCost: [
+            {
+                cost: 228,
+                costPer: 'Неделя',
+                menuText: 'Еженедельно'
+            },
+            {
+                cost: 12,
+                costPer: 'День',
+                menuText: 'Ежеквартально'
+            },
+            {
+                cost: 4320,
+                costPer: 'Ежегодно',
+                menuText: 'Ежегодно'
+            },
+            {
+                cost: 360,
+                costPer: 'Месяц',
+                menuText: 'Ежемесячно'
+            }
+        ],
         locks: 0,
         peopleBought: [],
         promocodes: {
