@@ -333,6 +333,11 @@ const typeDefs = `
         allCost: [CostInput]
     }
 
+    type Purchase {
+        date: Date!
+        boughtTime: Int!
+    }
+
     type Query {
         products: [Product!]!
         popularProducts: [Product!]!
@@ -348,6 +353,7 @@ const typeDefs = `
         getSort(sort: String!): Answers!
         getActionLogs: [ActionLog]!
         getAllBindings: [ResetRequest]!
+        purchases: [Purchase]!
     }
 
     type Mutation {

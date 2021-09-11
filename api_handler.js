@@ -1,10 +1,11 @@
 const { ApolloServer } = require('apollo-server-express');
+const { GraphQLScalarType, Kind } = require('graphql');
 const typeDefs = require('./schema.graphql');
 const products = require('./products');
 const user = require('./user');
 const answers = require('./answersFAQ');
 const actionLogs = require('./action-logs');
-const { GraphQLScalarType, Kind } = require('graphql');
+const graphs = require('./graphs');
 
 const dateScalar = new GraphQLScalarType({
     name: 'Date',
@@ -36,7 +37,8 @@ const resolvers = {
         getResetRequests: user.getResetRequests,
         getSort: answers.getSort,
         getActionLogs: actionLogs.actionLogs,
-        getAllBindings: user.getResetBindings
+        getAllBindings: user.getResetBindings,
+        purchases: graphs.getPurchases
     },
     Mutation: {
         signUp: user.signUp,
