@@ -340,7 +340,7 @@ const typeDefs = `
 
     type Query {
         products: [Product!]!
-        popularProducts: [Product!]!
+        popularProducts(amountToGet: Int): [Product!]!
         user(name: String!): User!
         verifyToken(token: String!): String!
         getSubscriptions(name: String!): Subscriptions
@@ -426,6 +426,8 @@ const typeDefs = `
         disableProduct(title: String!): String!
         addCost(title: String!, cost: CostInput!): String!
         deleteCost(title: String!, costTitle: String!): String!
+        saveCostChanges(title: String!, costPerDay: Int!): String!
+        updateProductBG(title: String!, imageURL: String!): String!
     }
 `;
 

@@ -1,5 +1,6 @@
 const { ApolloServer } = require('apollo-server-express');
 const { GraphQLScalarType, Kind } = require('graphql');
+const cors = require('cors');
 const typeDefs = require('./schema.graphql');
 const products = require('./products');
 const user = require('./user');
@@ -76,7 +77,9 @@ const resolvers = {
         deleteAllNews: products.deleteAllNews,
         disableProduct: products.disableProduct,
         addCost: products.addCost,
-        deleteCost: products.deleteCost
+        deleteCost: products.deleteCost,
+        saveCostChanges: products.saveCostChanges,
+        updateProductBG: products.updateProductBG
     }
 }
 
@@ -88,7 +91,7 @@ const server = new ApolloServer({
 });
 
 function installHandler(app) {
-    server.applyMiddleware({app})
+    server.applyMiddleware({ app, path: '/graphql' })
 }
 
 module.exports = installHandler;

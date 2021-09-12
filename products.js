@@ -13,7 +13,7 @@ async function getProducts() {
     }
 }
 
-async function getPopularProducts() {
+async function getPopularProducts(_, { amountToGet = 3 }) {
     try {
         const db = getDb();
         let popularProducts = (
@@ -22,7 +22,9 @@ async function getPopularProducts() {
                 .aggregate([
                     {
                         $match: {
-                            $or: [ { timeBought: { $gte: 30 } } ]
+                            timeBought: {
+                                $gte: 30
+                            }
                         }
                     },
                     {
@@ -34,20 +36,24 @@ async function getPopularProducts() {
                 .toArray()
         );
         updateDate(popularProducts, db);
-        if (popularProducts.length < 1) {
-            popularProducts = (
+        if (popularProducts.length < amountToGet) {
+            const theRestPopularProducts = (
                 await db
                     .collection('products')
                     .aggregate([
                         {
                             $sort: {
-                                timeBought: -1,
                                 id: 1
                             }
                         }
                     ])
                     .toArray()
             );
+            theRestPopularProducts.map(product => {
+                if (popularProducts.length < amountToGet) {
+                    popularProducts.push(product);
+                }
+            });
         }
         return popularProducts;
     } catch (error) {
@@ -708,6 +714,14 @@ async function createProduct(_, { product }) {
         const products = await db.collection('products').find().toArray();
         product.id = products.length + 1;
         product.status = 'undetect';
+        product.allCost = [
+            {
+                menuText: '',
+                cost: 0,
+                costPer: ''
+            }
+        ];
+        product.currentDate = new Date();
 
         const result = await db.collection('products').insertOne(product);
         return result.ops[0];
@@ -834,6 +848,28 @@ async function deleteCost(_, { costTitle, title }) {
     }
 }
 
+async function saveCostChanges(_, { title, costPerDay }) {
+    try {
+        const db = getDb();
+        await db.collection('products').updateOne({ title }, { $set: { costPerDay } });
+
+        return 'Evertyhing is successfully done';
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function updateProductBG(_, { title, imageURL }) {
+    try {
+        const db = getDb();
+        await db.collection('products').updateOne({ title }, { $set: { imageURL } });
+
+        return 'BG is successfully updated';
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProducts,
     getPopularProducts,
@@ -857,5 +893,7 @@ module.exports = {
     deleteAllNews,
     disableProduct,
     addCost,
-    deleteCost
+    deleteCost,
+    saveCostChanges,
+    updateProductBG
 };
