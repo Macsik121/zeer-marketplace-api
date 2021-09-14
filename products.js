@@ -67,7 +67,8 @@ async function buyProduct(
             title,
             name,
             dateToSet = 30,
-            navigator
+            navigator,
+            isKey = false
         }
     ) {
     try {
@@ -146,11 +147,13 @@ async function buyProduct(
                     }
                 )
         }
-        await db.collection('products').findOneAndUpdate(
-            { title },
-            { $inc: { timeBought: 1 } },
-            { returnOriginal: false }
-        );
+        if (!isKey) {
+            await db.collection('products').findOneAndUpdate(
+                { title },
+                { $inc: { timeBought: 1 } },
+                { returnOriginal: false }
+            );
+        }
         createLog(
             {
                 name: user.name,
@@ -584,7 +587,7 @@ async function activateKey(_, { keyName, username, navigator }) {
                     dateToSet: matchedKey.expiredInDays,
                     subscriptionExists: true,
                     navigator,
-                    inActivateKey: true
+                    isKey: true
                 }
             );
             await db
@@ -716,12 +719,15 @@ async function createProduct(_, { product }) {
         product.status = 'undetect';
         product.allCost = [
             {
-                menuText: '',
+                menuText: 'Ежемесячно',
                 cost: 0,
-                costPer: ''
+                costPer: 'Месяц'
             }
         ];
         product.currentDate = new Date();
+        product.locationOnclick = '/dashboard/products/' + product.title;
+        product.costPerDayInfo = 0;
+        product.timeBought = 0;
 
         const result = await db.collection('products').insertOne(product);
         return result.ops[0];
@@ -848,10 +854,13 @@ async function deleteCost(_, { costTitle, title }) {
     }
 }
 
-async function saveCostChanges(_, { title, costPerDay }) {
+async function saveCostChanges(_, { title, costPerDayInfo, locationOnclick }) {
     try {
         const db = getDb();
-        await db.collection('products').updateOne({ title }, { $set: { costPerDay } });
+        await db.collection('products').updateOne({ title }, { $set: {
+            costPerDayInfo,
+            locationOnclick
+        } });
 
         return 'Evertyhing is successfully done';
     } catch (error) {

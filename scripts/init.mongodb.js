@@ -1,5 +1,6 @@
 const currentDate = new Date();
 const logo = '/images/trash.jpg';
+
 const products = [
     {
         id: 1,
@@ -23,6 +24,8 @@ const products = [
         reloading: 'Еженедельно',
         status: 'undetect',
         locks: 0,
+        locationOnclick: '/dashboard/products/hwid spoofer',
+        costPerDayInfo: 34,
         allCost: [
             {
                 cost: 228,
@@ -77,6 +80,8 @@ const products = [
         logo,
         reloading: 'Еженедельно',
         status: 'undetect',
+        locationOnclick: '/dashboard/products/zeer-changer',
+        costPerDayInfo: 34,
         allCost: [
             {
                 cost: 228,
@@ -135,6 +140,8 @@ const products = [
         peopleBought: [],
         reloading: 'Еженедельно',
         status: 'undetect',
+        locationOnclick: '/dashboard/products/Damage Plus',
+        costPerDayInfo: 34,
         allCost: [
             {
                 cost: 228,
@@ -193,6 +200,8 @@ const products = [
         peopleBought: [],
         reloading: 'Еженедельно',
         status: 'undetect',
+        locationOnclick: '/dashboard/products/esp + wallhack',
+        costPerDayInfo: 34,
         allCost: [
             {
                 cost: 228,
@@ -249,6 +258,8 @@ const products = [
         currentDate,
         reloading: 'Еженедельно',
         status: 'undetect',
+        locationOnclick: '/dashboard/products/tournament',
+        costPerDayInfo: 34,
         allCost: [
             {
                 cost: 228,
@@ -312,6 +323,8 @@ const products = [
         logo,
         reloading: 'Еженедельно',
         status: 'undetect',
+        locationOnclick: '/dashboard/products/Not HWID spoofer',
+        costPerDayInfo: 34,
         allCost: [
             {
                 cost: 228,
@@ -370,6 +383,8 @@ const products = [
         logo,
         reloading: 'Еженедельно',
         status: 'undetect',
+        locationOnclick: '/dashboard/products/hwid spofer2',
+        costPerDayInfo: 34,
         allCost: [
             {
                 cost: 228,

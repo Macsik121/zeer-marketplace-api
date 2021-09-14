@@ -290,6 +290,7 @@ const typeDefs = `
         cost: ProductCost
         allCost: [Cost]
         costPerDay: Int
+        costPerDayInfo: Int
         imageURL: String
         imageURLdashboard: String
         logo: String
@@ -305,6 +306,7 @@ const typeDefs = `
         currentDate: Date
         promocodes: ProductPromocodes
         status: ProductStatus
+        locationOnclick: String!
     }
 
     input ProductInput {
@@ -426,7 +428,11 @@ const typeDefs = `
         disableProduct(title: String!): String!
         addCost(title: String!, cost: CostInput!): String!
         deleteCost(title: String!, costTitle: String!): String!
-        saveCostChanges(title: String!, costPerDay: Int!): String!
+        saveCostChanges(
+            title: String!,
+            costPerDayInfo: Int!,
+            locationOnclick: String!
+        ): String!
         updateProductBG(title: String!, imageURL: String!): String!
     }
 `;
