@@ -1,6 +1,6 @@
 const { getDb } = require('./db');
 const fetch = require('isomorphic-fetch');
-const detectBrowser = require('./detectBrowser');
+const detectBrowser = require('../detectBrowser');
 
 async function actionLogs() {
     try {

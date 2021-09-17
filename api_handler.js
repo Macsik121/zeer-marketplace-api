@@ -1,12 +1,11 @@
 const { ApolloServer } = require('apollo-server-express');
 const { GraphQLScalarType, Kind } = require('graphql');
-const cors = require('cors');
 const typeDefs = require('./schema.graphql');
-const products = require('./products');
-const user = require('./user');
-const answers = require('./answersFAQ');
-const actionLogs = require('./action-logs');
-const graphs = require('./graphs');
+const products = require('./db_actions/products');
+const user = require('./db_actions/user');
+const answers = require('./db_actions/answersFAQ');
+const actionLogs = require('./db_actions/action-logs');
+const purchases = require('./db_actions/purchases');
 
 const dateScalar = new GraphQLScalarType({
     name: 'Date',
@@ -21,8 +20,6 @@ const dateScalar = new GraphQLScalarType({
         return (ast.kind == Kind.STRING) ? new Date(ast.value) : undefined;
     }
 });
-
-const about = 'About message';
 
 const resolvers = {
     Date: dateScalar,
@@ -39,7 +36,7 @@ const resolvers = {
         getSort: answers.getSort,
         getActionLogs: actionLogs.actionLogs,
         getAllBindings: user.getResetBindings,
-        purchases: graphs.getPurchases
+        purchases: purchases.getPurchases
     },
     Mutation: {
         signUp: user.signUp,
@@ -79,7 +76,8 @@ const resolvers = {
         addCost: products.addCost,
         deleteCost: products.deleteCost,
         saveCostChanges: products.saveCostChanges,
-        updateProductBG: products.updateProductBG
+        updateProductBG: products.updateProductBG,
+        createPurchase: purchases.createPurchase
     }
 }
 

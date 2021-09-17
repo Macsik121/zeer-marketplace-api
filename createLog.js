@@ -1,4 +1,4 @@
-const { createLog } = require('./action-logs');
+const { createLog } = require('./db_actions/action-logs');
 
 module.exports = async function createActionLog(log, navigator) {
     try {

@@ -336,8 +336,13 @@ const typeDefs = `
     }
 
     type Purchase {
-        date: Date!
-        boughtTime: Int!
+        date: Date
+        boughtTime: Int
+    }
+
+    input WeekInput {
+        from: Date!
+        to: Date!
     }
 
     type Query {
@@ -355,7 +360,7 @@ const typeDefs = `
         getSort(sort: String!): Answers!
         getActionLogs: [ActionLog]!
         getAllBindings: [ResetRequest]!
-        purchases: [Purchase]!
+        purchases(week: WeekInput): [Purchase]!
     }
 
     type Mutation {
@@ -434,6 +439,7 @@ const typeDefs = `
             locationOnclick: String!
         ): String!
         updateProductBG(title: String!, imageURL: String!): String!
+        createPurchase(boughtTime: Int!, days: Int!): String!
     }
 `;
 

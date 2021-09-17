@@ -1,6 +1,6 @@
 const { getDb } = require('./db');
-const createLog = require('./createLog');
-const updateDate = require('./update-date');
+const createLog = require('../createLog');
+const updateDate = require('../update-date');
 
 async function getProducts() {
     try {
@@ -153,6 +153,7 @@ async function buyProduct(
                 { $inc: { timeBought: 1 } },
                 { returnOriginal: false }
             );
+            
         }
         createLog(
             {

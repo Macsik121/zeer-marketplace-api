@@ -1,9 +1,9 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { getDb } = require('./db');
-const { sendMail } = require('./nodemailer');
-const createActionLog = require('./createLog');
-const createLog = require('./createLog');
+const { sendMail } = require('../nodemailer');
+const createActionLog = require('../createLog');
+const createLog = require('../createLog');
 let token = '';
 
 async function getUser(_, { name }) {
