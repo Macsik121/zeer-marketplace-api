@@ -532,8 +532,10 @@ const answers = [
     }
 ];
 
-db.products.drop();
+db.products.deleteMany({});
 db.products.insertMany(products);
 
-db.answersFAQ.drop();
+db.answersFAQ.deleteMany({});
 db.answersFAQ.insertMany(answers);
+
+db.purchases.deleteMany({});

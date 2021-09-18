@@ -382,7 +382,6 @@ const typeDefs = `
         rateAnswer(title: String!): Answer!
         createLog(log: ActionLogInput, navigator: NavigatorInput): ActionLog!
         cleanLogs: String!
-        editUser(name: String!): User!
         createKeys(
             key: KeyInput!,
             title: String!,
@@ -439,7 +438,14 @@ const typeDefs = `
             locationOnclick: String!
         ): String!
         updateProductBG(title: String!, imageURL: String!): String!
-        createPurchase(boughtTime: Int!, days: Int!): String!
+        editUser(
+            oldName: String!,
+            name: String,
+            email: String,
+            hwid: String,
+            role: String
+        ): User!
+        editUserPassword(adminPassword: String!, newPassword: String!): String!
     }
 `;
 

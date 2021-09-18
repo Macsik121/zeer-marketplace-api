@@ -1,6 +1,7 @@
 const { getDb } = require('./db');
 const createLog = require('../createLog');
 const updateDate = require('../update-date');
+const { createPurchase } = require('./purchases');
 
 async function getProducts() {
     try {
@@ -153,7 +154,7 @@ async function buyProduct(
                 { $inc: { timeBought: 1 } },
                 { returnOriginal: false }
             );
-            
+            createPurchase();
         }
         createLog(
             {
@@ -690,7 +691,7 @@ async function editProduct(_, { product }) {
         const result = await db.collection('products').findOneAndUpdate(
             { title: oldTitle },
             {
-                $set: {...product}
+                $set: { ...product }
             },
             { returnOriginal: false }
         );

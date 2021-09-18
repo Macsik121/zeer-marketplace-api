@@ -25,17 +25,39 @@ async function getPurchases(_, { week }) {
     }
 }
 
-async function createPurchase(_, { boughtTime, days }) {
+async function createPurchase(currentDate = new Date()) {
     try {
         const db = getDb();
+        const purchases = await db.collection('purchases').find().toArray();
+        currentDate = new Date(new Date(currentDate).toISOString().substr(0, 10));
+        let purchaseExists = false;
 
-        await db
-            .collection('purchases')
-            .insertOne({
-                boughtTime,
-                // date: new Date(`2021-09-${new Date().getDate()}`)
-                date: new Date(`2021-09-${days}`)
-            });
+        purchases.map(purchase => {
+            const purchaseDate = new Date(purchase.date).toISOString().substr(0, 10);
+            if (new Date(purchaseDate).getTime() - new Date(currentDate).getTime() == 0) {
+                purchaseExists = true;
+            }
+        });
+        if (purchaseExists) {
+            await db
+                .collection('purchases')
+                .updateOne(
+                    { date: new Date(currentDate) },
+                    {
+                        $inc: {
+                            boughtTime: 1
+                        }
+                    }
+                );
+        } else {
+            await db
+                .collection('purchases')
+                .insertOne({
+                    boughtTime: 1,
+                    date: new Date(currentDate)
+                });
+        }
+
         return 'Purchase is successfully added';
     } catch (error) {
         console.log(error);

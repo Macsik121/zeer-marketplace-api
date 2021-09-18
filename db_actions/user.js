@@ -537,6 +537,37 @@ async function deleteAllResetRequests() {
     }
 }
 
+async function editUser(_, {
+    oldName,
+    name,
+    email,
+    hwid,
+    role
+}) {
+    try {
+        const db = getDb();
+
+        const newUser = await db
+            .collection('users')
+            .findOneAndUpdate(
+                { name: oldName },
+                {
+                    $set: {
+                        name,
+                        email
+                    }
+                },
+                {
+                    returnOriginal: false
+                }
+            );
+
+        return newUser.value;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getUser,
     getUsers,
@@ -554,5 +585,6 @@ module.exports = {
     getResetBindings,
     acceptResetBinding,
     rejectResetRequest,
-    deleteAllResetRequests
+    deleteAllResetRequests,
+    editUser
 };
