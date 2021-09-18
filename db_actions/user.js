@@ -417,14 +417,6 @@ async function deleteUser(_, { name }) {
     }
 }
 
-async function editUser(_, args) {
-    try {
-        const db = getDb();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 async function getResetBindings() {
     try {
         const db = getDb();
@@ -546,7 +538,17 @@ async function editUser(_, {
 }) {
     try {
         const db = getDb();
+        const status = {
+            isAdmin: null,
+            isBanned: null,
+            simpleUser: null
+        };
 
+        for (const possibleRole in status) {
+            if (possibleRole == role) {
+                status[role] = true;
+            }
+        }
         const newUser = await db
             .collection('users')
             .findOneAndUpdate(
@@ -554,7 +556,8 @@ async function editUser(_, {
                 {
                     $set: {
                         name,
-                        email
+                        email,
+                        status
                     }
                 },
                 {
@@ -563,6 +566,41 @@ async function editUser(_, {
             );
 
         return newUser.value;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function editUserPassword(_, {
+    userName,
+    adminName,
+    newPassword,
+    adminPassword
+}) {
+    try {
+        const db = getDb();
+
+        const admin = await db.collection('users').findOne({ name: adminName });
+
+        if (!await bcrypt.compare(adminPassword, admin.password)) {
+            return 'Вы ввели неправильный пароль.';
+        }
+
+        const salt = await bcrypt.genSalt(12);
+        newPassword = await bcrypt.hash(newPassword, salt);
+
+        await db
+            .collection('users')
+            .updateOne(
+                { name: userName },
+                {
+                    $set: {
+                        password: newPassword
+                    }
+                }
+            );
+
+        return `${userName}'s password is successfully changed.`;
     } catch (error) {
         console.log(error);
     }
@@ -586,5 +624,6 @@ module.exports = {
     acceptResetBinding,
     rejectResetRequest,
     deleteAllResetRequests,
-    editUser
+    editUser,
+    editUserPassword
 };

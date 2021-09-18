@@ -445,7 +445,12 @@ const typeDefs = `
             hwid: String,
             role: String
         ): User!
-        editUserPassword(adminPassword: String!, newPassword: String!): String!
+        editUserPassword(
+            adminName: String!,
+            adminPassword: String!,
+            userName: String!,
+            newPassword: String!
+        ): String!
     }
 `;
 

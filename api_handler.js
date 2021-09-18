@@ -77,7 +77,8 @@ const resolvers = {
         deleteCost: products.deleteCost,
         saveCostChanges: products.saveCostChanges,
         updateProductBG: products.updateProductBG,
-        editUser: user.editUser
+        editUser: user.editUser,
+        editUserPassword: user.editUserPassword
     }
 }
 
