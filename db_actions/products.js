@@ -70,6 +70,7 @@ async function buyProduct(
             dateToSet = 30,
             navigator,
             isKey = false
+
         }
     ) {
     try {
@@ -155,14 +156,14 @@ async function buyProduct(
                 { returnOriginal: false }
             );
             createPurchase();
+            createLog(
+                {
+                    name: user.name,
+                    action: `Покупка продукта ${title}`
+                },
+                navigator
+            );
         }
-        createLog(
-            {
-                name: user.name,
-                action: `Покупка продукта ${title}`
-            },
-            navigator
-        );
         return boughtProduct ? boughtProduct.value : product;
     } catch (error) {
         console.log(error);
@@ -483,7 +484,12 @@ async function createPromocode(_, { promocode, title, navigator, username }) {
     }
 }
 
-async function deletePromocode(_, { productTitle, promocodeTitle, navigator, name }) {
+async function deletePromocode(_, {
+    productTitle,
+    promocodeTitle,
+    navigator,
+    name
+}) {
     try {
         const db = getDb();
 
@@ -545,7 +551,13 @@ async function deleteAllPromocodes(_, { title }) {
     }
 }
 
-async function activateKey(_, { keyName, username, navigator }) {
+async function activateKey(
+    _,
+    {
+        keyName,
+        username,
+        navigator
+    }) {
     try {
         const db = getDb();
 
@@ -667,7 +679,7 @@ async function activateKey(_, { keyName, username, navigator }) {
             createLog(
                 {
                     name: username,
-                    action: 'Активирование ключа'
+                    action: `Активация ключа ${matchedKey.name}`
                 },
                 navigator
             );
@@ -680,7 +692,11 @@ async function activateKey(_, { keyName, username, navigator }) {
     }
 }
 
-async function editProduct(_, { product }) {
+async function editProduct(_, {
+    product,
+    navigator,
+    adminName
+}) {
     try {
         const db = getDb();
         const {
@@ -696,24 +712,48 @@ async function editProduct(_, { product }) {
             { returnOriginal: false }
         );
 
+        createLog(
+            {
+                name: adminName,
+                action: `Изменение продукта ${oldTitle}`
+            },
+            navigator
+        );
+
         return result.value;
     } catch (error) {
-        console.log(error);
+        console.log(error); 
     }
 }
 
-async function deleteProduct(_, { title }) {
+async function deleteProduct(_, {
+    title,
+    navigator,
+    name
+}) {
     try {
         const db = getDb();
-
         await db.collection('products').deleteOne({ title });
+
+        createLog(
+            {
+                name,
+                action: `Удаление продукта ${title}`
+            },
+            navigator
+        );
+
         return 'Продукт успешно удалён';
     } catch (error) {
         console.log(error);
     }
 }
 
-async function createProduct(_, { product }) {
+async function createProduct(_, {
+    product,
+    navigator,
+    adminName
+}) {
     try {
         const db = getDb();
         const products = await db.collection('products').find().toArray();
@@ -732,6 +772,14 @@ async function createProduct(_, { product }) {
         product.timeBought = 0;
 
         const result = await db.collection('products').insertOne(product);
+
+        createLog(
+            {
+                name: adminName,
+                action: `Создание продукта ${product.title}`
+            },
+            navigator
+        );
         return result.ops[0];
     } catch (error) {
         console.log(error);

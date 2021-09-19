@@ -27,10 +27,7 @@ async function createLog(
     {
         log: {
             name,
-            action,
-            date = new Date(),
-            IP = 'localhost',
-            location = 'Москва'
+            action
         },
         navigator: {
             userAgent,
@@ -41,12 +38,13 @@ async function createLog(
     try {
         const db = getDb();
 
+        let date = new Date();
         const browser = detectBrowser(userAgent);
         const actionLogs = await db.collection('actionLogs').find().toArray();
         let result = await fetch('http://ip-api.com/json');
         result = await result.json();
-        IP = result.query;
-        location = result.city;
+        let IP = result.query;
+        let location = result.city;
 
         const actionLog = {
             id: ++actionLogs.length,

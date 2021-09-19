@@ -406,10 +406,18 @@ async function makeResetRequest(
     }
 }
 
-async function deleteUser(_, { name }) {
+async function deleteUser(_, { name, navigator }) {
     try {
         const db = getDb();
         await db.collection('users').deleteOne({ name });
+
+        createLog(
+            {
+                name,
+                action: `Удаление пользователя ${name}`
+            },
+            navigator
+        );
 
         return `Вы успешно удалили пользователя с именем ${name}`
     } catch (error) {
@@ -534,10 +542,23 @@ async function editUser(_, {
     name,
     email,
     hwid,
-    role
+    role,
+    navigator,
+    adminName
 }) {
     try {
         const db = getDb();
+        const users = await db.collection('users').find().toArray();
+        let userExists = false;
+        for(let i = 0; i < users.length; i++) {
+            const user = users[i];
+            if (user == name) {
+                userExists = true;
+            }
+        }
+        if (userExists) {
+            return '';
+        }
         const status = {
             isAdmin: null,
             isBanned: null,
@@ -564,6 +585,15 @@ async function editUser(_, {
                     returnOriginal: false
                 }
             );
+
+        console.log(adminName)
+        createLog(
+            {
+                name: adminName,
+                action: `Редактирование пользователя ${oldName}`
+            },
+            navigator
+        );
 
         return newUser.value;
     } catch (error) {

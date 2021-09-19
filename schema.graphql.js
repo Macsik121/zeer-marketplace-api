@@ -401,7 +401,7 @@ const typeDefs = `
         freezeSubscription(name: String!, title: String!): User!
         unfreezeSubscription(name: String!, title: String!): User!
         makeResetRequest(name: String!, reason: String!, navigator: NavigatorInput): ResetRequest!
-        deleteUser(name: String!): String!
+        deleteUser(name: String!, navigator: NavigatorInput!): String!
         createPromocode(
             promocode: ProductPromocodeInput!,
             title: String!,
@@ -423,9 +423,21 @@ const typeDefs = `
         acceptResetBinding(name: String!, number: Int!): ResetRequest!
         rejectResetBinding(name: String!, number: Int!): String!
         deleteAllResetRequests: String!
-        editProduct(product: ProductInput!): Product!
-        deleteProduct(title: String!): String!
-        createProduct(product: ProductInput!): Product!
+        editProduct(
+            product: ProductInput!,
+            navigator: NavigatorInput!,
+            adminName: String!
+        ): Product!
+        deleteProduct(
+            title: String!,
+            navigator: NavigatorInput!,
+            name: String!
+        ): String!
+        createProduct(
+            product: ProductInput!,
+            navigator: NavigatorInput!,
+            adminName: String!
+        ): Product!
         createNews(title: String!, change: ProductChangeInput!): String!
         deleteNews(title: String!, changeTitle: Int!): String!
         deleteAllNews(title: String!): String!
@@ -443,7 +455,9 @@ const typeDefs = `
             name: String,
             email: String,
             hwid: String,
-            role: String
+            role: String,
+            navigator: NavigatorInput!,
+            adminName: String
         ): User!
         editUserPassword(
             adminName: String!,
