@@ -33,10 +33,10 @@ async function signUp(_, { email, name, password, navigator }) {
     try {
         const db = getDb();
         const existingUser = (
-            await db.collection('users').findOne({email}) ||
-            await db.collection('users').findOne({name})
+            await db.collection('users').findOne({ email }) ||
+            await db.collection('users').findOne({ name })
         );
-        const allUsers = await db.collection('users').find({}).toArray();
+        const allUsers = await db.collection('users').find().toArray();
         const hashedPassword = await bcrypt.hash(password, 12);
 
         if (existingUser && existingUser.name == name) {
@@ -77,7 +77,7 @@ async function signUp(_, { email, name, password, navigator }) {
 
         const insertedId = createdUser.insertedId;
 
-        const user = await db.collection('users').findOne({_id: insertedId})
+        const user = await db.collection('users').findOne({ _id: insertedId });
 
         createActionLog(
             {
@@ -93,10 +93,11 @@ async function signUp(_, { email, name, password, navigator }) {
                 id: user._id,
                 name: user.name,
                 avatar: user.avatar,
-                isAdmin: user.isAdmin
+                isAdmin: user.isAdmin,
+                status: user.status
             },
             '!@secretKey: Morgenshtern - Show@!',
-            {expiresIn: '3d'}
+            { expiresIn: '3d' }
         );
     
         return {
@@ -275,11 +276,17 @@ async function changePassword(_, { name, oldPassword, newPassword }) {
         const user = await db.collection('users').findOne({ name });
 
         if (!await bcrypt.compare(oldPassword, user.password)) {
-            return 'Ваш старый пароль неверный';
+            return {
+                success: false,
+                message: 'Ваш старый пароль неверный'
+            };
         }
 
         if (await bcrypt.compare(newPassword, user.password)) {
-            return 'Вы успешно поменяли пароль';
+            return {
+                success: false,
+                message: 'Вы успешно поменяли пароль'
+            };
         }
 
         await db.collection('users').updateOne(
@@ -287,7 +294,10 @@ async function changePassword(_, { name, oldPassword, newPassword }) {
             { $set: { password: await bcrypt.hash(newPassword, 12) } }
         );
 
-        return 'Вы успешно поменяли пароль'
+        return {
+            success: true,
+            message: 'Вы успешно поменяли пароль'
+        }
     } catch (error) {
         console.log(error);
     }
@@ -406,14 +416,18 @@ async function makeResetRequest(
     }
 }
 
-async function deleteUser(_, { name, navigator }) {
+async function deleteUser(_, {
+    name,
+    navigator,
+    adminName
+}) {
     try {
         const db = getDb();
         await db.collection('users').deleteOne({ name });
 
         createLog(
             {
-                name,
+                name: adminName,
                 action: `Удаление пользователя ${name}`
             },
             navigator
@@ -636,6 +650,47 @@ async function editUserPassword(_, {
     }
 }
 
+async function updateSubscriptionTime(_, {
+    name,
+    date,
+    title
+}) {
+    try {
+        const db = getDb();
+        if (!new Date(date).getTime()) {
+            return {
+                success: false,
+                message: 'Вы ввели дату неверно.'
+            }
+        }
+
+        await db
+            .collection('users')
+            .updateOne(
+                { name },
+                {
+                    $set: {
+                        'subscriptions.$[subscription].activelyUntil': new Date(date)
+                    }
+                },
+                {
+                    arrayFilters: [
+                        {
+                            'subscription.title': { $eq: title }
+                        }
+                    ]
+                }
+            );
+
+        return {
+            success: true,
+            message: `Подписка продукта ${title} у пользователя ${name} успешно изменена`
+        };
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getUser,
     getUsers,
@@ -655,5 +710,6 @@ module.exports = {
     rejectResetRequest,
     deleteAllResetRequests,
     editUser,
-    editUserPassword
+    editUserPassword,
+    updateSubscriptionTime
 };

@@ -202,6 +202,7 @@ const typeDefs = `
         title: String!
         productFor: String!
         imageURL: String
+        freezedFrom: Date!
     }
 
     input SubscriptionInput {
@@ -245,12 +246,8 @@ const typeDefs = `
     input UserInput {
         id: Int
         name: String!
-        password: String
         avatar: String
-        registeredDate: Date
-        subscriptions: [SubscriptionInput]
         status: UserStatusInput
-        resetRequests: [ResetRequestInput]
     }
 
     type ProductCost {
@@ -345,6 +342,16 @@ const typeDefs = `
         to: Date!
     }
 
+    type ServerResponse {
+        success: Boolean!
+        message: String!
+    }
+
+    type ProfitToday {
+        date: Date
+        cost: Int
+    }
+
     type Query {
         products: [Product!]!
         popularProducts(amountToGet: Int): [Product!]!
@@ -361,6 +368,7 @@ const typeDefs = `
         getActionLogs: [ActionLog]!
         getAllBindings: [ResetRequest]!
         purchases(week: WeekInput): [Purchase]!
+        profit(week: WeekInput): [ProfitToday]!
     }
 
     type Mutation {
@@ -395,13 +403,26 @@ const typeDefs = `
             name: String!
         ): String!
         deleteAllKeys(title: String!, navigator: NavigatorInput): String!
-        changePassword(name: String!, oldPassword: String!, newPassword: String!): String!
-        buyProduct(title: String!, name: String!, navigator: NavigatorInput): Product!
+        changePassword(
+            name: String!,
+            oldPassword: String!,
+            newPassword: String!
+        ): ServerResponse!
+        buyProduct(
+            title: String!,
+            name: String!,
+            navigator: NavigatorInput,
+            productCost: Int!
+        ): Product!
         updateBoughtIcon(name: String!): [Product!]!
         freezeSubscription(name: String!, title: String!): User!
         unfreezeSubscription(name: String!, title: String!): User!
         makeResetRequest(name: String!, reason: String!, navigator: NavigatorInput): ResetRequest!
-        deleteUser(name: String!, navigator: NavigatorInput!): String!
+        deleteUser(
+            name: String!,
+            navigator: NavigatorInput!,
+            adminName: String!
+        ): String!
         createPromocode(
             promocode: ProductPromocodeInput!,
             title: String!,
@@ -465,6 +486,15 @@ const typeDefs = `
             userName: String!,
             newPassword: String!
         ): String!
+        updateSubscriptionTime(
+            name: String!,
+            date: String!,
+            title: String!
+        ): ServerResponse!
+        freezeUserSub(
+            name: String!,
+            title: String!
+        ): ServerResponse!
     }
 `;
 

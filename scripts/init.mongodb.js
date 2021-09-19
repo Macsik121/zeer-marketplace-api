@@ -539,3 +539,4 @@ db.answersFAQ.deleteMany({});
 db.answersFAQ.insertMany(answers);
 
 db.purchases.deleteMany({});
+db.profit.deleteMany({});

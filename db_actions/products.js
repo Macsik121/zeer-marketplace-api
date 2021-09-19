@@ -2,6 +2,7 @@ const { getDb } = require('./db');
 const createLog = require('../createLog');
 const updateDate = require('../update-date');
 const { createPurchase } = require('./purchases');
+const { createProfit } = require('./profit');
 
 async function getProducts() {
     try {
@@ -69,8 +70,8 @@ async function buyProduct(
             name,
             dateToSet = 30,
             navigator,
-            isKey = false
-
+            isKey = false,
+            productCost
         }
     ) {
     try {
@@ -156,6 +157,7 @@ async function buyProduct(
                 { returnOriginal: false }
             );
             createPurchase();
+            createProfit(productCost);
             createLog(
                 {
                     name: user.name,
