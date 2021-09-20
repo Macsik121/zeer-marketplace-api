@@ -303,7 +303,8 @@ const typeDefs = `
         currentDate: Date
         promocodes: ProductPromocodes
         status: ProductStatus
-        locationOnclick: String!
+        locationOnclick: String
+        freezeTime: Date
     }
 
     input ProductInput {

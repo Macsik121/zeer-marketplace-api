@@ -660,7 +660,7 @@ async function updateSubscriptionTime(_, {
         if (!new Date(date).getTime()) {
             return {
                 success: false,
-                message: 'Вы ввели дату неверно.'
+                message: 'Вы ввели дату неверно. Дата должна быть в формате yyyy-mm-dd.'
             }
         }
 

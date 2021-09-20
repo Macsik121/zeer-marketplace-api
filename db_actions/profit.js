@@ -44,8 +44,6 @@ async function createProfit(cost) {
         for (let i = 0; i < profit.length; i++) {
             const currentProfit = profit[i];
             const profitDate = new Date(new Date(currentProfit.date).toISOString().substr(0, 10)).getTime();
-            if (profitDate == new Date(date).getTime()) console.log(true);
-            else console.log(false);
             if (new Date(date).getTime() == profitDate) {
                 profitExists = true;
                 break;
