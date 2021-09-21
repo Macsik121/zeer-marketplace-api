@@ -26,6 +26,8 @@ const products = [
         locks: 0,
         locationOnclick: '/dashboard/products/hwid spoofer',
         costPerDayInfo: 34,
+        wasFreezed: false,
+        freezeTime: new Date(),
         allCost: [
             {
                 cost: 228,
@@ -82,6 +84,8 @@ const products = [
         status: 'undetect',
         locationOnclick: '/dashboard/products/zeer-changer',
         costPerDayInfo: 34,
+        wasFreezed: false,
+        freezeTime: new Date(),
         allCost: [
             {
                 cost: 228,
@@ -142,6 +146,8 @@ const products = [
         status: 'undetect',
         locationOnclick: '/dashboard/products/Damage Plus',
         costPerDayInfo: 34,
+        wasFreezed: false,
+        freezeTime: new Date(),
         allCost: [
             {
                 cost: 228,
@@ -202,6 +208,8 @@ const products = [
         status: 'undetect',
         locationOnclick: '/dashboard/products/esp + wallhack',
         costPerDayInfo: 34,
+        wasFreezed: false,
+        freezeTime: new Date(),
         allCost: [
             {
                 cost: 228,
@@ -260,6 +268,8 @@ const products = [
         status: 'undetect',
         locationOnclick: '/dashboard/products/tournament',
         costPerDayInfo: 34,
+        wasFreezed: false,
+        freezeTime: new Date(),
         allCost: [
             {
                 cost: 228,
@@ -325,6 +335,8 @@ const products = [
         status: 'undetect',
         locationOnclick: '/dashboard/products/Not HWID spoofer',
         costPerDayInfo: 34,
+        wasFreezed: false,
+        freezeTime: new Date(),
         allCost: [
             {
                 cost: 228,
@@ -385,6 +397,8 @@ const products = [
         status: 'undetect',
         locationOnclick: '/dashboard/products/hwid spofer2',
         costPerDayInfo: 34,
+        wasFreezed: false,
+        freezeTime: new Date(),
         allCost: [
             {
                 cost: 228,
@@ -540,3 +554,4 @@ db.answersFAQ.insertMany(answers);
 
 db.purchases.deleteMany({});
 db.profit.deleteMany({});
+db.users.updateMany({}, { $set: { subscriptions: [] } });

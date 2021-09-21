@@ -772,6 +772,8 @@ async function createProduct(_, {
         product.locationOnclick = '/dashboard/products/' + product.title;
         product.costPerDayInfo = 0;
         product.timeBought = 0;
+        product.freezeTime = new Date();
+        product.wasFreezed = false;
 
         const result = await db.collection('products').insertOne(product);
 

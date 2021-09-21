@@ -305,6 +305,7 @@ const typeDefs = `
         status: ProductStatus
         locationOnclick: String
         freezeTime: Date
+        wasFreezed: Boolean
     }
 
     input ProductInput {
