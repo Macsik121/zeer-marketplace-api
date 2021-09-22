@@ -7,7 +7,16 @@ const { createProfit } = require('./profit');
 async function getProducts() {
     try {
         const db = getDb();
-        const products = await db.collection('products').find().toArray();
+        const products = (
+            await db
+                .collection('products')
+                .aggregate([
+                    {
+                        $sort: { id: 1 }
+                    }
+                ])
+                .toArray()
+        );
         updateDate(products, db);
         return products;
     } catch (error) {
@@ -115,7 +124,9 @@ async function buyProduct(
                         activelyUntil,
                         title,
                         productFor: product.productFor,
-                        imageURL: product.imageURLdashboard
+                        imageURL: product.imageURLdashboard,
+                        freezeTime: new Date(),
+                        wasFreezed: false
                     }
                 } }
             );
@@ -212,16 +223,28 @@ async function freezeSubscripiton(_, { name, title }) {
                     isExpired: false,
                     isFreezed: true
                 };
+                sub.wasFreezed = true;
+                sub.freezeTime = new Date(`${
+                    new Date().getFullYear()
+                }-${
+                    new Date().getMonth() + 1 + 2
+                }-${
+                    new Date().getDate()
+                }`);
             }
             return sub;
         });
         const newUser = (
             await db.collection('users').findOneAndUpdate(
                 { name },
-                { $set: { subscriptions: user.subscriptions } },
+                {
+                    $set: {
+                        subscriptions: user.subscriptions
+                    }
+                },
                 { returnNewDocument: true }
             )
-        )
+        );
         return newUser.value;
     } catch (error) {
         console.log(error);
@@ -759,7 +782,7 @@ async function createProduct(_, {
     try {
         const db = getDb();
         const products = await db.collection('products').find().toArray();
-        product.id = products.length + 1;
+        product.id = products[products.length - 1].id + 1;
         product.status = 'undetect';
         product.allCost = [
             {

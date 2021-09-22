@@ -202,7 +202,8 @@ const typeDefs = `
         title: String!
         productFor: String!
         imageURL: String
-        freezedFrom: Date!
+        freezeTime: Date
+        wasFreezed: Boolean
     }
 
     input SubscriptionInput {
@@ -304,8 +305,6 @@ const typeDefs = `
         promocodes: ProductPromocodes
         status: ProductStatus
         locationOnclick: String
-        freezeTime: Date
-        wasFreezed: Boolean
     }
 
     input ProductInput {
