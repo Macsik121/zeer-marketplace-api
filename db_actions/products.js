@@ -116,19 +116,21 @@ async function buyProduct(
             activelyUntil.setDate(activelyUntil.getDate() + dateToSet);
             await db.collection('users').updateOne(
                 { name },
-                { $push: {
-                    subscriptions: {
-                        status: {
-                            isActive: true
-                        },
-                        activelyUntil,
-                        title,
-                        productFor: product.productFor,
-                        imageURL: product.imageURLdashboard,
-                        freezeTime: new Date(),
-                        wasFreezed: false
+                {
+                    $push: {
+                        subscriptions: {
+                            status: {
+                                isActive: true
+                            },
+                            activelyUntil,
+                            title,
+                            productFor: product.productFor,
+                            imageURL: product.imageURLdashboard,
+                            freezeTime: new Date(),
+                            wasFreezed: false
+                        }
                     }
-                } }
+                }
             );
         } else {
             let subIndex = 0;
@@ -224,18 +226,14 @@ async function freezeSubscripiton(_, { name, title }) {
                     isFreezed: true
                 };
                 sub.wasFreezed = true;
-                sub.freezeTime = new Date(`${
-                    new Date().getFullYear()
-                }-${
-                    new Date().getMonth() + 1 + 2
-                }-${
-                    new Date().getDate()
-                }`);
+                const freezeTime = new Date();
+                freezeTime.setMonth(new Date().getMonth());
+                sub.freezeTime = freezeTime;
             }
             return sub;
         });
         const newUser = (
-            await db.collection('users').findOneAndUpdate(
+            await db.collection('users').updateOne(
                 { name },
                 {
                     $set: {
@@ -245,7 +243,10 @@ async function freezeSubscripiton(_, { name, title }) {
                 { returnNewDocument: true }
             )
         );
-        return newUser.value;
+        return {
+            success: true,
+            message: 'Подписка успешно заморожена!'
+        };
     } catch (error) {
         console.log(error);
     }
@@ -255,24 +256,55 @@ async function unfreezeSubscription(_, { name, title }) {
     try {
         const db = getDb();
         const user = await db.collection('users').findOne({ name });
-        user.subscriptions.map(sub => {
+        let updateSubscription = {};
+        for(let i = 0; i < user.subscriptions.length; i++) {
+            const sub = user.subscriptions[i];
             if (sub.title == title) {
                 sub.status = {
                     isActive: true,
                     isExpired: false,
                     isFreezed: false
                 };
+                // feezeTime = new Date('2021-09-25')
+                // currentDate = new Date('2021-09-24')
+                const freezeTime = new Date(sub.freezeTime).getTime();
+                const currentDate = new Date().getTime();
+                const activelyUntil = new Date(sub.activelyUntil).getTime();
+                let difference = currentDate - freezeTime;
+                console.log(new Date(freezeTime));
+                if (currentDate - freezeTime >= 0) {
+                    sub.activelyUntil = new Date(activelyUntil + difference);
+                } else if (currentDate - freezeTime < 0) {
+                    difference = freezeTime - currentDate;
+                    sub.activelyUntil = new Date(activelyUntil + difference);
+                }
+                updateSubscription = sub;
+                break;
             }
-            return sub;
-        });
-        const newUser = (
-            await db.collection('users').findOneAndUpdate(
-                { name },
-                { $set: { subscriptions: user.subscriptions } },
-                { returnNewDocument: true }
-            )
+        }
+        await db.collection('users').updateOne(
+            { name },
+            {
+                $set: {
+                    'subscriptions.$[subscription]': updateSubscription
+                }
+            },
+            {
+                returnNewDocument: true,
+                arrayFilters: [
+                    {
+                        'subscription.title': {
+                            $eq: title
+                        }
+                    }
+                ]
+            }
         )
-        return newUser.value;
+
+        return {
+            success: true,
+            message: 'Подписка успешно разморожена!'
+        };
     } catch (error) {
         console.log(error);
     }
@@ -708,9 +740,15 @@ async function activateKey(
                 },
                 navigator
             );
-            return message;
+            return {
+                success: true,
+                message
+            };
         } else {
-            return 'Такого ключа не существует';
+            return {
+                success: false,
+                message: 'Такого ключа не существует'
+            }
         }
     } catch (error) {
         console.log(error);

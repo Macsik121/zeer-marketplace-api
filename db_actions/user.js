@@ -93,7 +93,6 @@ async function signUp(_, { email, name, password, navigator }) {
                 id: user._id,
                 name: user.name,
                 avatar: user.avatar,
-                isAdmin: user.isAdmin,
                 status: user.status
             },
             '!@secretKey: Morgenshtern - Show@!',
@@ -254,11 +253,11 @@ async function changeAvatar(_, { name, avatar }) {
         const newToken = (
             jwt.sign(
                 {
-                    email: user.email,
                     id: user._id,
+                    email: user.email,
                     name: user.name,
                     avatar: user.avatar,
-                    isAdmin: user.isAdmin
+                    status: user.status
                 },
                 '!@secretKey: Morgenshtern - Show@!',
                 { expiresIn: '3d' }
@@ -306,7 +305,7 @@ async function changePassword(_, { name, oldPassword, newPassword }) {
 async function getSubscriptions(_, { name }) {
     try {
         const db = getDb();
-        const user = await db.collection('users').findOne({name});
+        const user = await db.collection('users').findOne({ name });
         const activeSubs = [];
         user.subscriptions.map(sub => {
             if (sub && sub.status.isActive) activeSubs.push(sub);
@@ -651,43 +650,106 @@ async function editUserPassword(_, {
 }
 
 async function updateSubscriptionTime(_, {
-    name,
     date,
-    title
+    subscription,
+    name
 }) {
     try {
         const db = getDb();
+        const { title } = subscription;
         if (!new Date(date).getTime()) {
             return {
                 success: false,
                 message: 'Вы ввели дату неверно. Дата должна быть в формате yyyy-mm-dd.'
             }
         }
+        let subscriptionExists = false;
+        const user = await db.collection('users').findOne({ name });
+        for(let i = 0; i < user.subscriptions.length; i++) {
+            const sub = user.subscriptions[i];
+            if (sub.title.toLowerCase() == title.toLowerCase()) {
+                subscriptionExists = true;
+                break;
+            }
+        }
+        if (new Date().getTime() > new Date(date).getTime()) {
+            subscription.status = {
+                isActive: true
+            }
+        } else {
+            subscription.status = {
+                isExpired: true,
+                isActive: false,
+                isFreezed: false
+            }
+        }
+        if (subscriptionExists) {
+            await db
+                .collection('users')
+                .updateOne(
+                    { name },
+                    {
+                        $set: {
+                            'subscriptions.$[subscription].activelyUntil': new Date(date)
+                        }
+                    },
+                    {
+                        arrayFilters: [
+                            {
+                                'subscription.title': { $eq: title }
+                            }
+                        ]
+                    }
+                );
 
+            return {
+                success: true,
+                message: `Подписка продукта ${title} у пользователя ${name} успешно изменена`
+            };
+        } else {
+            subscription.activelyUntil = new Date(date);
+            await db
+                .collection('users')
+                .updateOne(
+                    { name },
+                    {
+                        $push: subscription
+                    }
+                );
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function resetFreezeCooldown(_, { name, title }) {
+    try {
+        const db = getDb();
         await db
             .collection('users')
             .updateOne(
                 { name },
                 {
                     $set: {
-                        'subscriptions.$[subscription].activelyUntil': new Date(date)
+                        // 'subscriptions.$[subscription].freezeTime': new Date()
+                        'subscriptions.$[subscription].wasFreezed': false
                     }
                 },
                 {
-                    arrayFilters: [
-                        {
-                            'subscription.title': { $eq: title }
+                    arrayFilters: [{
+                        'subscription.title': {
+                            $eq: title
                         }
-                    ]
+                    }]
                 }
             );
-
+        
         return {
             success: true,
-            message: `Подписка продукта ${title} у пользователя ${name} успешно изменена`
+            message: 'Кулдаун заморозки успешно сброшен!'
         };
-    } catch (error) {
-        console.log(error);
+    } catch (e) {
+        console.log(e);
     }
 }
 
@@ -711,5 +773,6 @@ module.exports = {
     deleteAllResetRequests,
     editUser,
     editUserPassword,
-    updateSubscriptionTime
+    updateSubscriptionTime,
+    resetFreezeCooldown
 };

@@ -416,8 +416,8 @@ const typeDefs = `
             productCost: Int!
         ): Product!
         updateBoughtIcon(name: String!): [Product!]!
-        freezeSubscription(name: String!, title: String!): User!
-        unfreezeSubscription(name: String!, title: String!): User!
+        freezeSubscription(name: String!, title: String!): ServerResponse!
+        unfreezeSubscription(name: String!, title: String!): ServerResponse!
         makeResetRequest(name: String!, reason: String!, navigator: NavigatorInput): ResetRequest!
         deleteUser(
             name: String!,
@@ -441,7 +441,11 @@ const typeDefs = `
         deleteAnswerSort(sort: String!): String!
         createAnswer(sort: String!, answer: AnswerInput!): Answer!
         deleteAnswer(sort: String!, title: String!): String!
-        activateKey(keyName: String!, username: String!, navigator: NavigatorInput): String!
+        activateKey(
+            keyName: String!,
+            username: String!,
+            navigator: NavigatorInput
+        ): ServerResponse!
         acceptResetBinding(name: String!, number: Int!): ResetRequest!
         rejectResetBinding(name: String!, number: Int!): String!
         deleteAllResetRequests: String!
@@ -488,13 +492,13 @@ const typeDefs = `
             newPassword: String!
         ): String!
         updateSubscriptionTime(
-            name: String!,
             date: String!,
-            title: String!
+            subscription: SubscriptionInput!,
+            name: String!
         ): ServerResponse!
-        freezeUserSub(
-            name: String!,
-            title: String!
+        resetFreezeCooldown(
+            title: String!,
+            name: String!
         ): ServerResponse!
     }
 `;
