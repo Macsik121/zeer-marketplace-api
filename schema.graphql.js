@@ -207,11 +207,13 @@ const typeDefs = `
     }
 
     input SubscriptionInput {
-        status: StatusInput!
-        activelyUntil: Date!
-        title: String!
-        productFor: String!
+        status: StatusInput
+        activelyUntil: Date
+        title: String
+        productFor: String
         imageURL: String
+        wasFreezed: Boolean
+        freezeTime: Date
     }
 
     type Subscriptions {
@@ -500,6 +502,7 @@ const typeDefs = `
             title: String!,
             name: String!
         ): ServerResponse!
+        issueSubscription(name: String!, subscription: SubscriptionInput!): ServerResponse!
     }
 `;
 

@@ -6,9 +6,13 @@ async function getAllProfit(_, { week }) {
         const allProfit = await db.collection('profit').find().toArray();
         const weeklyProfit = Array.from(Array(7).keys());
         let { from, to } = week;
-        from = new Date(new Date(from).toISOString().substr(0, 10)).getTime();
-        to = new Date(new Date(to).toISOString().substr(0, 10)).getTime();
+        function generateDate(date) {
+            return new Date(new Date(date).toISOString().substr(0, 10));
+        }
+        from = generateDate(from).getTime();
+        to = generateDate(to).getTime();
 
+        deleteUselessProfit(db, week);
         allProfit.map((profit, i) => {
             const profitDate = (
                 new Date(
@@ -69,6 +73,26 @@ async function createProfit(cost) {
         }
 
         return 'Кто-то купил товар сегодня.';
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function deleteUselessProfit(db, days) {
+    try {
+        const { from, to } = days;
+        const allProfit = await db.collection('profit').find().toArray();
+        let uselessProfitExist = false;
+        for(let i = 0; i < allProfit.length; i++) {
+            const date = new Date(allProfit[i].date).getTime();
+            if (from > date || to < date) {
+                uselessProfitExist = true;
+                break;
+            }
+        }
+        if (uselessProfitExist) {
+            await db.collection('profit').deleteMany({ date: { $lt: from } });
+        }
     } catch (error) {
         console.log(error);
     }

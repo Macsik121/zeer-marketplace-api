@@ -753,6 +753,33 @@ async function resetFreezeCooldown(_, { name, title }) {
     }
 }
 
+async function issueSubscription(_, {
+    name,
+    subscription
+}) {
+    try {
+        const db = getDb();
+
+        await db
+            .collection('users')
+            .updateOne(
+                { name },
+                {
+                    $push: {
+                        subscriptions: subscription
+                    }
+                }
+            );
+
+        return {
+            success: true,
+            message: `Вы успешно добавили подписку ${subscription.title} пользователю ${name}!`
+        };
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getUser,
     getUsers,
@@ -774,5 +801,6 @@ module.exports = {
     editUser,
     editUserPassword,
     updateSubscriptionTime,
-    resetFreezeCooldown
+    resetFreezeCooldown,
+    issueSubscription
 };

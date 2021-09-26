@@ -82,7 +82,8 @@ const resolvers = {
         editUser: user.editUser,
         editUserPassword: user.editUserPassword,
         updateSubscriptionTime: user.updateSubscriptionTime,
-        resetFreezeCooldown: user.resetFreezeCooldown
+        resetFreezeCooldown: user.resetFreezeCooldown,
+        issueSubscription: user.issueSubscription
     }
 }
 
