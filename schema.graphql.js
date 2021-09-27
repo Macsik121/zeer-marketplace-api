@@ -415,7 +415,8 @@ const typeDefs = `
             title: String!,
             name: String!,
             navigator: NavigatorInput,
-            productCost: Int!
+            productCost: Int!,
+            isKey: Boolean
         ): Product!
         updateBoughtIcon(name: String!): [Product!]!
         freezeSubscription(name: String!, title: String!): ServerResponse!
