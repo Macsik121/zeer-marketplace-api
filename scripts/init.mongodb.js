@@ -30,22 +30,26 @@ const products = [
             {
                 cost: 228,
                 costPer: 'Неделя',
-                menuText: 'Еженедельно'
+                menuText: 'Еженедельно',
+                days: 7
             },
             {
                 cost: 12,
                 costPer: 'День',
-                menuText: 'Ежеквартально'
+                menuText: 'Ежеквартально',
+                days: 1
             },
             {
                 cost: 4320,
                 costPer: 'Ежегодно',
-                menuText: 'Ежегодно'
+                menuText: 'Ежегодно',
+                days: 365
             },
             {
                 cost: 360,
                 costPer: 'Месяц',
-                menuText: 'Ежемесячно'
+                menuText: 'Ежемесячно',
+                days: 30
             }
         ],
         promocodes: {
@@ -86,22 +90,26 @@ const products = [
             {
                 cost: 228,
                 costPer: 'Неделя',
-                menuText: 'Еженедельно'
+                menuText: 'Еженедельно',
+                days: 7
             },
             {
                 cost: 12,
                 costPer: 'День',
-                menuText: 'Ежеквартально'
+                menuText: 'Ежеквартально',
+                days: 1
             },
             {
                 cost: 4320,
                 costPer: 'Ежегодно',
-                menuText: 'Ежегодно'
+                menuText: 'Ежегодно',
+                days: 365
             },
             {
                 cost: 360,
                 costPer: 'Месяц',
-                menuText: 'Ежемесячно'
+                menuText: 'Ежемесячно',
+                days: 30
             }
         ],
         keys: {
@@ -146,22 +154,26 @@ const products = [
             {
                 cost: 228,
                 costPer: 'Неделя',
-                menuText: 'Еженедельно'
+                menuText: 'Еженедельно',
+                days: 7
             },
             {
                 cost: 12,
                 costPer: 'День',
-                menuText: 'Ежеквартально'
+                menuText: 'Ежеквартально',
+                days: 1
             },
             {
                 cost: 4320,
                 costPer: 'Ежегодно',
-                menuText: 'Ежегодно'
+                menuText: 'Ежегодно',
+                days: 365
             },
             {
                 cost: 360,
                 costPer: 'Месяц',
-                menuText: 'Ежемесячно'
+                menuText: 'Ежемесячно',
+                days: 30
             }
         ],
         keys: {
@@ -206,22 +218,26 @@ const products = [
             {
                 cost: 228,
                 costPer: 'Неделя',
-                menuText: 'Еженедельно'
+                menuText: 'Еженедельно',
+                days: 7
             },
             {
                 cost: 12,
                 costPer: 'День',
-                menuText: 'Ежеквартально'
+                menuText: 'Ежеквартально',
+                days: 1
             },
             {
                 cost: 4320,
                 costPer: 'Ежегодно',
-                menuText: 'Ежегодно'
+                menuText: 'Ежегодно',
+                days: 365
             },
             {
                 cost: 360,
                 costPer: 'Месяц',
-                menuText: 'Ежемесячно'
+                menuText: 'Ежемесячно',
+                days: 30
             }
         ],
         keys: {
@@ -264,22 +280,26 @@ const products = [
             {
                 cost: 228,
                 costPer: 'Неделя',
-                menuText: 'Еженедельно'
+                menuText: 'Еженедельно',
+                days: 7
             },
             {
                 cost: 12,
                 costPer: 'День',
-                menuText: 'Ежеквартально'
+                menuText: 'Ежеквартально',
+                days: 1
             },
             {
                 cost: 4320,
                 costPer: 'Ежегодно',
-                menuText: 'Ежегодно'
+                menuText: 'Ежегодно',
+                days: 365
             },
             {
                 cost: 360,
                 costPer: 'Месяц',
-                menuText: 'Ежемесячно'
+                menuText: 'Ежемесячно',
+                days: 30
             }
         ],
         locks: 0,
@@ -329,22 +349,26 @@ const products = [
             {
                 cost: 228,
                 costPer: 'Неделя',
-                menuText: 'Еженедельно'
+                menuText: 'Еженедельно',
+                days: 7
             },
             {
                 cost: 12,
                 costPer: 'День',
-                menuText: 'Ежеквартально'
+                menuText: 'Ежеквартально',
+                days: 1
             },
             {
                 cost: 4320,
                 costPer: 'Ежегодно',
-                menuText: 'Ежегодно'
+                menuText: 'Ежегодно',
+                days: 365
             },
             {
                 cost: 360,
                 costPer: 'Месяц',
-                menuText: 'Ежемесячно'
+                menuText: 'Ежемесячно',
+                days: 30
             }
         ],
         locks: 0,
@@ -389,22 +413,26 @@ const products = [
             {
                 cost: 228,
                 costPer: 'Неделя',
-                menuText: 'Еженедельно'
+                menuText: 'Еженедельно',
+                days: 7
             },
             {
                 cost: 12,
                 costPer: 'День',
-                menuText: 'Ежеквартально'
+                menuText: 'Ежеквартально',
+                days: 1
             },
             {
                 cost: 4320,
                 costPer: 'Ежегодно',
-                menuText: 'Ежегодно'
+                menuText: 'Ежегодно',
+                days: 365
             },
             {
                 cost: 360,
                 costPer: 'Месяц',
-                menuText: 'Ежемесячно'
+                menuText: 'Ежемесячно',
+                days: 30
             }
         ],
         locks: 0,

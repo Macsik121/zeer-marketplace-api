@@ -73,30 +73,35 @@ async function getPopularProducts(_, { amountToGet = 3 }) {
 }
 
 async function buyProduct(
-        _,
-        {
-            title,
-            name,
-            dateToSet = 30,
-            navigator,
-            isKey = false,
-            productCost
-        }
-    ) {
+    _,
+    {
+        title,
+        name,
+        navigator,
+        isKey = false,
+        productCost,
+        issueSub = false,
+        activelyUntilDate = new Date().setMonth(new Date().getMonth() + 1)
+    }
+) {
     try {
         const db = getDb();
         const user = await db.collection('users').findOne({ name });
         const product = await db.collection('products').findOne({ title });
+        let userSub = {};
         let userExists = false;
         let boughtProduct;
         if (product.peopleBought.length > 0) {
             for(let i = 0; i < product.peopleBought.length; i++) {
-                if (product.peopleBought[i] && product.peopleBought[i].name == name) {
+                const currentProduct = product.peopleBought[i];
+                if (currentProduct && currentProduct.name == name) {
                     userExists = true;
+                    userSub = currentProduct;
                     break;
                 }
             }
         }
+        let activelyUntil = new Date(activelyUntilDate);
         if (!userExists) {
             boughtProduct = (
                 await db.collection('products').findOneAndUpdate(
@@ -112,8 +117,6 @@ async function buyProduct(
                     { returnOriginal: false }
                 )
             );
-            let activelyUntil = new Date();
-            activelyUntil.setDate(activelyUntil.getDate() + dateToSet);
             await db.collection('users').updateOne(
                 { name },
                 {
@@ -141,17 +144,21 @@ async function buyProduct(
                     break;
                 }
             }
-            let activelyUntil;
-            activelyUntil = new Date(user.subscriptions[subIndex].activelyUntil);
-            activelyUntil.setDate(activelyUntil.getDate() + dateToSet);
-            product.activelyUntil = activelyUntil;
+            console.log(userSub.activelyUntil);
+            console.log(new Date(new Date(userSub.activelyUntil).getTime() + activelyUntil.getTime()));
             await db
                 .collection('users')
                 .updateOne(
                     { name },
                     {
                         $set: {
-                            'subscriptions.$[key].activelyUntil': activelyUntil
+                            'subscriptions.$[key].activelyUntil': (
+                                new Date(
+                                    new Date(
+                                        userSub.activelyUntil
+                                    ).getTime() + activelyUntil.getTime()
+                                )
+                            )
                         }
                     },
                     {
@@ -169,15 +176,17 @@ async function buyProduct(
                 { $inc: { timeBought: 1 } },
                 { returnOriginal: false }
             );
-            createPurchase();
-            createProfit(productCost);
-            createLog(
-                {
-                    name: user.name,
-                    action: `Покупка продукта ${title}`
-                },
-                navigator
-            );
+            if (!issueSub) {
+                createPurchase();
+                createProfit(productCost);
+                createLog(
+                    {
+                        name: user.name,
+                        action: `Покупка продукта ${title}`
+                    },
+                    navigator
+                );
+            }
         }
         return boughtProduct ? boughtProduct.value : product;
     } catch (error) {

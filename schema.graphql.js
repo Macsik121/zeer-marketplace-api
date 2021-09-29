@@ -275,6 +275,7 @@ const typeDefs = `
         cost: Int!
         costPer: String!
         menuText: String!
+        days: Int!
     }
 
     input CostInput {
@@ -416,7 +417,9 @@ const typeDefs = `
             name: String!,
             navigator: NavigatorInput,
             productCost: Int!,
-            isKey: Boolean
+            isKey: Boolean,
+            issueSub: Boolean,
+            activelyUntilDate: Date
         ): Product!
         updateBoughtIcon(name: String!): [Product!]!
         freezeSubscription(name: String!, title: String!): ServerResponse!

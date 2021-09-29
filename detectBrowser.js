@@ -15,6 +15,6 @@ module.exports = function detectBrowser(userAgent) {
     ) {
       return 'Internet Explorer'; 
     } else {
-       return null;
+       return 'Unknown browser';
     }
 }
