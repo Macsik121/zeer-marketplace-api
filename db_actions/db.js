@@ -5,7 +5,13 @@ const dbUri = process.env.DB_URL || 'mongodb+srv://Macsick121:AsDf1234@cluster0.
 let db;
 
 async function connectToDb() {
-    const client = new MongoClient(dbUri, {useNewUrlParser: true, useUnifiedTopology: true});
+    const client = new MongoClient(
+        dbUri,
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }
+    );
     await client.connect();
     console.log(`MongoDB has successfully connected on ${dbUri}`);
     db = client.db();

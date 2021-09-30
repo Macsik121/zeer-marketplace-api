@@ -282,6 +282,7 @@ const typeDefs = `
         cost: Int!
         costPer: String!
         menuText: String!
+        days: Int
     }
 
     type Product {
@@ -419,7 +420,7 @@ const typeDefs = `
             productCost: Int!,
             isKey: Boolean,
             issueSub: Boolean,
-            activelyUntilDate: Date
+            days: Int
         ): Product!
         updateBoughtIcon(name: String!): [Product!]!
         freezeSubscription(name: String!, title: String!): ServerResponse!

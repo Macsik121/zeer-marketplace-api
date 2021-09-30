@@ -81,7 +81,7 @@ async function buyProduct(
         isKey = false,
         productCost,
         issueSub = false,
-        activelyUntilDate = new Date().setMonth(new Date().getMonth() + 1)
+        days = 30
     }
 ) {
     try {
@@ -96,12 +96,19 @@ async function buyProduct(
                 const currentProduct = product.peopleBought[i];
                 if (currentProduct && currentProduct.name == name) {
                     userExists = true;
-                    userSub = currentProduct;
                     break;
                 }
             }
         }
-        let activelyUntil = new Date(activelyUntilDate);
+        for(let i = 0; i < user.subscriptions.length; i++) {
+            const subscription = user.subscriptions[i];
+            if (subscription.title == title) {
+                userSub = subscription;
+                break;
+            }
+        }
+        let activelyUntil = new Date().setDate(new Date().getDate() + days);
+        activelyUntil = new Date(activelyUntil);
         if (!userExists) {
             boughtProduct = (
                 await db.collection('products').findOneAndUpdate(
@@ -144,21 +151,15 @@ async function buyProduct(
                     break;
                 }
             }
-            console.log(userSub.activelyUntil);
-            console.log(new Date(new Date(userSub.activelyUntil).getTime() + activelyUntil.getTime()));
+            userSub.activelyUntil = new Date(userSub.activelyUntil).setDate(new Date(userSub.activelyUntil).getDate() + days);
+            userSub.activelyUntil = new Date(userSub.activelyUntil);
             await db
                 .collection('users')
                 .updateOne(
                     { name },
                     {
                         $set: {
-                            'subscriptions.$[key].activelyUntil': (
-                                new Date(
-                                    new Date(
-                                        userSub.activelyUntil
-                                    ).getTime() + activelyUntil.getTime()
-                                )
-                            )
+                            'subscriptions.$[key].activelyUntil': userSub.activelyUntil
                         }
                     },
                     {
@@ -280,7 +281,6 @@ async function unfreezeSubscription(_, { name, title }) {
                 const currentDate = new Date().getTime();
                 const activelyUntil = new Date(sub.activelyUntil).getTime();
                 let difference = currentDate - freezeTime;
-                console.log(new Date(freezeTime));
                 if (currentDate - freezeTime >= 0) {
                     sub.activelyUntil = new Date(activelyUntil + difference);
                 } else if (currentDate - freezeTime < 0) {
@@ -412,7 +412,7 @@ async function createKeys(_, { key, title, navigator, username }) {
                 navigator
             );
 
-            return 'Вы успешно создали ключ'
+            return 'Вы успешно создали ключ';
         }
     } catch (error) {
         console.log(error);
@@ -664,10 +664,9 @@ async function activateKey(
                 {
                     title: matchedProduct.title,
                     name: username,
-                    dateToSet: matchedKey.expiredInDays,
-                    subscriptionExists: true,
                     navigator,
-                    isKey: true
+                    isKey: true,
+                    days: matchedKey.expiredInDays
                 }
             );
             await db
