@@ -40,6 +40,7 @@ async function createLog(
         const actionLogs = await db.collection('actionLogs').find().toArray();
         let result = await fetch('https://ipinfo.io/json');
         result = await result.json();
+        console.log(result);
         let IP = result.ip;
         let location = result.city;
         let platform = "Unknown OS";
