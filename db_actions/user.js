@@ -29,7 +29,7 @@ async function getUser(_, { name }) {
     }
 }
 
-async function signUp(_, { email, name, password, navigator }) {
+async function signUp(_, { email, name, password, navigator, locationData }) {
     try {
         const db = getDb();
         const existingUser = (
@@ -84,7 +84,8 @@ async function signUp(_, { email, name, password, navigator }) {
                 name: user.name,
                 action: 'Регистрация на сайте'
             },
-            navigator
+            navigator,
+            locationData
         );
 
         token = jwt.sign(
@@ -109,7 +110,13 @@ async function signUp(_, { email, name, password, navigator }) {
     }
 }
 
-async function signIn(_, { email, password, rememberMe, navigator }) {
+async function signIn(_, {
+    email,
+    password,
+    rememberMe,
+    navigator,
+    locationData
+}) {
     try {
         const db = getDb();
         const user = (
@@ -158,12 +165,14 @@ async function signIn(_, { email, password, rememberMe, navigator }) {
             )
         }
 
+        console.log(locationData);
         createActionLog(
             {
                 name: user.name,
                 action: 'Вход в аккаунт на сайте'
             },
-            navigator
+            navigator,
+            locationData
         );
 
         return {

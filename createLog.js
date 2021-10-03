@@ -1,12 +1,13 @@
 const { createLog } = require('./db_actions/action-logs');
 
-module.exports = async function createActionLog(log, navigator) {
+module.exports = async function createActionLog(log, navigator, locationData) {
     try {
         await createLog(
             '',
             {
                 log,
-                navigator
+                navigator,
+                locationData
             }
         );
     } catch (error) {

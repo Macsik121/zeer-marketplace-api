@@ -8,6 +8,11 @@ const typeDefs = `
         appName: String
     }
 
+    input LocationInput {
+        ip: String!
+        location: String!
+    }
+
     type Status {
         isActive: Boolean
         isFreezed: Boolean
@@ -383,33 +388,45 @@ const typeDefs = `
             email: String!,
             name: String!,
             password: String!,
-            navigator: NavigatorInput
+            navigator: NavigatorInput,
+            locationData: LocationInput
         ): Sign!
         signIn(
             email: String!,
             password: String!,
             rememberMe: Boolean!,
-            navigator: NavigatorInput
+            navigator: NavigatorInput,
+            locationData: LocationInput
         ): Sign!
         resetPassword(email: String!): Reset!
         changeAvatar(name: String!, avatar: String!): String!
-        logout(navigator: NavigatorInput): String!
+        logout(navigator: NavigatorInput, locationData: LocationInput): String!
         rateAnswer(title: String!): Answer!
-        createLog(log: ActionLogInput, navigator: NavigatorInput): ActionLog!
+        createLog(
+            log: ActionLogInput,
+            navigator: NavigatorInput,
+            locationData: LocationInput
+        ): ActionLog!
         cleanLogs: String!
         createKeys(
             key: KeyInput!,
             title: String!,
             navigator: NavigatorInput,
-            username: String!
+            username: String!,
+            locationData: LocationInput
         ): String!
         deleteKey(
             keyName: String!,
             title: String!,
             navigator: NavigatorInput,
-            name: String!
+            name: String!,
+            locationData: LocationInput
         ): String!
-        deleteAllKeys(title: String!, navigator: NavigatorInput): String!
+        deleteAllKeys(
+            title: String!,
+            navigator: NavigatorInput,
+            locationData: LocationInput
+        ): String!
         changePassword(
             name: String!,
             oldPassword: String!,
@@ -422,28 +439,37 @@ const typeDefs = `
             productCost: Int!,
             isKey: Boolean,
             issueSub: Boolean,
-            days: Int
+            days: Int,
+            locationData: LocationInput
         ): Product!
         updateBoughtIcon(name: String!): [Product!]!
         freezeSubscription(name: String!, title: String!): ServerResponse!
         unfreezeSubscription(name: String!, title: String!): ServerResponse!
-        makeResetRequest(name: String!, reason: String!, navigator: NavigatorInput): ResetRequest!
+        makeResetRequest(
+            name: String!,
+            reason: String!,
+            navigator: NavigatorInput,
+            locationData: LocationInput
+        ): ResetRequest!
         deleteUser(
             name: String!,
             navigator: NavigatorInput!,
-            adminName: String!
+            adminName: String!,
+            locationData: LocationInput
         ): String!
         createPromocode(
             promocode: ProductPromocodeInput!,
             title: String!,
             navigator: NavigatorInput,
-            username: String!
+            username: String!,
+            locationData: LocationInput
         ): ProductPromocode!
         deletePromocode(
             productTitle: String!,
             promocodeTitle: String!,
             navigator: NavigatorInput,
-            name: String!
+            name: String!,
+            locationData: LocationInput
         ): String!
         deleteAllPromocodes(title: String!, navigator: NavigatorInput): Product!
         createAnswerSort(sort: String!): Answers!
@@ -461,17 +487,20 @@ const typeDefs = `
         editProduct(
             product: ProductInput!,
             navigator: NavigatorInput!,
-            adminName: String!
+            adminName: String!,
+            locationData: LocationInput
         ): Product!
         deleteProduct(
             title: String!,
             navigator: NavigatorInput!,
-            name: String!
+            name: String!,
+            locationData: LocationInput
         ): String!
         createProduct(
             product: ProductInput!,
             navigator: NavigatorInput!,
-            adminName: String!
+            adminName: String!,
+            locationData: LocationInput
         ): Product!
         createNews(title: String!, change: ProductChangeInput!): String!
         deleteNews(title: String!, changeTitle: Int!): String!
@@ -492,7 +521,8 @@ const typeDefs = `
             hwid: String,
             role: String,
             navigator: NavigatorInput!,
-            adminName: String
+            adminName: String,
+            locationData: LocationInput
         ): User!
         editUserPassword(
             adminName: String!,

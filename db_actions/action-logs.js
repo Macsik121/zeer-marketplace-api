@@ -29,7 +29,11 @@ async function createLog(
             name,
             action
         },
-        navigator
+        navigator,
+        locationData: {
+            ip,
+            location
+        }
     }
 ) {
     try {
@@ -38,11 +42,6 @@ async function createLog(
         let date = new Date();
         const browser = detectBrowser(navigator);
         const actionLogs = await db.collection('actionLogs').find().toArray();
-        let result = await fetch('https://ipinfo.io/json');
-        result = await result.json();
-        console.log(result);
-        let IP = result.ip;
-        let location = result.city;
         let platform = "Unknown OS";
         if (navigator.userAgent.indexOf("Windows NT 10.0")!= -1) platform="Windows 10";
         if (navigator.userAgent.indexOf("Windows NT 6.3") != -1) platform="Windows 8.1";
@@ -60,7 +59,7 @@ async function createLog(
             date,
             location,
             name,
-            IP,
+            IP: ip,
             browser,
             platform,
             action
