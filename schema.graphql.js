@@ -479,7 +479,8 @@ const typeDefs = `
         activateKey(
             keyName: String!,
             username: String!,
-            navigator: NavigatorInput
+            navigator: NavigatorInput,
+            locationData: LocationInput
         ): ServerResponse!
         acceptResetBinding(name: String!, number: Int!): ResetRequest!
         rejectResetBinding(name: String!, number: Int!): String!

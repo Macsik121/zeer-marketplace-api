@@ -81,7 +81,8 @@ async function buyProduct(
         isKey = false,
         productCost,
         issueSub = false,
-        days = 30
+        days = 30,
+        locationData
     }
 ) {
     try {
@@ -185,7 +186,8 @@ async function buyProduct(
                         name: user.name,
                         action: `Покупка продукта ${title}`
                     },
-                    navigator
+                    navigator,
+                    locationData
                 );
             }
         }
@@ -242,17 +244,15 @@ async function freezeSubscripiton(_, { name, title }) {
             }
             return sub;
         });
-        const newUser = (
-            await db.collection('users').updateOne(
-                { name },
-                {
-                    $set: {
-                        subscriptions: user.subscriptions
-                    }
-                },
-                { returnNewDocument: true }
-            )
-        );
+        await db.collection('users').updateOne(
+            { name },
+            {
+                $set: {
+                    subscriptions: user.subscriptions
+                }
+            },
+            { returnNewDocument: true }
+        )
         return {
             success: true,
             message: 'Подписка успешно заморожена!'
@@ -319,7 +319,13 @@ async function unfreezeSubscription(_, { name, title }) {
     }
 }
 
-async function createKeys(_, { key, title, navigator, username }) {
+async function createKeys(_, {
+    key,
+    title,
+    navigator,
+    username,
+    locationData
+}) {
     try {
         const db = getDb();
         let {
@@ -381,7 +387,8 @@ async function createKeys(_, { key, title, navigator, username }) {
                     name: username,
                     action: `Добавление ключа ${name}`
                 },
-                navigator
+                navigator,
+                locationData
             );
 
             return `Вы успешно добавили ${keysToAddAmount} ключей`
@@ -409,7 +416,8 @@ async function createKeys(_, { key, title, navigator, username }) {
                         return ` ${currName}`
                     })}`
                 },
-                navigator
+                navigator,
+                locationData
             );
 
             return 'Вы успешно создали ключ';
@@ -419,7 +427,13 @@ async function createKeys(_, { key, title, navigator, username }) {
     }
 }
 
-async function deleteKey(_, { keyName, title, navigator, name }) {
+async function deleteKey(_, {
+    keyName,
+    title,
+    navigator,
+    name,
+    locationData
+}) {
     try {
         const db = getDb();
 
@@ -441,7 +455,8 @@ async function deleteKey(_, { keyName, title, navigator, name }) {
                 name,
                 action: `Удаление ключа ${keyName}`
             },
-            navigator
+            navigator,
+            locationData
         );
         return 'Ключь успешно удалён';
     } catch (error) {
@@ -474,7 +489,13 @@ async function deleteAllKeys(_, { title }) {
     }
 }
 
-async function createPromocode(_, { promocode, title, navigator, username }) {
+async function createPromocode(_, {
+    promocode,
+    title,
+    navigator,
+    username,
+    locationData
+}) {
     try {
         const db = getDb();
 
@@ -541,7 +562,8 @@ async function createPromocode(_, { promocode, title, navigator, username }) {
                 name: username,
                 action: `Создание промокода ${name}`
             },
-            navigator
+            navigator,
+            locationData
         );
 
         return newPromos[newPromos.length - 1];
@@ -554,7 +576,8 @@ async function deletePromocode(_, {
     productTitle,
     promocodeTitle,
     navigator,
-    name
+    name,
+    locationData
 }) {
     try {
         const db = getDb();
@@ -580,7 +603,8 @@ async function deletePromocode(_, {
                 name,
                 action: `Удаление промокода ${promocodeTitle}`
             },
-            navigator
+            navigator,
+            locationData
         );
         
         return 'Промокод успешно удалён'
@@ -622,8 +646,10 @@ async function activateKey(
     {
         keyName,
         username,
-        navigator
-    }) {
+        navigator,
+        locationData
+    }
+) {
     try {
         const db = getDb();
 
@@ -632,7 +658,7 @@ async function activateKey(
         let message = '';
         let matchedProduct = {};
         let matchedKey = {};
-        
+
         for(let i = 0; i < allProducts.length; i++) {
             const product = allProducts[i];
             for(let j = 0; j < product.keys.all.length; j++) {
@@ -666,7 +692,8 @@ async function activateKey(
                     name: username,
                     navigator,
                     isKey: true,
-                    days: matchedKey.expiredInDays
+                    days: matchedKey.expiredInDays,
+                    locationData
                 }
             );
             await db
@@ -746,7 +773,8 @@ async function activateKey(
                     name: username,
                     action: `Активация ключа ${matchedKey.name}`
                 },
-                navigator
+                navigator,
+                locationData
             );
             return {
                 success: true,
@@ -766,7 +794,8 @@ async function activateKey(
 async function editProduct(_, {
     product,
     navigator,
-    adminName
+    adminName,
+    locationData
 }) {
     try {
         const db = getDb();
@@ -788,7 +817,8 @@ async function editProduct(_, {
                 name: adminName,
                 action: `Изменение продукта ${oldTitle}`
             },
-            navigator
+            navigator,
+            locationData
         );
 
         return result.value;
@@ -800,7 +830,8 @@ async function editProduct(_, {
 async function deleteProduct(_, {
     title,
     navigator,
-    name
+    name,
+    locationData
 }) {
     try {
         const db = getDb();
@@ -811,7 +842,8 @@ async function deleteProduct(_, {
                 name,
                 action: `Удаление продукта ${title}`
             },
-            navigator
+            navigator,
+            locationData
         );
 
         return 'Продукт успешно удалён';
@@ -823,7 +855,8 @@ async function deleteProduct(_, {
 async function createProduct(_, {
     product,
     navigator,
-    adminName
+    adminName,
+    locationData
 }) {
     try {
         const db = getDb();
@@ -851,7 +884,8 @@ async function createProduct(_, {
                 name: adminName,
                 action: `Создание продукта ${product.title}`
             },
-            navigator
+            navigator,
+            locationData
         );
         return result.ops[0];
     } catch (error) {

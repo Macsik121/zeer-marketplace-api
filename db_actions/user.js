@@ -367,9 +367,8 @@ async function makeResetRequest(
     {
         name,
         reason,
-        ip = 'localhost',
-        location = 'Москва',
-        navigator
+        navigator,
+        locationData
     }
 ) {
     try {
@@ -384,6 +383,7 @@ async function makeResetRequest(
             }
             currentUser.resetRequests && currentUser.resetRequests.map(request => id++);
         });
+        const { ip, location } = locationData;
         user.resetRequests.unshift({
             id,
             owner: name,
@@ -415,7 +415,8 @@ async function makeResetRequest(
                 name: user.name,
                 action: 'Подача заявки на сброс привязки'
             },
-            navigator
+            navigator,
+            locationData
         );
 
         return resetRequests[resetRequests.length - 1];
@@ -427,7 +428,8 @@ async function makeResetRequest(
 async function deleteUser(_, {
     name,
     navigator,
-    adminName
+    adminName,
+    locationData
 }) {
     try {
         const db = getDb();
@@ -438,7 +440,8 @@ async function deleteUser(_, {
                 name: adminName,
                 action: `Удаление пользователя ${name}`
             },
-            navigator
+            navigator,
+            locationData
         );
 
         return `Вы успешно удалили пользователя с именем ${name}`
@@ -566,7 +569,8 @@ async function editUser(_, {
     hwid,
     role,
     navigator,
-    adminName
+    adminName,
+    locationData
 }) {
     try {
         const db = getDb();
@@ -608,13 +612,13 @@ async function editUser(_, {
                 }
             );
 
-        console.log(adminName)
         createLog(
             {
                 name: adminName,
                 action: `Редактирование пользователя ${oldName}`
             },
-            navigator
+            navigator,
+            locationData
         );
 
         return newUser.value;
@@ -740,7 +744,6 @@ async function resetFreezeCooldown(_, { name, title }) {
                 { name },
                 {
                     $set: {
-                        // 'subscriptions.$[subscription].freezeTime': new Date()
                         'subscriptions.$[subscription].wasFreezed': false
                     }
                 },
