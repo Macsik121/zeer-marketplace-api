@@ -1,20 +1,16 @@
-module.exports = function detectBrowser(userAgent) {
-    if (
-        (userAgent.indexOf("Opera") || userAgent.indexOf('OPR')) != -1
-    ) {
-        return 'Opera';
-    } else if (userAgent.indexOf("Chrome") != -1) {
-        return 'Chrome';
-    } else if (userAgent.indexOf("Safari") != -1) {
-        return 'Safari';
-    } else if (userAgent.indexOf("Firefox") != -1 ) {
-        return 'Firefox';
+module.exports = function detectBrowser(navigator) {
+    var ua= navigator.userAgent;
+    var tem; 
+    var M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if(/trident/i.test(M[1])){
+        tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
+        return 'IE '+(tem[1] || '');
     }
-    else if (
-        (userAgent.indexOf("MSIE") != -1 )
-    ) {
-      return 'Internet Explorer'; 
-    } else {
-       return 'Unknown browser';
+    if(M[1]=== 'Chrome'){
+        tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
+        if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
     }
+    M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+    if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
+    return M.join(' ');
 }

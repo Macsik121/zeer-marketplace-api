@@ -4,6 +4,8 @@ const typeDefs = `
     input NavigatorInput {
         userAgent: String!
         platform: String!
+        appVersion: String
+        appName: String
     }
 
     type Status {
