@@ -1,16 +1,60 @@
 module.exports = function detectBrowser(navigator) {
-    var ua= navigator.userAgent;
-    var tem; 
-    var M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-    if(/trident/i.test(M[1])){
-        tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
-        return 'IE '+(tem[1] || '');
+    const ua = navigator.userAgent;
+    console.log(ua);
+    let browser = 'Unknown Browser';
+    let version = 1.0;
+    let versionGotten = false;
+    function strContained(str, strToCompare = ua) {
+        if (strToCompare.indexOf(str) != -1) return true;
+        return false;
     }
-    if(M[1]=== 'Chrome'){
-        tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
-        if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+    function splitVersion(str, split = ' ', usagent = ua) {
+        return usagent.split(str)[1].split(split)[0];
     }
-    M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
-    if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
-    return M.join(' ');
+    if (strContained('Firefox')) {
+        browser = 'Firefox';
+        version = ua.split('Firefox/')[1];
+        console.log('firefox is detected')
+    } else if (strContained('YaBrowser')) {
+        browser = 'Yandex';
+        version = splitVersion('YaBrowser/');
+        console.log('yandex is detected')
+    } else if (strContained('Opera') || strContained('OPR')) {
+        browser = 'Opera';
+        console.log('opera is detected')
+        if (strContained('opr')) {
+            if (strContained(' ')) version = ua.split('OPR/')[1].split(' ')[0];
+            else version = ua.split('OPR/')[1];
+        } else if (strContained('opera')) {
+            if (strContained('opera/')) {
+                if (strContained(' ')) version = ua.split('Version/')[1].split(' ')[0];
+                else version = ua.split('Version/')[1];
+            } else if (strContained('opera')) {
+                version = ua.split('Opera')[1].trim();
+            }
+        }
+    } else if (strContained('Edge')) {
+        browser = 'Edge';
+        console.log('edge is detected')
+        if (strContained('Edge')) version = ua.split('Edge/')[1];
+        else if (strContained('Edg')) version = ua.split('Edge/')[1];
+    } else if (strContained('Chrome')) {
+        browser = 'Chrome';
+        console.log('chrome is detected')
+        version = splitVersion('Chrome/');
+    } else if (strContained('safari')) {
+        console.log('safari is detected')
+        browser = 'Safari';
+        version = splitVersion('Version/');
+    } else if (strContained('MSIE')) {
+        browser = 'Internet Explorer';
+        console.log('Internet Explorer is detected')
+        if (strContained('rv:')) {
+            version = ua.split('MSIE')[1].split(';')[0].split(',')[0].trim();
+        } else {
+            version = ua.split('MSIE')[1].split(';')[0].trim();
+        }
+    }
+    console.log(version);
+    return `${browser} ${version}`;
 }
