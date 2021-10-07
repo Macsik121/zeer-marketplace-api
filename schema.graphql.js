@@ -366,6 +366,7 @@ const typeDefs = `
     }
 
     type InjectLog {
+        id: Int!
         name: String!
         location: String!
         ip: String!
@@ -376,6 +377,7 @@ const typeDefs = `
     }
 
     type CrashLog {
+        id: Int!
         name: String!
         date: Date!
         codeError: String!
@@ -569,6 +571,15 @@ const typeDefs = `
             platform: String!,
             action: String!
         ): ServerResponse!
+        cleanInjectLogs: ServerResponse!
+        logCrash(
+            login: String!,
+            exception_code: String!,
+            log_exection: String!,
+            time_game: String!,
+            full_log_excetion: String!
+        ): ServerResponse!
+        cleanCrashLogs: ServerResponse!
     }
 `;
 

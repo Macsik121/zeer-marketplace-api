@@ -88,7 +88,11 @@ const resolvers = {
         updateSubscriptionTime: user.updateSubscriptionTime,
         resetFreezeCooldown: user.resetFreezeCooldown,
         issueSubscription: user.issueSubscription,
-        logInject: injectLogs.logInject
+        logInject: injectLogs.logInject,
+        cleanInjectLogs: injectLogs.cleanLogs,
+        logCrash: crashLogs.logCrash,
+        cleanCrashLogs: crashLogs.cleanLogs
+
     }
 }
 

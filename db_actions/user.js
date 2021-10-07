@@ -4,7 +4,6 @@ const { getDb } = require('./db');
 const { sendMail } = require('../nodemailer');
 const createActionLog = require('../createLog');
 const createLog = require('../createLog');
-let token = '';
 
 async function getUser(_, { name }) {
     try {
@@ -56,7 +55,7 @@ async function signUp(_, { email, name, password, navigator, locationData }) {
         }
 
         const avatarBGs = ['#c00', '#f60', '#6f6', '#03c', '#33f', '#60c', '#1E75FF'];
-        
+
         const id = ++allUsers[allUsers.length - 1].id || 1;
 
         const createdUser = await db.collection('users').insertOne({
@@ -80,14 +79,14 @@ async function signUp(_, { email, name, password, navigator, locationData }) {
 
         const user = await db.collection('users').findOne({ _id: insertedId });
 
-        createActionLog(
-            {
+        createLog({
+            log: {
                 name: user.name,
                 action: 'Регистрация на сайте'
             },
             navigator,
             locationData
-        );
+        });
 
         token = jwt.sign(
             {
@@ -167,14 +166,14 @@ async function signIn(_, {
         }
 
         console.log(locationData);
-        createActionLog(
-            {
+        createLog({
+            log: {
                 name: user.name,
                 action: 'Вход в аккаунт на сайте'
             },
             navigator,
             locationData
-        );
+        });
 
         return {
             user,
@@ -411,14 +410,14 @@ async function makeResetRequest(
         );
         const { resetRequests } = updatedUser.value;
 
-        createLog(
-            {
+        createLog({
+            log: {
                 name: user.name,
                 action: 'Подача заявки на сброс привязки'
             },
             navigator,
             locationData
-        );
+        });
 
         return resetRequests[resetRequests.length - 1];
     } catch (error) {
@@ -436,14 +435,14 @@ async function deleteUser(_, {
         const db = getDb();
         await db.collection('users').deleteOne({ name });
 
-        createLog(
-            {
+        createLog({
+            log: {
                 name: adminName,
                 action: `Удаление пользователя ${name}`
             },
             navigator,
             locationData
-        );
+        });
 
         return `Вы успешно удалили пользователя с именем ${name}`
     } catch (error) {
@@ -614,14 +613,14 @@ async function editUser(_, {
                 }
             );
 
-        createLog(
-            {
+        createLog({
+            log: {
                 name: adminName,
                 action: `Редактирование пользователя ${oldName}`
             },
             navigator,
             locationData
-        );
+        });
 
         return newUser.value;
     } catch (error) {

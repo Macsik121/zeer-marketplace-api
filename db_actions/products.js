@@ -181,14 +181,14 @@ async function buyProduct(
             if (!issueSub) {
                 createPurchase();
                 createProfit(productCost);
-                createLog(
-                    {
+                createLog({
+                    log: {
                         name: user.name,
                         action: `Покупка продукта ${title}`
                     },
                     navigator,
                     locationData
-                );
+                });
             }
         }
         return boughtProduct ? boughtProduct.value : product;
@@ -380,16 +380,14 @@ async function createKeys(_, {
                     )
             )
 
-            const { all } = updatedProduct.value.keys;
-            
-            createLog(
-                {
+            createLog({
+                log: {
                     name: username,
                     action: `Добавление ключа ${name}`
                 },
                 navigator,
                 locationData
-            );
+            });
 
             return `Вы успешно добавили ${keysToAddAmount} ключей`
         } else {
@@ -408,8 +406,8 @@ async function createKeys(_, {
                     )
             }
 
-            createLog(
-                {
+            createLog({
+                log: {
                     name: username,
                     action: `Добавление ключей ${name.map((currName, i) => {
                         if (i == 0) return currName;
@@ -418,7 +416,7 @@ async function createKeys(_, {
                 },
                 navigator,
                 locationData
-            );
+            });
 
             return 'Вы успешно создали ключ';
         }
@@ -450,14 +448,14 @@ async function deleteKey(_, {
                 }
             );
         
-        createLog(
-            {
+        createLog({
+            log: {
                 name,
                 action: `Удаление ключа ${keyName}`
             },
             navigator,
             locationData
-        );
+        });
         return 'Ключь успешно удалён';
     } catch (error) {
         console.log(error);
@@ -557,14 +555,14 @@ async function createPromocode(_, {
 
         const newPromos = updatedProduct.value.promocodes.all;
 
-        createLog(
-            {
+        createLog({
+            log: {
                 name: username,
                 action: `Создание промокода ${name}`
             },
             navigator,
             locationData
-        );
+        });
 
         return newPromos[newPromos.length - 1];
     } catch (error) {
@@ -598,15 +596,15 @@ async function deletePromocode(_, {
                 }
             )
 
-        createLog(
-            {
+        createLog({
+            log: {
                 name,
                 action: `Удаление промокода ${promocodeTitle}`
             },
             navigator,
             locationData
-        );
-        
+        });
+
         return 'Промокод успешно удалён'
     } catch (error) {
         console.log(error);
@@ -768,14 +766,14 @@ async function activateKey(
         }
 
         if (keyExists) {
-            createLog(
-                {
+            createLog({
+                log: {
                     name: username,
                     action: `Активация ключа ${matchedKey.name}`
                 },
                 navigator,
                 locationData
-            );
+            });
             return {
                 success: true,
                 message
@@ -812,14 +810,14 @@ async function editProduct(_, {
             { returnOriginal: false }
         );
 
-        createLog(
-            {
+        createLog({
+            log: {
                 name: adminName,
                 action: `Изменение продукта ${oldTitle}`
             },
             navigator,
             locationData
-        );
+        });
 
         return result.value;
     } catch (error) {
@@ -837,14 +835,14 @@ async function deleteProduct(_, {
         const db = getDb();
         await db.collection('products').deleteOne({ title });
 
-        createLog(
-            {
+        createLog({
+            log: {
                 name,
                 action: `Удаление продукта ${title}`
             },
             navigator,
             locationData
-        );
+        });
 
         return 'Продукт успешно удалён';
     } catch (error) {
@@ -879,14 +877,14 @@ async function createProduct(_, {
 
         const result = await db.collection('products').insertOne(product);
 
-        createLog(
-            {
+        createLog({
+            log: {
                 name: adminName,
                 action: `Создание продукта ${product.title}`
             },
             navigator,
             locationData
-        );
+        });
         return result.ops[0];
     } catch (error) {
         console.log(error);

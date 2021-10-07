@@ -6,6 +6,10 @@ const loaderAPIRouter = require('./db_actions/api_loader/api_loader');
 const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 3000;
+const cors = require('cors');
+
+app.use(cors());
+app.set('trusted proxy', true);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -33,18 +33,19 @@ async function createLog(
             ip,
             location
         },
-        browser = null
+        browser = null,
+        platform = null
     }
 ) {
     try {
         const db = getDb();
 
         let date = new Date();
-        const browser = detectBrowser(navigator);
-        const actionLogs = await db.collection('actionLogs').find().toArray();
-        let platform = "Unknown OS";
-        if (browser) platform = browser;
-        else {
+        const actionLogs = await db.collection('actionLogs').countDocuments();
+        if (!browser && navigator != '') browser = detectBrowser(navigator);
+        else browser = 'Unknown browser';
+
+        if (!platform && navigator != '') {
             if (navigator.userAgent.indexOf("Windows NT 10.0")!= -1) platform="Windows 10";
             if (navigator.userAgent.indexOf("Windows NT 6.3") != -1) platform="Windows 8.1";
             if (navigator.userAgent.indexOf("Windows NT 6.2") != -1) platform="Windows 8";
@@ -55,10 +56,10 @@ async function createLog(
             if (navigator.userAgent.indexOf("Mac")            != -1) platform="Mac/iOS";
             if (navigator.userAgent.indexOf("X11")            != -1) platform="UNIX";
             if (navigator.userAgent.indexOf("Linux")          != -1) platform="Linux";
-        }
+        } else platform = "Unknown OS";
 
         const actionLog = {
-            id: ++actionLogs.length,
+            id: actionLogs,
             date,
             location,
             name,
