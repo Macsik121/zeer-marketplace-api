@@ -1,13 +1,16 @@
 require('dotenv').config()
 const express = require('express');
-const cors = require('cors');
 const db = require('./db_actions/db');
 const installHandler = require('./api_handler');
+const loaderAPIRouter = require('./db_actions/api_loader/api_loader');
+const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use('/api_loader', loaderAPIRouter);
 installHandler(app);
 
 (async function() {

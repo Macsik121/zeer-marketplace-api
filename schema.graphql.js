@@ -251,6 +251,7 @@ const typeDefs = `
         subscriptions: [Subscription]
         status: UserStatus
         resetRequests: [ResetRequest]
+        hwid: String!
     }
 
     input UserInput {
@@ -364,6 +365,24 @@ const typeDefs = `
         cost: Int
     }
 
+    type InjectLog {
+        name: String!
+        location: String!
+        ip: String!
+        idSteam: String!
+        platform: String!
+        action: String!
+        date: Date!
+    }
+
+    type CrashLog {
+        name: String!
+        date: Date!
+        codeError: String!
+        errorDesc: String!
+        playingTime: String!
+    }
+
     type Query {
         products: [Product!]!
         popularProducts(amountToGet: Int): [Product!]!
@@ -381,6 +400,8 @@ const typeDefs = `
         getAllBindings: [ResetRequest]!
         purchases(week: WeekInput): [Purchase]!
         profit(week: WeekInput): [ProfitToday]!
+        injectLogs: [InjectLog]!
+        crashLogs: [CrashLog]!
     }
 
     type Mutation {
@@ -541,6 +562,13 @@ const typeDefs = `
             name: String!
         ): ServerResponse!
         issueSubscription(name: String!, subscription: SubscriptionInput!): ServerResponse!
+        logInject(
+            name: String!,
+            ip: String!,
+            id_steam: String!,
+            platform: String!,
+            action: String!
+        ): ServerResponse!
     }
 `;
 

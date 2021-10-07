@@ -14,14 +14,11 @@ module.exports = function detectBrowser(navigator) {
     if (strContained('Firefox')) {
         browser = 'Firefox';
         version = ua.split('Firefox/')[1];
-        console.log('firefox is detected')
     } else if (strContained('YaBrowser')) {
         browser = 'Yandex';
         version = splitVersion('YaBrowser/');
-        console.log('yandex is detected')
     } else if (strContained('Opera') || strContained('OPR')) {
         browser = 'Opera';
-        console.log('opera is detected')
         if (strContained('opr')) {
             if (strContained(' ')) version = ua.split('OPR/')[1].split(' ')[0];
             else version = ua.split('OPR/')[1];
@@ -35,26 +32,21 @@ module.exports = function detectBrowser(navigator) {
         }
     } else if (strContained('Edge')) {
         browser = 'Edge';
-        console.log('edge is detected')
         if (strContained('Edge')) version = ua.split('Edge/')[1];
         else if (strContained('Edg')) version = ua.split('Edge/')[1];
     } else if (strContained('Chrome')) {
         browser = 'Chrome';
-        console.log('chrome is detected')
         version = splitVersion('Chrome/');
     } else if (strContained('safari')) {
-        console.log('safari is detected')
         browser = 'Safari';
         version = splitVersion('Version/');
     } else if (strContained('MSIE')) {
         browser = 'Internet Explorer';
-        console.log('Internet Explorer is detected')
         if (strContained('rv:')) {
             version = ua.split('MSIE')[1].split(';')[0].split(',')[0].trim();
         } else {
             version = ua.split('MSIE')[1].split(';')[0].trim();
         }
     }
-    console.log(version);
     return `${browser} ${version}`;
 }

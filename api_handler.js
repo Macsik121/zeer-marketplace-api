@@ -7,6 +7,8 @@ const answers = require('./db_actions/answersFAQ');
 const actionLogs = require('./db_actions/action-logs');
 const purchases = require('./db_actions/purchases');
 const profit = require('./db_actions/profit');
+const injectLogs = require('./db_actions/inject-logs');
+const crashLogs = require('./db_actions/crash-logs');
 
 const dateScalar = new GraphQLScalarType({
     name: 'Date',
@@ -38,7 +40,9 @@ const resolvers = {
         getActionLogs: actionLogs.actionLogs,
         getAllBindings: user.getResetBindings,
         purchases: purchases.getPurchases,
-        profit: profit.getAllProfit
+        profit: profit.getAllProfit,
+        injectLogs: injectLogs.injectLogs,
+        crashLogs: crashLogs.crashLogs
     },
     Mutation: {
         signUp: user.signUp,
@@ -83,7 +87,8 @@ const resolvers = {
         editUserPassword: user.editUserPassword,
         updateSubscriptionTime: user.updateSubscriptionTime,
         resetFreezeCooldown: user.resetFreezeCooldown,
-        issueSubscription: user.issueSubscription
+        issueSubscription: user.issueSubscription,
+        logInject: injectLogs.logInject
     }
 }
 

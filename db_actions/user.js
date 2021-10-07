@@ -72,7 +72,8 @@ async function signUp(_, { email, name, password, navigator, locationData }) {
                 isBanned: false
             },
             registeredDate: new Date(),
-            resetRequests: []
+            resetRequests: [],
+            hwid: ''
         });
 
         const insertedId = createdUser.insertedId;
@@ -604,7 +605,8 @@ async function editUser(_, {
                     $set: {
                         name,
                         email,
-                        status
+                        status,
+                        hwid
                     }
                 },
                 {
