@@ -411,6 +411,21 @@ router.post('/block_user', async (req, res) => {
         });
     }
 
+    await db
+        .collection('users')
+        .updateOne(
+            { name: login },
+            {
+                $set: {
+                    status: {
+                        isBanned: true,
+                        isActive: false,
+                        simpleUser: false
+                    }
+                }
+            }
+        );
+
     createLog({
         log: {
             name: login,

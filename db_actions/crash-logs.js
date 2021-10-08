@@ -26,6 +26,7 @@ async function logCrash(_, {
     try {
         const db = getDb();
         const id = await db.collection('crashLogs').countDocuments();
+        full_log_excetion = encodeURIComponent(full_log_excetion);
 
         await db.collection('crashLogs').insertOne({
             id: id + 1,
@@ -33,7 +34,8 @@ async function logCrash(_, {
             name: login,
             playingTime: time_game,
             codeError: exception_code,
-            errorDesc: log_exection
+            errorDesc: log_exection,
+            full_log_excetion
         });
 
         return {

@@ -383,6 +383,7 @@ const typeDefs = `
         codeError: String!
         errorDesc: String!
         playingTime: String!
+        full_log_excetion: String!
     }
 
     type Query {
