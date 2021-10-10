@@ -88,7 +88,6 @@ async function buyProduct(
     try {
         const db = getDb();
         const user = await db.collection('users').findOne({ name });
-        console.log(title);
         const product = await db.collection('products').findOne({ title });
         let userSub = {};
         let userExists = false;
@@ -126,7 +125,7 @@ async function buyProduct(
                     { returnOriginal: false }
                 )
             );
-            let subExpired = new Date(activelyUntil) - new Date() > 0 ? false : true
+            let subExpired = new Date(activelyUntil) - new Date() > 0 ? false : true;
             await db.collection('users').updateOne(
                 { name },
                 {
@@ -168,11 +167,11 @@ async function buyProduct(
                         }
                     },
                     {
-                        arrayFilters: [{
-                            'key.title': {
-                                $eq: product.title
+                        arrayFilters: [
+                            {
+                                'key.title': product.title
                             }
-                        }]
+                        ]
                     }
                 )
         }
@@ -712,9 +711,7 @@ async function activateKey(
                     {
                         arrayFilters: [
                             {
-                                'key.name': {
-                                    $eq: matchedKey.name
-                                }
+                                'key.name': matchedKey.name
                             }
                         ]
                     }
@@ -734,9 +731,7 @@ async function activateKey(
                     {
                         arrayFilters: [
                             {
-                                'key.name': {
-                                    $eq: matchedKey.name
-                                }
+                                'key.name': matchedKey.name
                             }
                         ]
                     }

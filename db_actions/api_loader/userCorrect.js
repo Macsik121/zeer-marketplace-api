@@ -17,7 +17,6 @@ module.exports = async function userCorrect({
     let response = {
         success: true
     };
-    let browser = null;
     if (!location) {
         location = await getLocationByIP(ip).location;
         if (!location) location = 'failed';
@@ -103,8 +102,8 @@ module.exports = async function userCorrect({
             const subscription = subscriptions[i];
             if (title == subscription.title) {
                 subscriptionExists = true;
-                if (typeof subscription.status.isFreezed == 'undefined') {
-                    subscription.status.isFreezed = false;
+                if (subscription.status.isExpired) {
+                    subscriptionExists = false;
                 }
                 if (subscription.status.isFreezed) {
                     subscriptionFreezed = true;

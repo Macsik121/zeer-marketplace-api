@@ -89,23 +89,46 @@ router.post('/auth', async (req, res) => {
         return;
     }
 
+    const products = await db.collection('products').find({}, { changes: 1 }).toArray();
+
     for(let i = 0; i < subscriptions.length; i++) {
         const subscription = subscriptions[i];
+        let lastUpdate = {
+            index: 0,
+            description: 'Обновлений не было за последнее время'
+        };
         const {
             status: { isActive, isFreezed },
             activelyUntil,
             title,
             productFor
         } = subscription;
+        for(let j = 0; j < products.length; j++) {
+            const currentProduct = products[j];
+            if (title == currentProduct.title) {
+                const lastUpdateIndex = currentProduct.changes.length;
+                const change = currentProduct.changes[lastUpdateIndex - 1];
+                if (change) {
+                    lastUpdate.description = change.description;
+                    lastUpdate.index = lastUpdateIndex;
+                }
+                break;
+            };
+        }
         if (isActive || isFreezed) {
             activeSubsCount++;
             const slotNumber = activeSubs.length;
+            const days = new Date(activelyUntil).getDate();
+            const months = new Date(activelyUntil).getMonth();
+            const years = new Date(activelyUntil).getFullYear();
             activeSubs[slotNumber] = {
                 ['slot_' + slotNumber]: {
                     frozen: typeof isFreezed == 'undefined' ? false : isFreezed,
                     name: title,
-                    sub: new Date(activelyUntil).toLocaleDateString(),
-                    typeGame: productFor
+                    sub: `${months + 1}.${days}.${years}`,
+                    typeGame: productFor,
+                    index: slotNumber,
+                    update_log: `- ${lastUpdate.description};${lastUpdate.index}`
                 }
             };
         }
@@ -168,7 +191,7 @@ router.post('/inject_dll_preload', async (req, res) => {
     } = req.body;
     const { location } = await getLocationByIP(ip);
 
-    const { response } = await userCorrect({
+    const { response: { success, message } } = await userCorrect({
         name: login,
         data: { password, hwid },
         compareHwid: true,
@@ -178,7 +201,6 @@ router.post('/inject_dll_preload', async (req, res) => {
         logErrorTopic: 'Запуск продукта'
     });
 
-    const { success, message } = response;
     if (!success) {
         res.status(500).send({
             message
@@ -394,7 +416,7 @@ router.post('/crash_logs', async (req, res) => {
     }
 
     res.status(200).send({
-        message: 'Crash is successfully logged'
+        message: 'success log created'
     });
 });
 
