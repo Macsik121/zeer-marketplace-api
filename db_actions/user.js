@@ -316,19 +316,89 @@ async function getSubscriptions(_, { name }) {
         const db = getDb();
         const user = await db.collection('users').findOne({ name });
         const activeSubs = [];
-        user.subscriptions.map(sub => {
-            if (sub && sub.status.isActive) activeSubs.push(sub);
-        });
         const overdueSubs = [];
+        let userHasExpiredSub = false;
+        let userHasExtended = false;
         user.subscriptions.map(sub => {
-            if (sub && sub.status.isExpired) overdueSubs.push(sub);
-        })
+            const {
+                status,
+                activelyUntil
+            } = sub;
+            const dateDifference = new Date(activelyUntil) - new Date();
+            if (status.isActive || status.isFreezed) {
+                if (dateDifference < 0 && !status.isFreezed) {
+                    userHasExpiredSub = true;
+                    sub.status = { isExpired: true, isActive: false, isFreezed: false }
+                    overdueSubs.push(sub);
+                    return;
+                }
+                activeSubs.push(sub);
+            } else if (status.isExpired) {
+                if (dateDifference > 0) {
+                    userHasExtended = true;
+                    sub.status = { isExpired: false, isActive: true, isFreezed: false }
+                    activeSubs.push(sub);
+                    return;
+                }
+                overdueSubs.push(sub);
+            }
+        });
         const subscriptions = {
             all: user.subscriptions,
             active: activeSubs,
             overdue: overdueSubs
         };
-        return subscriptions;    
+        if (userHasExpiredSub) {
+            await db
+                .collection('users')
+                .updateOne(
+                    { name },
+                    {
+                        $set: {
+                            'subscriptions.$[subscription].status': {
+                                isActive: false,
+                                isFreezed: false,
+                                isExpired: true
+                            }
+                        }
+                    },
+                    {
+                        arrayFilters: [
+                            {
+                                'subscription.activelyUntil': {
+                                    $lt: new Date()
+                                }
+                            }
+                        ]
+                    }
+                )
+        }
+        if (userHasExtended) {
+            await db
+                .collection('users')
+                .updateOne(
+                    { name },
+                    {
+                        $set: {
+                            'subscriptions.$[subscription].status': {
+                                isActive: true,
+                                isFreezed: false,
+                                isExpired: false
+                            }
+                        }
+                    },
+                    {
+                        arrayFilters: [
+                            {
+                                'subscription.activelyUntil': {
+                                    $gt: new Date()
+                                }
+                            }
+                        ]
+                    }
+                )
+        }
+        return subscriptions;
     } catch (error) {
         console.log(error);
     }

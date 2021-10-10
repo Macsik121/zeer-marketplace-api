@@ -18,9 +18,12 @@ module.exports = async function userCorrect({
         success: true
     };
     let browser = null;
+    if (!location) {
+        location = await getLocationByIP(ip).location;
+        if (!location) location = 'failed';
+    }
 
     if (!user || !(await bcrypt.compare(data.password, user.password))) {
-        if (!location) location = await (await getLocationByIP(ip)).location;
         createLog({
             log: {
                 name,
@@ -48,7 +51,6 @@ module.exports = async function userCorrect({
     if (typeof status.isBanned == 'undefined') status.isBanned = false;
 
     if (status.isBanned) {
-        if (!location) location = await (await getLocationByIP(ip)).location;
         createLog({
             log: {
                 name,
@@ -72,7 +74,6 @@ module.exports = async function userCorrect({
     }
 
     if (compareHwid && user.hwid != data.hwid) {
-        if (!location) location = await (await getLocationByIP(ip)).location;
         createLog({
             log: {
                 name,
@@ -113,7 +114,6 @@ module.exports = async function userCorrect({
         }
         if (!subscriptionExists) {
             console.log('there is no sub for the product');
-            if (!location) location = await (await getLocationByIP(ip)).location;
             createLog({
                 log: {
                     name,
@@ -135,7 +135,6 @@ module.exports = async function userCorrect({
             };
         }
         if (subscriptionFreezed) {
-            if (!location) location = await (await getLocationByIP(ip)).location;
             createLog({
                 log: {
                     name,

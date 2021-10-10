@@ -3,7 +3,6 @@ module.exports = function detectBrowser(navigator) {
     console.log(ua);
     let browser = 'Unknown Browser';
     let version = 1.0;
-    let versionGotten = false;
     function strContained(str, strToCompare = ua) {
         if (strToCompare.indexOf(str) != -1) return true;
         return false;

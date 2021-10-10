@@ -531,7 +531,7 @@ const typeDefs = `
         deleteNews(title: String!, changeTitle: Int!): String!
         deleteAllNews(title: String!): String!
         disableProduct(title: String!): String!
-        addCost(title: String!, cost: CostInput!): String!
+        addCost(title: String!, cost: CostInput!): ServerResponse!
         deleteCost(title: String!, costTitle: String!): String!
         saveCostChanges(
             title: String!,

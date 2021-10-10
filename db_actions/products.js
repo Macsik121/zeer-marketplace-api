@@ -88,6 +88,7 @@ async function buyProduct(
     try {
         const db = getDb();
         const user = await db.collection('users').findOne({ name });
+        console.log(title);
         const product = await db.collection('products').findOne({ title });
         let userSub = {};
         let userExists = false;
@@ -125,13 +126,16 @@ async function buyProduct(
                     { returnOriginal: false }
                 )
             );
+            let subExpired = new Date(activelyUntil) - new Date() > 0 ? false : true
             await db.collection('users').updateOne(
                 { name },
                 {
                     $push: {
                         subscriptions: {
                             status: {
-                                isActive: true
+                                isFreezed: false,
+                                isActive: subExpired ? false : true,
+                                isExpired: subExpired ? true : false
                             },
                             activelyUntil,
                             title,
@@ -173,7 +177,7 @@ async function buyProduct(
                 )
         }
         if (!isKey) {
-            await db.collection('products').findOneAndUpdate(
+            await db.collection('products').updateOne(
                 { title },
                 { $inc: { timeBought: 1 } },
                 { returnOriginal: false }
@@ -834,6 +838,18 @@ async function deleteProduct(_, {
     try {
         const db = getDb();
         await db.collection('products').deleteOne({ title });
+        await db
+            .collection('users')
+            .updateMany(
+                {},
+                {
+                    $pull: {
+                        'subscriptions': {
+                            title
+                        }
+                    }
+                }
+            )
 
         createLog({
             log: {
@@ -968,6 +984,39 @@ async function disableProduct(_, { title }) {
 async function addCost(_, { cost, title }) {
     try {
         const db = getDb();
+        const {
+            costPer,
+            menuText,
+            days
+        } = cost;
+
+        if (!cost.cost) {
+            return {
+                success: false,
+                message: 'Вы не ввели цену за продукт'
+            };
+        }
+
+        if (costPer == '') {
+            return {
+                success: false,
+                message: 'Вы не ввели поле "Цена за", оно является обязательным'
+            }
+        }
+
+        if (!days) {
+            return {
+                success: false,
+                message: 'Вы не ввели поле "Дни". Это поле обязательное'
+            }
+        }
+
+        if (menuText == '') {
+            return {
+                success: false,
+                message: 'Вы не ввели "Надпись в меню", нужно ввести для добавления цены'
+            };
+        }
 
         await db
             .collection('products')
@@ -980,7 +1029,10 @@ async function addCost(_, { cost, title }) {
                 }
             )
 
-        return 'Everything is ok, cost is added';
+        return {
+            success: true,
+            message: "Цена за продукт успешно добавлена"
+        };
     } catch (error) {
         console.log(error);
     }

@@ -13,10 +13,12 @@ router.post('/auth', async (req, res) => {
         login,
         password,
         hwid,
-        ip,
-        browser
+        ip
     } = req.body;
-    const { location } = await getLocationByIP(ip);
+    let { location } = await getLocationByIP(ip);
+    if (!location) {
+        location = 'failed city'
+    }
 
     const {
         user,
@@ -27,6 +29,7 @@ router.post('/auth', async (req, res) => {
         compareHwid: false,
         title: null,
         ip,
+        location,
         logErrorTopic: 'Неудачная авторизация в лоадере'
     });
     const { success, message } = response;
@@ -38,6 +41,8 @@ router.post('/auth', async (req, res) => {
     }
 
     let frozenSubsCount = 0;
+    let activeSubsCount = 0;
+    const activeSubs = [];
     let userHasHwid = false;
     if (user.hwid != '') {
         userHasHwid = true;
@@ -86,7 +91,25 @@ router.post('/auth', async (req, res) => {
 
     for(let i = 0; i < subscriptions.length; i++) {
         const subscription = subscriptions[i];
-        if (subscription.status.isFreezed) {
+        const {
+            status: { isActive, isFreezed },
+            activelyUntil,
+            title,
+            productFor
+        } = subscription;
+        if (isActive || isFreezed) {
+            activeSubsCount++;
+            const slotNumber = activeSubs.length;
+            activeSubs[slotNumber] = {
+                ['slot_' + slotNumber]: {
+                    frozen: typeof isFreezed == 'undefined' ? false : isFreezed,
+                    name: title,
+                    sub: new Date(activelyUntil).toLocaleDateString(),
+                    typeGame: productFor
+                }
+            };
+        }
+        if (isFreezed) {
             frozenSubsCount++;
         }
     }
@@ -115,14 +138,6 @@ router.post('/auth', async (req, res) => {
         await db.collection('users').updateOne({ name: login }, { $set: { hwid } });
     }
 
-    const sub = subscriptions[Math.round(Math.random() * subscriptions.length)];
-    const {
-        title,
-        activelyUntil,
-        productFor,
-        status: { isFreezed }
-    } = sub;
-
     createLog({
         log: {
             name: login,
@@ -138,11 +153,8 @@ router.post('/auth', async (req, res) => {
     });
 
     res.status(200).send({
-        subsCount: subscriptions.length,
-        subName: title,
-        subExpired: new Date(activelyUntil).toLocaleDateString(),
-        gameType: productFor,
-        frozen: typeof isFreezed == 'undefined' ? false : isFreezed
+        subsCount: activeSubsCount,
+        subscriptions: activeSubs,
     });
 });
 
@@ -162,6 +174,7 @@ router.post('/inject_dll_preload', async (req, res) => {
         compareHwid: true,
         title: select_product,
         ip,
+        location,
         logErrorTopic: 'Запуск продукта'
     });
 
@@ -199,7 +212,8 @@ router.post('/generate_key_product', async (req, res) => {
         ip
     } = req.body;
     const db = getDb();
-    const { location } = await getLocationByIP(ip);
+    let { location } = await getLocationByIP(ip);
+    if (!location) location = 'failed city';
 
     const product = await db.collection('products').findOne({ title: select_product });
     if (!product) {
@@ -224,8 +238,8 @@ router.post('/generate_key_product', async (req, res) => {
 
     const key = {
         name: generateString(10, true, 5),
-        expiredInDays: count_days,
-        activationsAmount: count_activations,
+        expiredInDays: +count_days,
+        activationsAmount: +count_activations,
         isUsed: false,
         usedAmount: 0
     };
@@ -320,8 +334,7 @@ router.post('/log_inject_hacks', async (req, res) => {
         ip
     };
 
-    let result = await fetchGraphQLServer(query, vars);
-    console.log('result:', result);
+    await fetchGraphQLServer(query, vars);
 
     res.status(200).send({
         message: `Successfully created log for ${select_product}` 
@@ -340,7 +353,7 @@ router.post('/crash_logs', async (req, res) => {
 
     const user = await db.collection('users').findOne({ name: login });
     if (!user) {
-        res.send(400).send({
+        res.status(400).send({
             message: 'wrong user parameters'
         });
         return;
@@ -375,7 +388,10 @@ router.post('/crash_logs', async (req, res) => {
     };
 
     const result = await fetchGraphQLServer(query, vars);
-    console.log(result);
+    if (result.errors) {
+        res.sendStatus(400);
+        return;
+    }
 
     res.status(200).send({
         message: 'Crash is successfully logged'
@@ -389,7 +405,8 @@ router.post('/block_user', async (req, res) => {
     } = req.body;
     const db = getDb();
     const user = await db.collection('users').findOne({ name: login });
-    const { location } = await getLocationByIP(ip);
+    let { location } = await getLocationByIP(ip);
+    if (!location) location = 'failed city';
 
     if (!user) {
         createLog({
@@ -409,6 +426,7 @@ router.post('/block_user', async (req, res) => {
         res.status(400).send({
             message: 'user not found'
         });
+        return;
     }
 
     await db
