@@ -155,15 +155,14 @@ async function buyProduct(
                     break;
                 }
             }
-            userSub.activelyUntil = new Date(userSub.activelyUntil).setDate(new Date(userSub.activelyUntil).getDate() + days);
-            userSub.activelyUntil = new Date(userSub.activelyUntil);
+            userSub.activelyUntil = new Date().setDate(new Date().getDate() + days);
             await db
                 .collection('users')
                 .updateOne(
                     { name },
                     {
                         $set: {
-                            'subscriptions.$[key].activelyUntil': userSub.activelyUntil
+                            'subscriptions.$[key].activelyUntil': new Date(userSub.activelyUntil)
                         }
                     },
                     {
@@ -175,6 +174,7 @@ async function buyProduct(
                     }
                 )
         }
+        console.log(userSub.activelyUntil);
         if (!isKey) {
             await db.collection('products').updateOne(
                 { title },
