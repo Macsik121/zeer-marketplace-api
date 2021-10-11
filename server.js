@@ -14,7 +14,7 @@ app.set('trusted proxy', true);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(function(_, res) {
+app.use('/api_loader', function(_, res) {
     res.set({ 'content-type': 'application/json; charset=utf-8' });
 });
 
