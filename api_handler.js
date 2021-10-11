@@ -52,7 +52,7 @@ const resolvers = {
         resetPassword: user.resetPassword,
         buyProduct: products.buyProduct,
         updateBoughtIcon: products.updateBoughtIcon,
-        freezeSubscription: products.freezeSubscripiton,
+        freezeSubscription: products.freezeSubscription,
         unfreezeSubscription: products.unfreezeSubscription,
         makeResetRequest: user.makeResetRequest,
         deleteUser: user.deleteUser,

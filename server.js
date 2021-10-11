@@ -14,6 +14,10 @@ app.set('trusted proxy', true);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(function(_, res) {
+    res.set({ 'content-type': 'application/json; charset=utf-8' });
+});
+
 app.use('/api_loader', loaderAPIRouter);
 installHandler(app);
 

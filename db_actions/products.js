@@ -221,32 +221,29 @@ async function updateBoughtIcon(_, { name }) {
     }
 }
 
-async function freezeSubscripiton(_, { name, title }) {
+async function freezeSubscription(_, { name, title }) {
     try {
         const db = getDb();
-        const user = await db.collection('users').findOne({ name });
-        user.subscriptions = user.subscriptions.map(sub => {
-            if (sub.title == title) {
-                sub.status = {
-                    isActive: false,
-                    isExpired: false,
-                    isFreezed: true
-                };
-                sub.wasFreezed = true;
-                const freezeTime = new Date();
-                freezeTime.setMonth(new Date().getMonth());
-                sub.freezeTime = freezeTime;
-            }
-            return sub;
-        });
         await db.collection('users').updateOne(
             { name },
             {
                 $set: {
-                    subscriptions: user.subscriptions
+                    'subscriptions.$[subscription].status': {
+                        isActive: false,
+                        isExpired: false,
+                        isFreezed: true
+                    },
+                    'subscriptions.$[subscription].wasFreezed': true,
+                    'subscriptions.$[subscription].freezeTime': new Date()
                 }
             },
-            { returnNewDocument: true }
+            {
+                arrayFilters: [
+                    {
+                        'subscription.title': title
+                    }
+                ]
+            }
         )
         return {
             success: true,
@@ -1079,7 +1076,7 @@ module.exports = {
     getProduct,
     buyProduct,
     updateBoughtIcon,
-    freezeSubscripiton,
+    freezeSubscription,
     unfreezeSubscription,
     createKeys,
     deleteKey,

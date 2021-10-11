@@ -97,11 +97,12 @@ router.post('/auth', async (req, res) => {
             description: 'Обновлений не было за последнее время'
         };
         const {
-            status: { isActive, isFreezed },
+            status,
             activelyUntil,
             title,
             productFor
         } = subscription;
+        const { isActive, isFreezed } = status;
         for(let j = 0; j < products.length; j++) {
             const currentProduct = products[j];
             if (title == currentProduct.title) {
@@ -115,6 +116,9 @@ router.post('/auth', async (req, res) => {
             };
         }
         if (isActive || isFreezed) {
+            if (isFreezed) {
+                frozenSubsCount++;
+            }
             activeSubsCount++;
             const slotNumber = activeSubs.length;
             const days = new Date(activelyUntil).getDate();
@@ -124,15 +128,12 @@ router.post('/auth', async (req, res) => {
                 ['slot_' + slotNumber]: {
                     frozen: typeof isFreezed == 'undefined' ? false : isFreezed,
                     name: title,
-                    sub: `${months + 1}.${days}.${years}`,
+                    sub: `${days}.${months + 1}.${years}`,
                     typeGame: productFor,
                     index: slotNumber,
                     update_log: '- ' + lastUpdate.description
                 }
             };
-        }
-        if (isFreezed) {
-            frozenSubsCount++;
         }
     }
 

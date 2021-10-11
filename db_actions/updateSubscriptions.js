@@ -21,12 +21,10 @@ module.exports = async function updateSubscriptions({
             const dateDifference = new Date(activelyUntil) - new Date();
             if (dateDifference < 0 && !status.isFreezed) {
                 userHasExpiredSub = true;
-            } else if (dateDifference > 0) {
+            } else if (dateDifference > 0 && status.isExpired) {
                 userHasExtended = true;
             }
         });
-        console.log(userHasExpiredSub);
-        console.log(userHasExtended);
         if (userHasExpiredSub) {
             user = await db
                 .collection('users')
@@ -79,7 +77,7 @@ module.exports = async function updateSubscriptions({
                     }
                 )
         }
-        if (returnUser) return user.value;
+        if (returnUser) return user.value || user;
     } catch (error) {
         console.log(error);
     }

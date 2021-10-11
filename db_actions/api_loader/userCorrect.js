@@ -103,8 +103,8 @@ module.exports = async function userCorrect({
     if (title) {
         let subscriptionExists = false;
         let subscriptionFreezed = false;
-        for(let i = 0; i < subscriptions.length; i++) {
-            const subscription = subscriptions[i];
+        for(let i = 0; i < user.subscriptions.length; i++) {
+            const subscription = user.subscriptions[i];
             if (title == subscription.title) {
                 subscriptionExists = true;
                 if (subscription.status.isExpired) {
