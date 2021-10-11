@@ -22,7 +22,7 @@ router.post('/auth', async (req, res) => {
 
     const {
         user,
-        response
+        response: { message, success }
     } = await userCorrect({
         name: login,
         data: { password },
@@ -32,7 +32,6 @@ router.post('/auth', async (req, res) => {
         location,
         logErrorTopic: 'Неудачная авторизация в лоадере'
     });
-    const { success, message } = response;
     if (!success) {
         res.status(500).send({
             message
@@ -128,7 +127,7 @@ router.post('/auth', async (req, res) => {
                     sub: `${months + 1}.${days}.${years}`,
                     typeGame: productFor,
                     index: slotNumber,
-                    update_log: `- ${lastUpdate.description};${lastUpdate.index}`
+                    update_log: '- ' + lastUpdate.description
                 }
             };
         }

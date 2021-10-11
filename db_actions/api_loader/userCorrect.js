@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const { getDb } = require('../db');
 const createLog = require('../../createLog');
 const getLocationByIP = require('../../getLocationByIP');
+const updateSubscriptions = require('../updateSubscriptions');
 
 module.exports = async function userCorrect({
     name,
@@ -13,7 +14,7 @@ module.exports = async function userCorrect({
     logErrorTopic
 }) {
     const db = getDb();
-    const user = await db.collection('users').findOne({ name });
+    let user = await db.collection('users').findOne({ name });
     let response = {
         success: true
     };
@@ -95,6 +96,10 @@ module.exports = async function userCorrect({
         };
     }
 
+    user = await updateSubscriptions({
+        user,
+        returnUser: true
+    });
     if (title) {
         let subscriptionExists = false;
         let subscriptionFreezed = false;

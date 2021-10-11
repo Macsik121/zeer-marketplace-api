@@ -3,6 +3,7 @@ const createLog = require('../createLog');
 const updateDate = require('../update-date');
 const { createPurchase } = require('./purchases');
 const { createProfit } = require('./profit');
+const updateSubscriptions = require('./updateSubscriptions');
 
 async function getProducts() {
     try {
@@ -147,14 +148,6 @@ async function buyProduct(
                 }
             );
         } else {
-            let subIndex = 0;
-            for(let i = 0; i < user.subscriptions.length; i++) {
-                const currentSub = user.subscriptions[i];
-                if (currentSub.title == product.title) {
-                    subIndex = i;
-                    break;
-                }
-            }
             userSub.activelyUntil = new Date().setDate(new Date().getDate() + days);
             await db
                 .collection('users')
@@ -174,7 +167,6 @@ async function buyProduct(
                     }
                 )
         }
-        console.log(userSub.activelyUntil);
         if (!isKey) {
             await db.collection('products').updateOne(
                 { title },

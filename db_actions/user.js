@@ -4,6 +4,7 @@ const { getDb } = require('./db');
 const { sendMail } = require('../nodemailer');
 const createActionLog = require('../createLog');
 const createLog = require('../createLog');
+const updateSubscriptions = require('./updateSubscriptions');
 
 async function getUser(_, { name }) {
     try {
@@ -756,17 +757,7 @@ async function updateSubscriptionTime(_, {
                 break;
             }
         }
-        if (new Date().getTime() > new Date(date).getTime()) {
-            subscription.status = {
-                isActive: true
-            }
-        } else {
-            subscription.status = {
-                isExpired: true,
-                isActive: false,
-                isFreezed: false
-            }
-        }
+        let successfullyChangedSub = false;
         if (subscriptionExists) {
             await db
                 .collection('users')
@@ -780,16 +771,13 @@ async function updateSubscriptionTime(_, {
                     {
                         arrayFilters: [
                             {
-                                'subscription.title': { $eq: title }
+                                'subscription.title': title
                             }
                         ]
                     }
                 );
 
-            return {
-                success: true,
-                message: `Подписка продукта ${title} у пользователя ${name} успешно изменена`
-            };
+            successfullyChangedSub = true;
         } else {
             subscription.activelyUntil = new Date(date);
             await db
@@ -800,6 +788,16 @@ async function updateSubscriptionTime(_, {
                         $push: subscription
                     }
                 );
+        }
+
+        await updateSubscriptions({
+            user
+        });
+        if (successfullyChangedSub) {
+            return {
+                success: true,
+                message: `Подписка продукта ${title} у пользователя ${name} успешно изменена`
+            };
         }
     } catch (error) {
         console.log(error);
