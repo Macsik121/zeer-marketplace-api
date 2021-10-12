@@ -8,6 +8,7 @@ const generateString = require('../../generateString');
 const getLocationByIP = require('../../getLocationByIP');
 
 router.post('/auth', async (req, res) => {
+    res.set({ 'content-type': 'application/json; charset=utf-8' });
     const db = getDb();
     const {
         login,
@@ -182,6 +183,7 @@ router.post('/auth', async (req, res) => {
 });
 
 router.post('/inject_dll_preload', async (req, res) => {
+    res.set({ 'content-type': 'application/json; charset=utf-8' });
     const {
         login,
         password,
@@ -227,6 +229,7 @@ router.post('/inject_dll_preload', async (req, res) => {
 });
 
 router.post('/generate_key_product', async (req, res) => {
+    res.set({ 'content-type': 'application/json; charset=utf-8' });
     const {
         select_product,
         count_days,
@@ -297,6 +300,7 @@ router.post('/generate_key_product', async (req, res) => {
 });
 
 router.post('/log_inject_hacks', async (req, res) => {
+    res.set({ 'content-type': 'application/json; charset=utf-8' });
     const {
         login,
         password,
@@ -364,6 +368,7 @@ router.post('/log_inject_hacks', async (req, res) => {
 });
 
 router.post('/crash_logs', async (req, res) => {
+    res.set({ 'content-type': 'application/json; charset=utf-8' });
     const {
         login,
         exception_code,
@@ -421,6 +426,7 @@ router.post('/crash_logs', async (req, res) => {
 });
 
 router.post('/block_user', async (req, res) => {
+    res.set({ 'content-type': 'application/json; charset=utf-8' });
     const {
         login,
         ip
