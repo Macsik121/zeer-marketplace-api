@@ -8,7 +8,7 @@ const generateString = require('../../generateString');
 const getLocationByIP = require('../../getLocationByIP');
 
 router.post('/auth', async (req, res) => {
-    res.set({ 'content-type': 'application/json; charset=utf-8' });
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     const db = getDb();
     const {
         login,
@@ -89,7 +89,7 @@ router.post('/auth', async (req, res) => {
         return;
     }
 
-    const products = await db.collection('products').find({}, { changes: 1 }).toArray();
+    const products = await db.collection('products').find({}, { changes: 1, id: 1 }).toArray();
 
     for(let i = 0; i < subscriptions.length; i++) {
         const subscription = subscriptions[i];
@@ -101,7 +101,8 @@ router.post('/auth', async (req, res) => {
             status,
             activelyUntil,
             title,
-            productFor
+            productFor,
+            id
         } = subscription;
         const { isActive, isFreezed } = status;
         for(let j = 0; j < products.length; j++) {
@@ -128,7 +129,7 @@ router.post('/auth', async (req, res) => {
             activeSubs[slotNumber] = {
                 ['slot_' + slotNumber]: {
                     frozen: typeof isFreezed == 'undefined' ? false : isFreezed,
-                    name: title,
+                    id,
                     sub: `${days}.${months + 1}.${years}`,
                     typeGame: productFor,
                     index: slotNumber,
@@ -183,7 +184,7 @@ router.post('/auth', async (req, res) => {
 });
 
 router.post('/inject_dll_preload', async (req, res) => {
-    res.set({ 'content-type': 'application/json; charset=utf-8' });
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     const {
         login,
         password,
@@ -229,7 +230,7 @@ router.post('/inject_dll_preload', async (req, res) => {
 });
 
 router.post('/generate_key_product', async (req, res) => {
-    res.set({ 'content-type': 'application/json; charset=utf-8' });
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     const {
         select_product,
         count_days,
@@ -300,7 +301,7 @@ router.post('/generate_key_product', async (req, res) => {
 });
 
 router.post('/log_inject_hacks', async (req, res) => {
-    res.set({ 'content-type': 'application/json; charset=utf-8' });
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     const {
         login,
         password,
@@ -368,7 +369,7 @@ router.post('/log_inject_hacks', async (req, res) => {
 });
 
 router.post('/crash_logs', async (req, res) => {
-    res.set({ 'content-type': 'application/json; charset=utf-8' });
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     const {
         login,
         exception_code,
@@ -426,7 +427,7 @@ router.post('/crash_logs', async (req, res) => {
 });
 
 router.post('/block_user', async (req, res) => {
-    res.set({ 'content-type': 'application/json; charset=utf-8' });
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     const {
         login,
         ip
