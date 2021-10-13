@@ -1,5 +1,6 @@
 require('dotenv').config();
 const router = require('express').Router();
+const utf8 = require('utf8');
 const { getDb } = require('../db');
 const fetchGraphQLServer = require('../fetchGraphQLServer');
 const userCorrect = require('./userCorrect');
@@ -34,7 +35,7 @@ router.post('/auth', async (req, res) => {
         logErrorTopic: 'Неудачная авторизация в лоадере'
     });
     if (!success) {
-        res.status(500).send({
+        res.status(500).json({
             message
         });
         return;
@@ -60,7 +61,7 @@ router.post('/auth', async (req, res) => {
                 browser: null,
                 platform: null
             });
-            res.status(400).send({
+            res.status(400).json({
                 message: 'error hwid'
             });
             return;
@@ -83,7 +84,7 @@ router.post('/auth', async (req, res) => {
             browser: null,
             platform: null
         });
-        res.status(500).send({
+        res.status(500).json({
             message: 'no subs'
         });
         return;
@@ -101,9 +102,9 @@ router.post('/auth', async (req, res) => {
             status,
             activelyUntil,
             title,
-            productFor,
-            id
+            productFor
         } = subscription;
+        let id = 0;
         const { isActive, isFreezed } = status;
         for(let j = 0; j < products.length; j++) {
             const currentProduct = products[j];
@@ -113,6 +114,7 @@ router.post('/auth', async (req, res) => {
                 if (change) {
                     lastUpdate.description = change.description;
                     lastUpdate.index = lastUpdateIndex;
+                    id = currentProduct.id;
                 }
                 break;
             };
@@ -133,7 +135,7 @@ router.post('/auth', async (req, res) => {
                     sub: `${days}.${months + 1}.${years}`,
                     typeGame: productFor,
                     index: slotNumber,
-                    update_log: '- ' + lastUpdate.description
+                    update_log: '- ' + utf8.encode(lastUpdate.description)
                 }
             };
         }
@@ -153,7 +155,7 @@ router.post('/auth', async (req, res) => {
             browser: null,
             platform: null
         });
-        res.status(500).send({
+        res.status(500).json({
             message: 'subs frozen'
         });
         return;
@@ -177,7 +179,7 @@ router.post('/auth', async (req, res) => {
         platform: null
     });
 
-    res.status(200).send({
+    res.status(200).json({
         subsCount: activeSubsCount,
         subscriptions: activeSubs,
     });
@@ -193,19 +195,25 @@ router.post('/inject_dll_preload', async (req, res) => {
         ip
     } = req.body;
     const { location } = await getLocationByIP(ip);
+    const db = getDb();
+    const product = await db.collection('products').findOne({ id: +select_product }, { title: 1 })
 
+    if (!product) {
+        res.status(400).json({ message: 'product not found' });
+        return;
+    }
     const { response: { success, message } } = await userCorrect({
         name: login,
         data: { password, hwid },
         compareHwid: true,
-        title: select_product,
+        title: product.title,
         ip,
         location,
         logErrorTopic: 'Запуск продукта'
     });
 
     if (!success) {
-        res.status(500).send({
+        res.status(500).json({
             message
         });
         return;
@@ -214,7 +222,7 @@ router.post('/inject_dll_preload', async (req, res) => {
     createLog({
         log: {
             name: login,
-            action: `Запуск продукта: успешно пройдена проверка на лицензию ${select_product}`
+            action: `Запуск продукта: успешно пройдена проверка на лицензию ${product.title}`
         },
         navigator: '',
         locationData: {
@@ -224,8 +232,8 @@ router.post('/inject_dll_preload', async (req, res) => {
         browser: null,
         platform: null
     });
-    res.status(200).send({
-        message: `success for ${select_product}`
+    res.status(200).json({
+        message: `success for ${product.title}`
     });
 });
 
@@ -256,7 +264,7 @@ router.post('/generate_key_product', async (req, res) => {
             browser: null,
             platform: null
         });
-        res.status(400).send({
+        res.status(400).json({
             message: 'Failed found product'
         });
         return;
@@ -295,7 +303,7 @@ router.post('/generate_key_product', async (req, res) => {
         browser: null,
         platform: null
     });
-    res.status(200).send({
+    res.status(200).json({
         key: key.name
     });
 });
@@ -325,7 +333,7 @@ router.post('/log_inject_hacks', async (req, res) => {
 
     const { success, message } = response;
     if (!success) {
-        res.status(500).send({
+        res.status(500).json({
             message
         });
         return;
@@ -363,7 +371,7 @@ router.post('/log_inject_hacks', async (req, res) => {
 
     await fetchGraphQLServer(query, vars);
 
-    res.status(200).send({
+    res.status(200).json({
         message: `Successfully created log for ${select_product}` 
     });
 });
@@ -381,7 +389,7 @@ router.post('/crash_logs', async (req, res) => {
 
     const user = await db.collection('users').findOne({ name: login });
     if (!user) {
-        res.status(400).send({
+        res.status(400).json({
             message: 'wrong user parameters'
         });
         return;
@@ -421,7 +429,7 @@ router.post('/crash_logs', async (req, res) => {
         return;
     }
 
-    res.status(200).send({
+    res.status(200).json({
         message: 'success log created'
     });
 });
@@ -452,7 +460,7 @@ router.post('/block_user', async (req, res) => {
             platform: null
         });
 
-        res.status(400).send({
+        res.status(400).json({
             message: 'user not found'
         });
         return;
@@ -487,7 +495,7 @@ router.post('/block_user', async (req, res) => {
         platform: null
     });
 
-    res.status(200).send({
+    res.status(200).json({
         message: 'user banned'
     });
 });
