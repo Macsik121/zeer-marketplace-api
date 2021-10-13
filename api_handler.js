@@ -91,8 +91,8 @@ const resolvers = {
         logInject: injectLogs.logInject,
         cleanInjectLogs: injectLogs.cleanLogs,
         logCrash: crashLogs.logCrash,
-        cleanCrashLogs: crashLogs.cleanLogs
-
+        cleanCrashLogs: crashLogs.cleanLogs,
+        refuseSub: user.refuseSub
     }
 }
 

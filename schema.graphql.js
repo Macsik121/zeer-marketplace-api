@@ -581,6 +581,7 @@ const typeDefs = `
             full_log_excetion: String!
         ): ServerResponse!
         cleanCrashLogs: ServerResponse!
+        refuseSub(name: String!, title: String!): ServerResponse!
     }
 `;
 

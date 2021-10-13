@@ -9,7 +9,7 @@ const generateString = require('../../generateString');
 const getLocationByIP = require('../../getLocationByIP');
 
 router.post('/auth', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.set('Content-Type', 'application/json; charset=utf-8');
     const db = getDb();
     const {
         login,
@@ -90,7 +90,13 @@ router.post('/auth', async (req, res) => {
         return;
     }
 
-    const products = await db.collection('products').find({}, { changes: 1, id: 1 }).toArray();
+    const products = (
+        await db
+            .collection('products')
+            .find()
+            .project({ changes: 1, id: 1, title: 1 })
+            .toArray()
+    );
 
     for(let i = 0; i < subscriptions.length; i++) {
         const subscription = subscriptions[i];
@@ -105,16 +111,18 @@ router.post('/auth', async (req, res) => {
             productFor
         } = subscription;
         let id = 0;
+        let productTitle = '';
         const { isActive, isFreezed } = status;
         for(let j = 0; j < products.length; j++) {
             const currentProduct = products[j];
             if (title == currentProduct.title) {
+                id = currentProduct.id;
+                productTitle = currentProduct.title;
                 const lastUpdateIndex = currentProduct.changes.length;
                 const change = currentProduct.changes[lastUpdateIndex - 1];
                 if (change) {
                     lastUpdate.description = change.description;
                     lastUpdate.index = lastUpdateIndex;
-                    id = currentProduct.id;
                 }
                 break;
             };
@@ -132,10 +140,11 @@ router.post('/auth', async (req, res) => {
                 ['slot_' + slotNumber]: {
                     frozen: typeof isFreezed == 'undefined' ? false : isFreezed,
                     id,
+                    title: productTitle,
                     sub: `${days}.${months + 1}.${years}`,
                     typeGame: productFor,
                     index: slotNumber,
-                    update_log: '- ' + utf8.encode(lastUpdate.description)
+                    update_log: '- ' + lastUpdate.description
                 }
             };
         }
@@ -186,7 +195,7 @@ router.post('/auth', async (req, res) => {
 });
 
 router.post('/inject_dll_preload', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.set('Content-Type', 'application/json; charset=utf-8');
     const {
         login,
         password,
@@ -238,7 +247,7 @@ router.post('/inject_dll_preload', async (req, res) => {
 });
 
 router.post('/generate_key_product', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.set('Content-Type', 'application/json; charset=utf-8');
     const {
         select_product,
         count_days,
@@ -309,7 +318,7 @@ router.post('/generate_key_product', async (req, res) => {
 });
 
 router.post('/log_inject_hacks', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.set('Content-Type', 'application/json; charset=utf-8');
     const {
         login,
         password,
@@ -377,7 +386,7 @@ router.post('/log_inject_hacks', async (req, res) => {
 });
 
 router.post('/crash_logs', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.set('Content-Type', 'application/json; charset=utf-8');
     const {
         login,
         exception_code,
@@ -435,7 +444,7 @@ router.post('/crash_logs', async (req, res) => {
 });
 
 router.post('/block_user', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.set('Content-Type', 'application/json; charset=utf-8');
     const {
         login,
         ip

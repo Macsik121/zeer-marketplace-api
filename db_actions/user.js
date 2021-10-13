@@ -861,6 +861,29 @@ async function issueSubscription(_, {
     }
 }
 
+async function refuseSub(_, { name, title }) {
+    try {
+        const db = getDb();
+        await db.collection('users').updateOne(
+            { name },
+            {
+                $pull: {
+                    subscriptions: {
+                        title
+                    }
+                }
+            }
+        );
+
+        return {
+            success: true,
+            message: `Вы отказались от подписки ${title}`
+        };
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getUser,
     getUsers,
@@ -883,5 +906,6 @@ module.exports = {
     editUserPassword,
     updateSubscriptionTime,
     resetFreezeCooldown,
-    issueSubscription
+    issueSubscription,
+    refuseSub
 };

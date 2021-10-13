@@ -91,6 +91,7 @@ async function buyProduct(
         const user = await db.collection('users').findOne({ name });
         const product = await db.collection('products').findOne({ title });
         let userSub = {};
+        let subExists = false;
         let userExists = false;
         let boughtProduct;
         if (product.peopleBought.length > 0) {
@@ -105,48 +106,54 @@ async function buyProduct(
         for(let i = 0; i < user.subscriptions.length; i++) {
             const subscription = user.subscriptions[i];
             if (subscription.title == title) {
+                subExists = true;
                 userSub = subscription;
                 break;
             }
         }
         let activelyUntil = new Date().setDate(new Date().getDate() + days);
         activelyUntil = new Date(activelyUntil);
-        if (!userExists) {
-            boughtProduct = (
-                await db.collection('products').findOneAndUpdate(
-                    { title },
+        console.log(subExists, userExists);
+        if (!userExists || !subExists) {
+            if (!userExists) {
+                boughtProduct = (
+                    await db.collection('products').findOneAndUpdate(
+                        { title },
+                        {
+                            $push: {
+                                peopleBought: {
+                                    avatar: user.avatar,
+                                    name: user.name
+                                }
+                            }
+                        },
+                        { returnOriginal: false }
+                    )
+                );
+            }
+            if (!subExists) {
+                let subExpired = new Date(activelyUntil) - new Date() > 0 ? false : true;
+                await db.collection('users').updateOne(
+                    { name },
                     {
                         $push: {
-                            peopleBought: {
-                                avatar: user.avatar,
-                                name: user.name
+                            subscriptions: {
+                                status: {
+                                    isFreezed: false,
+                                    isActive: subExpired ? false : true,
+                                    isExpired: subExpired ? true : false
+                                },
+                                activelyUntil,
+                                title,
+                                productFor: product.productFor,
+                                imageURL: product.imageURLdashboard,
+                                freezeTime: new Date(),
+                                wasFreezed: false
                             }
                         }
-                    },
-                    { returnOriginal: false }
-                )
-            );
-            let subExpired = new Date(activelyUntil) - new Date() > 0 ? false : true;
-            await db.collection('users').updateOne(
-                { name },
-                {
-                    $push: {
-                        subscriptions: {
-                            status: {
-                                isFreezed: false,
-                                isActive: subExpired ? false : true,
-                                isExpired: subExpired ? true : false
-                            },
-                            activelyUntil,
-                            title,
-                            productFor: product.productFor,
-                            imageURL: product.imageURLdashboard,
-                            freezeTime: new Date(),
-                            wasFreezed: false
-                        }
                     }
-                }
-            );
+                );
+            }
         } else {
             userSub.activelyUntil = new Date().setDate(new Date().getDate() + days);
             await db
