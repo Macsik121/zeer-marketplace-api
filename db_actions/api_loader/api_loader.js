@@ -30,7 +30,7 @@ router.post('/auth', async (req, res) => {
         data: { password },
         compareHwid: false,
         title: null,
-        ip,
+        ip: ip || '',
         location,
         logErrorTopic: 'Неудачная авторизация в лоадере'
     });
@@ -55,7 +55,7 @@ router.post('/auth', async (req, res) => {
                 },
                 navigator: '',
                 locationData: {
-                    ip,
+                    ip: ip || '',
                     location
                 },
                 browser: null,
@@ -78,7 +78,7 @@ router.post('/auth', async (req, res) => {
             },
             navigator: '',
             locationData: {
-                ip,
+                ip: ip || '',
                 location
             },
             browser: null,
@@ -121,7 +121,7 @@ router.post('/auth', async (req, res) => {
                 const lastUpdateIndex = currentProduct.changes.length;
                 const change = currentProduct.changes[lastUpdateIndex - 1];
                 if (change) {
-                    lastUpdate.description = change.description;
+                    lastUpdate.description = utf8.decode(change.description);
                     lastUpdate.index = lastUpdateIndex;
                 }
                 break;
@@ -158,7 +158,7 @@ router.post('/auth', async (req, res) => {
             },
             navigator: '',
             locationData: {
-                ip,
+                ip: ip || '',
                 location
             },
             browser: null,
