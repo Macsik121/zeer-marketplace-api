@@ -216,7 +216,7 @@ async function resetPassword(_, { email }) {
             )
         return {
             // user,
-            message: 'You successfully reseted the password'
+            message: 'На указанную почту отправленно сообщение'
         }
     } catch (error) {
         console.log(error);
