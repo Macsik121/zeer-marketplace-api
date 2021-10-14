@@ -386,6 +386,11 @@ const typeDefs = `
         full_log_excetion: String!
     }
 
+    type isPromoRightResponse {
+        response: ServerResponse!
+        discountPercent: Int!
+    }
+
     type Query {
         products: [Product!]!
         popularProducts(amountToGet: Int): [Product!]!
@@ -405,6 +410,7 @@ const typeDefs = `
         profit(week: WeekInput): [ProfitToday]!
         injectLogs: [InjectLog]!
         crashLogs: [CrashLog]!
+        isPromocodeRight(title: String!, name: String!): isPromoRightResponse!
     }
 
     type Mutation {
@@ -582,6 +588,7 @@ const typeDefs = `
         ): ServerResponse!
         cleanCrashLogs: ServerResponse!
         refuseSub(name: String!, title: String!): ServerResponse!
+        activatePromo(name: String!, title: String!): ServerResponse!
     }
 `;
 

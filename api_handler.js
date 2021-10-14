@@ -42,7 +42,8 @@ const resolvers = {
         purchases: purchases.getPurchases,
         profit: profit.getAllProfit,
         injectLogs: injectLogs.injectLogs,
-        crashLogs: crashLogs.crashLogs
+        crashLogs: crashLogs.crashLogs,
+        isPromocodeRight: products.isPromocodeRight
     },
     Mutation: {
         signUp: user.signUp,

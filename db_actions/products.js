@@ -1077,6 +1077,40 @@ async function updateProductBG(_, { title, imageURL }) {
     }
 }
 
+async function isPromocodeRight(_, { name, title }) {
+    try {
+        const db = getDb();
+        const { promocodes: { active } } = (
+            await db
+                .collection('products')
+                .findOne({ title }, { projection: { promocodes: 1 } })
+        );
+        let response = {
+            response: {
+                success: false,
+                message: 'Вы ввели неверное имя промокода'
+            },
+            discountPercent: 1
+        };
+        for(let i = 0; i < active.length; i++) {
+            const promo = active[i];
+            if (promo.name == name) {
+                response = {
+                    response: {
+                        success: true,
+                        message: `Вы успешно ввели промокод! Теперь вы можете купить продукт ${title} со скидкой ${promo.discountPercent}%!`
+                    },
+                    discountPercent: promo.discountPercent
+                }
+                break;
+            }
+        }
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProducts,
     getPopularProducts,
@@ -1102,5 +1136,6 @@ module.exports = {
     addCost,
     deleteCost,
     saveCostChanges,
-    updateProductBG
+    updateProductBG,
+    isPromocodeRight
 };
