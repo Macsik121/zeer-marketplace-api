@@ -64,7 +64,6 @@ const typeDefs = `
     }
     
     type Reset {
-        user: User
         message: String!
     }
 

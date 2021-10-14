@@ -30,7 +30,7 @@ router.post('/auth', async (req, res) => {
         data: { password },
         compareHwid: false,
         title: null,
-        ip: ip || '',
+        ip,
         location,
         logErrorTopic: 'Неудачная авторизация в лоадере'
     });
@@ -55,7 +55,7 @@ router.post('/auth', async (req, res) => {
                 },
                 navigator: '',
                 locationData: {
-                    ip: ip || '',
+                    ip,
                     location
                 },
                 browser: null,
@@ -78,7 +78,7 @@ router.post('/auth', async (req, res) => {
             },
             navigator: '',
             locationData: {
-                ip: ip || '',
+                ip,
                 location
             },
             browser: null,
@@ -158,7 +158,7 @@ router.post('/auth', async (req, res) => {
             },
             navigator: '',
             locationData: {
-                ip: ip || '',
+                ip,
                 location
             },
             browser: null,
@@ -252,13 +252,18 @@ router.post('/generate_key_product', async (req, res) => {
         select_product,
         count_days,
         count_activations,
-        ip
     } = req.body;
+    let { ip } = req.body;
     const db = getDb();
     let { location } = await getLocationByIP(ip);
     if (!location) location = 'failed city';
+    if (!ip || ip == '') ip = 'wrong IP';
 
-    const product = await db.collection('products').findOne({ title: select_product });
+    const product = (
+        await db
+            .collection('products')
+            .findOne({ title: select_product })
+    );
     if (!product) {
         await createLog({
             log: {

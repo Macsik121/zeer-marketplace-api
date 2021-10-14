@@ -5,6 +5,7 @@ const { sendMail } = require('../nodemailer');
 const createActionLog = require('../createLog');
 const createLog = require('../createLog');
 const updateSubscriptions = require('./updateSubscriptions');
+const generateString = require('../generateString');
 
 async function getUser(_, { name }) {
     try {
@@ -189,32 +190,32 @@ async function signIn(_, {
 async function resetPassword(_, { email }) {
     try {
         const db = getDb();
-        const characters = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z", 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'g', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-        let newPassword = '';
-        characters.map(character => {
-            const addOrNot = Math.floor(Math.random() * 2) == 1 ? true : false;
-            if (addOrNot && newPassword.length < 11) {
-                newPassword += character;
-            }
-        });
         const user = (
-            await db.collection('users').findOne({email}) ||
-            await db.collection('users').findOne({name: email})
+            await db.collection('users').findOne({ email }) ||
+            await db.collection('users').findOne({ name: email })
         );
-        
         if (!user) {
-            return 'Этого пользователя не существует';
+            return { message: 'Этого пользователя не существует' };
         }
-        
-        sendMail(user.email);
-        
-        const newHashedPassword = await bcrypt.hash(newPassword, 12);
+        const generatedPassword = generateString(15, false);
+        sendMail(email, generatedPassword);
+        const newHashedPassword = await bcrypt.hash(generatedPassword, 12);
 
-        await db.collection('users').findOneAndUpdate({email}, {$set: {password: newHashedPassword}}) ||
-        await db.collection('users').findOneAndUpdate({name: email}, {$set: {password: newHashedPassword}})
-    
+        await db
+            .collection('users')
+            .updateOne(
+                { email },
+                { $set: { password: newHashedPassword } }
+            ) || (
+                await db
+                    .collection('users')
+                    .updateOne(
+                        { name: email },
+                        { $set: { password: newHashedPassword } }
+                    )
+            )
         return {
-            user,
+            // user,
             message: 'You successfully reseted the password'
         }
     } catch (error) {

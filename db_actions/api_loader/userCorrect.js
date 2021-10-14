@@ -21,6 +21,7 @@ module.exports = async function userCorrect({
     if (!location) {
         location = await getLocationByIP(ip).location;
         if (!location) location = 'failed';
+        if (!ip) ip = 'wrong IP';
     }
 
     if (!user || !(await bcrypt.compare(data.password, user.password))) {
