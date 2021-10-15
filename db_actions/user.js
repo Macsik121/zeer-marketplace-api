@@ -885,6 +885,88 @@ async function refuseSub(_, { name, title }) {
     }
 }
 
+async function activatePromo(_, { name, title }) {
+    try {
+        const db = getDb();
+        const product = (
+            await db
+                .collection('products')
+                .findOne(
+                    { title },
+                    { projection: { promocodes: 1 } }
+                )
+        );
+        let incrementActivations = true;
+        let promocode = {};
+        const {
+            promocodes: {
+                all
+            }
+        } = product;
+        for(let i = 0; i < all.length; i++) {
+            const currentPromo = all[i];
+            if (currentPromo.name == name) {
+                promocode = currentPromo;
+                if (currentPromo.activationsAmount + 1) {
+                    
+                }
+            }
+        }
+
+        if (incrementActivations) {
+            await db
+                .collection('products')
+                .updateOne(
+                    { title },
+                    {
+                        $inc: {
+                            'promocodes.all.$[promocode].activationsAmount': 1
+                        }
+                    },
+                    {
+                        arrayFilters: [
+                            {
+                                'promocode.name': name
+                            }
+                        ]
+                    }
+                )
+        } else {
+            await db
+                .collection('products')
+                .updateOne(
+                    { title },
+                    {
+                        $push: {
+                            'promocodes.unactive': promocode
+                        },
+                        $pull: {
+                            'promocodes.active': { title }
+                        }
+                    },
+                    {
+                        arrayFilters: [
+                            {
+                                'promocode.name': name
+                            }
+                        ]
+                    }
+                );
+
+            return {
+                message: 'Превышен лимит использования введёного промокода',
+                success: false
+            }
+        }
+        return {
+            message: 'Вы успешно активировали промокод',
+            success: true
+        };
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getUser,
     getUsers,
@@ -908,5 +990,6 @@ module.exports = {
     updateSubscriptionTime,
     resetFreezeCooldown,
     issueSubscription,
-    refuseSub
+    refuseSub,
+    activatePromo
 };

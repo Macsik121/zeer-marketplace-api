@@ -25,6 +25,7 @@ function sendMail(emailAddress, generatedPassword) {
     // });
     const transporter = nodemailer.createTransport({
         service: 'gmail',
+        host: 'https://zeer-marketplace-api-macsik121.herokuapp.com',
         auth: {
             user: 'hiomimipad@gmail.com',
             pass: 'dov57erep135'

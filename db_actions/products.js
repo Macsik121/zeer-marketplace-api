@@ -370,9 +370,7 @@ async function createKeys(_, {
                             returnOriginal: false,
                             arrayFilters: [
                                 {
-                                    'key.name': {
-                                        $eq: name
-                                    }
+                                    'key.name': name
                                 }
                             ]
                         }
@@ -542,7 +540,8 @@ async function createPromocode(_, {
                             'promocodes.active': {
                                 name,
                                 discountPercent,
-                                activationsAmount,
+                                activationsAmount: 0,
+                                promocodesAmount: activationsAmount,
                                 expirationDays,
                                 isUsed
                             }

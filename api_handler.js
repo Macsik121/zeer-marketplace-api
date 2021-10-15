@@ -93,7 +93,8 @@ const resolvers = {
         cleanInjectLogs: injectLogs.cleanLogs,
         logCrash: crashLogs.logCrash,
         cleanCrashLogs: crashLogs.cleanLogs,
-        refuseSub: user.refuseSub
+        refuseSub: user.refuseSub,
+        activatePromo: user.activatePromo
     }
 }
 
