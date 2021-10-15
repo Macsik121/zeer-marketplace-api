@@ -25,7 +25,7 @@ function sendMail(emailAddress, generatedPassword) {
     // });
     const transporter = nodemailer.createTransport({
         service: 'gmail',
-        host: 'https://zeer-marketplace-api-macsik121.herokuapp.com',
+        secure: false,
         auth: {
             user: 'hiomimipad@gmail.com',
             pass: 'dov57erep135'
@@ -37,7 +37,7 @@ function sendMail(emailAddress, generatedPassword) {
         to: emailAddress,
         subject: 'Сброс пароля в zeer.im',
         html: `
-            <label>Сгенерированный пароль: ${generatedPassword}</label>
+            <label>Сгенерированный пароль: ${generatedPassword}.</label>
             <a
                 href="https://zeer-marketplace-ui-macsik121.herokuapp.com"
             >
