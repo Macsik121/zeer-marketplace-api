@@ -25,7 +25,7 @@ function sendMail(emailAddress, generatedPassword) {
     // });
     const transporter = nodemailer.createTransport({
         service: 'gmail',
-        secure: false,
+        secure: true,
         auth: {
             user: 'hiomimipad@gmail.com',
             pass: 'dov57erep135'
