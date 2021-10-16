@@ -1128,6 +1128,24 @@ async function isPromocodeRight(_, { name, title }) {
     }
 }
 
+async function changeLoaderVersion(_, { version }) {
+    try {
+        const db = getDb();
+        await db.collection('loader_version').updateOne({}, { $set: { version_loader: version } });
+        console.log({
+            message: "message",
+            success: true
+        });
+
+        return {
+            message: 'Вы успешно обновили версию лоадера',
+            success: true
+        };
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProducts,
     getPopularProducts,
@@ -1154,5 +1172,6 @@ module.exports = {
     deleteCost,
     saveCostChanges,
     updateProductBG,
-    isPromocodeRight
+    isPromocodeRight,
+    changeLoaderVersion
 };

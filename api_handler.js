@@ -94,7 +94,8 @@ const resolvers = {
         logCrash: crashLogs.logCrash,
         cleanCrashLogs: crashLogs.cleanLogs,
         refuseSub: user.refuseSub,
-        activatePromo: user.activatePromo
+        activatePromo: user.activatePromo,
+        changeLoaderVersion: products.changeLoaderVersion
     }
 }
 

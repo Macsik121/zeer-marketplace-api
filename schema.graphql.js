@@ -597,6 +597,7 @@ const typeDefs = `
             navigator: NavigatorInput!,
             locationData: LocationInput!
         ): ServerResponse!
+        changeLoaderVersion(version: String!): ServerResponse!
     }
 `;
 

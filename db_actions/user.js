@@ -576,7 +576,7 @@ async function acceptResetBinding(_, { name, number }) {
                     {
                         $set: {
                             'resetRequests.$[request].status': 'done',
-                            'resetRequests.$[request].hwid': ''
+                            'hwid': ''
                         }
                     },
                     {
