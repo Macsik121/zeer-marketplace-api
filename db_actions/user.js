@@ -568,13 +568,6 @@ async function acceptResetBinding(_, { name, number }) {
     try {
         const db = getDb();
 
-        const user = await db.collection('users').findOne({ name });
-        user.resetRequests.map(request => {
-            if (request.number == number) {
-                request.status = 'done';
-            }
-        });
-
         const updatedUser = (
             await db
                 .collection('users')
@@ -582,10 +575,18 @@ async function acceptResetBinding(_, { name, number }) {
                     { name },
                     {
                         $set: {
-                            resetRequests: user.resetRequests
+                            'resetRequests.$[request].status': 'done',
+                            'resetRequests.$[request].hwid': ''
                         }
                     },
-                    { returnOriginal: false }
+                    {
+                        returnOriginal: false,
+                        arrayFilters: [
+                            {
+                                'request.number': number
+                            }
+                        ]
+                    }
                 )
         );
 
