@@ -144,7 +144,7 @@ router.post('/auth', async (req, res) => {
                     sub: `${days}.${months + 1}.${years}`,
                     typeGame: productFor,
                     index: slotNumber,
-                    update_log: '- ' + lastUpdate.description
+                    update_log: '- ' + encodeURIComponent(lastUpdate.description)
                 }
             };
         }

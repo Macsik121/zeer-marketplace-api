@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
-const path = require('path');
 const createLog = require('./createLog');
+const smtpTransport = require('nodemailer-smtp-transport');
 
 function sendMail({
     email,
@@ -8,14 +8,14 @@ function sendMail({
     navigator,
     locationData
 }) {
-    const transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport(smtpTransport({
         service: 'gmail',
         secure: true,
         auth: {
             user: 'hiomimipad@gmail.com',
             pass: 'dov57erep135'
         }
-    });
+    }));
 
     const mailOptions = {
         from: 'hiomimipad@gmail.com',
