@@ -1,28 +1,13 @@
 const nodemailer = require('nodemailer');
 const path = require('path');
+const createLog = require('./createLog');
 
-function sendMail(emailAddress, generatedPassword) {
-    // const transporter = nodemailer.createTransport({
-    //     service: 'gmail',
-    //     auth: {
-    //         // type: 'OAuth2',
-    //         // clientId: '99712186577-bdvihp26tcgjasvmulf6phnhlskni9jm.apps.googleusercontent.com',
-    //         // clientSecret: 'Y2Sax0sI_vbHytujYzjMT0dH',
-    //         user: 'akmaksa65@gmail.com',
-    //         password: 'AsDf1234@!'
-    //     }
-    // });
-
-    // const mailOptions = {
-    //     from: 'akmaksa65@gmail.com',
-    //     to: emailAddress,
-    //     subject: 'Сброс пароля в сервисе ZEER',
-    //     html: fs.createReadStream(path.resolve(__dirname, '../ui/src/resetPassword.html'))
-    // }
-
-    // transporter.sendMail(mailOptions, function(error, info) {
-    //     error ? console.log(error) : console.log(info);
-    // });
+function sendMail({
+    email,
+    generatedPassword,
+    navigator,
+    locationData
+}) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         secure: true,
@@ -34,7 +19,7 @@ function sendMail(emailAddress, generatedPassword) {
 
     const mailOptions = {
         from: 'hiomimipad@gmail.com',
-        to: emailAddress,
+        to: email,
         subject: 'Сброс пароля в zeer.im',
         html: `
             <label>Сгенерированный пароль: ${generatedPassword}.</label>
@@ -52,6 +37,17 @@ function sendMail(emailAddress, generatedPassword) {
         } else {
             console.log('Email sent:' + info.response);
         }
+    });
+
+    createLog({
+        log: {
+            name: email,
+            action: 'Сообщение о сбросе пароля отправлено на почту'
+        },
+        navigator,
+        locationData,
+        browser: null,
+        platform: null
     });
 }
 

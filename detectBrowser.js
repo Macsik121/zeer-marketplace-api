@@ -1,6 +1,5 @@
 module.exports = function detectBrowser(navigator) {
     const ua = navigator.userAgent;
-    console.log(ua);
     let browser = 'Unknown Browser';
     let version = 1.0;
     function strContained(str, strToCompare = ua) {

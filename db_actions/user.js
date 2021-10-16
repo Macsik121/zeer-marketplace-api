@@ -96,7 +96,8 @@ async function signUp(_, { email, name, password, navigator, locationData }) {
                 id: user._id,
                 name: user.name,
                 avatar: user.avatar,
-                status: user.status
+                status: user.status,
+                hwid: user.hwid
             },
             '!@secretKey: Morgenshtern - Show@!',
             { expiresIn: '3d' }
@@ -122,8 +123,8 @@ async function signIn(_, {
     try {
         const db = getDb();
         const user = (
-            await db.collection('users').findOne({email}) ||
-            await db.collection('users').findOne({name: email})
+            await db.collection('users').findOne({ email }) ||
+            await db.collection('users').findOne({ name: email })
         )
 
         if (!user) {
@@ -149,7 +150,8 @@ async function signIn(_, {
                     id: user._id,
                     name: user.name,
                     avatar: user.avatar,
-                    status: user.status
+                    status: user.status,
+                    hwid: user.hwid
                 },
                 '!@secretKey: Morgenshtern - Show@!'
             );
@@ -160,7 +162,8 @@ async function signIn(_, {
                     id: user._id,
                     name: user.name,
                     avatar: user.avatar,
-                    status: user.status
+                    status: user.status,
+                    hwid: user.hwid
                 },
                 '!@secretKey: Morgenshtern - Show@!',
                 { expiresIn: '3d' }
@@ -187,7 +190,11 @@ async function signIn(_, {
     }
 }
 
-async function resetPassword(_, { email }) {
+async function resetPassword(_, {
+    email,
+    navigator,
+    locationData
+}) {
     try {
         const db = getDb();
         const user = (
@@ -198,7 +205,12 @@ async function resetPassword(_, { email }) {
             return { message: 'Этого пользователя не существует' };
         }
         const generatedPassword = generateString(15, false);
-        sendMail(email, generatedPassword);
+        sendMail({
+            email,
+            generatedPassword,
+            navigator,
+            locationData
+        });
         const newHashedPassword = await bcrypt.hash(generatedPassword, 12);
 
         await db
@@ -217,7 +229,7 @@ async function resetPassword(_, { email }) {
         return {
             // user,
             message: 'На указанную почту отправленно сообщение'
-        }
+        };
     } catch (error) {
         console.log(error);
     }
@@ -268,7 +280,8 @@ async function changeAvatar(_, { name, avatar }) {
                     email: user.email,
                     name: user.name,
                     avatar: user.avatar,
-                    status: user.status
+                    status: user.status,
+                    hwid: user.hwid
                 },
                 '!@secretKey: Morgenshtern - Show@!',
                 { expiresIn: '3d' }
@@ -885,7 +898,13 @@ async function refuseSub(_, { name, title }) {
     }
 }
 
-async function activatePromo(_, { name, title }) {
+async function activatePromo(_, {
+    name,
+    title,
+    username,
+    navigator,
+    locationData
+}) {
     try {
         const db = getDb();
         const product = (
@@ -907,8 +926,8 @@ async function activatePromo(_, { name, title }) {
             const currentPromo = all[i];
             if (currentPromo.name == name) {
                 promocode = currentPromo;
-                if (currentPromo.activationsAmount + 1) {
-                    
+                if (currentPromo.activationsAmount + 1 > currentPromo.promocodesAmount) {
+                    incrementActivations = false;
                 }
             }
         }
@@ -920,7 +939,12 @@ async function activatePromo(_, { name, title }) {
                     { title },
                     {
                         $inc: {
-                            'promocodes.all.$[promocode].activationsAmount': 1
+                            'promocodes.all.$[promocode].activationsAmount': 1,
+                            'promocodes.active.$[promocode].activationsAmount': 1
+                        },
+                        $set: {
+                            'promocodes.all.$[promocode].isUsed': true,
+                            'promocodes.active.$[promocode].isUsed': true
                         }
                     },
                     {
@@ -931,6 +955,20 @@ async function activatePromo(_, { name, title }) {
                         ]
                     }
                 )
+
+            createLog({
+                log: {
+                    name: username,
+                    action: `Успешная активация промокода ${name}`
+                },
+                navigator,
+                locationData
+            });
+
+            return {
+                message: 'Вы успешно активировали промокод',
+                success: true
+            };
         } else {
             await db
                 .collection('products')
@@ -943,25 +981,23 @@ async function activatePromo(_, { name, title }) {
                         $pull: {
                             'promocodes.active': { title }
                         }
-                    },
-                    {
-                        arrayFilters: [
-                            {
-                                'promocode.name': name
-                            }
-                        ]
                     }
                 );
+
+            createLog({
+                log: {
+                    name: username,
+                    action: `Неудачная активация промокода ${name}. Превышен лимит активации`
+                },
+                navigator,
+                locationData
+            });
 
             return {
                 message: 'Превышен лимит использования введёного промокода',
                 success: false
             }
         }
-        return {
-            message: 'Вы успешно активировали промокод',
-            success: true
-        };
     } catch (error) {
         console.log(error);
     }

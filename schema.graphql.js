@@ -427,9 +427,12 @@ const typeDefs = `
             navigator: NavigatorInput,
             locationData: LocationInput
         ): Sign!
-        resetPassword(email: String!): Reset!
+        resetPassword(
+            email: String!,
+            navigator: NavigatorInput!,
+            locationData: LocationInput!
+        ): Reset!
         changeAvatar(name: String!, avatar: String!): String!
-        logout(navigator: NavigatorInput, locationData: LocationInput): String!
         rateAnswer(title: String!): Answer!
         createLog(
             log: ActionLogInput,
@@ -587,7 +590,13 @@ const typeDefs = `
         ): ServerResponse!
         cleanCrashLogs: ServerResponse!
         refuseSub(name: String!, title: String!): ServerResponse!
-        activatePromo(name: String!, title: String!): ServerResponse!
+        activatePromo(
+            name: String!,
+            title: String!,
+            username: String!,
+            navigator: NavigatorInput!,
+            locationData: LocationInput!
+        ): ServerResponse!
     }
 `;
 

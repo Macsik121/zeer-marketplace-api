@@ -514,4 +514,25 @@ router.post('/block_user', async (req, res) => {
     });
 });
 
+router.get('/version_loader', async (req, res) => {
+    const db = getDb();
+    const version = await db.collection('loader_version').findOne();
+    res.status(200).json({
+        version_loader: version.version_loader
+    });
+});
+
+router.post('/update_version_loader', async (req, res) => {
+    const {
+        version
+    } = req.body;
+    console.log(version);
+    const db = getDb();
+    await db.collection('loader_version').updateOne({ $set: { version_loader: version } });
+    console.log(version);
+    res.status(200).json({
+        message: 'Вы успешно обновили версию лоадера'
+    })
+})
+
 module.exports = router;

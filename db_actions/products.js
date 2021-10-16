@@ -90,7 +90,9 @@ async function buyProduct(
         const db = getDb();
         const user = await db.collection('users').findOne({ name });
         const product = await db.collection('products').findOne({ title });
-        let userSub = {};
+        let userSub = {
+            activelyUntil: new Date()
+        };
         let subExists = false;
         let userExists = false;
         let boughtProduct;
@@ -155,7 +157,12 @@ async function buyProduct(
                 );
             }
         } else {
-            userSub.activelyUntil = new Date().setDate(new Date().getDate() + days);
+            userSub.activelyUntil = (
+                new Date(
+                    userSub.activelyUntil
+                )
+            );
+            userSub.activelyUntil.setDate(userSub.activelyUntil.getDate() + days);
             await db
                 .collection('users')
                 .updateOne(
@@ -1094,12 +1101,23 @@ async function isPromocodeRight(_, { name, title }) {
         for(let i = 0; i < active.length; i++) {
             const promo = active[i];
             if (promo.name == name) {
-                response = {
-                    response: {
-                        success: true,
-                        message: `Вы успешно ввели промокод! Теперь вы можете купить продукт ${title} со скидкой ${promo.discountPercent}%!`
-                    },
-                    discountPercent: promo.discountPercent
+                console.log(promo);
+                if (promo.activationsAmount + 1 > promo.promocodesAmount) {
+                    response = {
+                        response: {
+                            success: false,
+                            message: 'Лимит использования этого промокода превышен'
+                        },
+                        discountPercent: 1
+                    }
+                } else {
+                    response = {
+                        response: {
+                            success: true,
+                            message: `Вы успешно ввели промокод! Теперь вы можете купить продукт ${title} со скидкой ${promo.discountPercent}%!`
+                        },
+                        discountPercent: promo.discountPercent
+                    }
                 }
                 break;
             }
