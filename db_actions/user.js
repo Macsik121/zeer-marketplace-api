@@ -197,10 +197,14 @@ async function resetPassword(_, {
 }) {
     try {
         const db = getDb();
-        const user = (
-            await db.collection('users').findOne({ email }) ||
-            await db.collection('users').findOne({ name: email })
+        console.log(email);
+        let user = (
+            await db.collection('users').findOne({ email })
         );
+        if (!user) {
+            user = await db.collection('users').findOne({ name: email });
+            email = user.email;
+        }
         if (!user) {
             return { message: 'Этого пользователя не существует' };
         }

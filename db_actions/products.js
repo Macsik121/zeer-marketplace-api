@@ -344,14 +344,13 @@ async function createKeys(_, {
         const product = await db.collection('products').findOne({ title });
         let isKeyExist = false;
 
-        // if (product.keys.all.length > 0) {
-        //     for(let i = 0; i < product.keys.all.length; i++) {
-        //         const currentProductName = product.keys.all[i].name;
-        //         const currentName 
-        //         if (currentProduct.name == name) isKeyExist = true;
-        //     }
-        // }
-        
+        if (product.keys.all.length > 0) {
+            for(let i = 0; i < product.keys.all.length; i++) {
+                const currentProduct = product.keys.all[i];
+                if (currentProduct.name == name) isKeyExist = true;
+            }
+        }
+
         const keysToAdd = {
             name,
             expiredInDays: daysAmount,
@@ -360,29 +359,25 @@ async function createKeys(_, {
             isUsed: false
         };
 
-        let updatedProduct = {};
-
         if (isKeyExist) {
-            updatedProduct = (
-                await db
-                    .collection('products')
-                    .findOneAndUpdate(
-                        { title },
-                        {
-                            $inc: {
-                                'keys.all.$[key].usedAmount': 1
-                            }
-                        },
-                        {
-                            returnOriginal: false,
-                            arrayFilters: [
-                                {
-                                    'key.name': name
-                                }
-                            ]
+            await db
+                .collection('products')
+                .updateOne(
+                    { title },
+                    {
+                        $inc: {
+                            'keys.all.$[key].usedAmount': 1
                         }
-                    )
-            )
+                    },
+                    {
+                        returnOriginal: false,
+                        arrayFilters: [
+                            {
+                                'key.name': name
+                            }
+                        ]
+                    }
+                )
 
             createLog({
                 log: {
@@ -396,19 +391,17 @@ async function createKeys(_, {
             return `Вы успешно добавили ${keysToAddAmount} ключей`
         } else {
             for (let i = 0; i < name.length; i++) {
-                keysToAdd.name = name[i];
-                await db
-                    .collection('products')
-                    .updateOne(
-                        { title },
-                        {
-                            $push: {
-                                "keys.all": keysToAdd,
-                                "keys.active": keysToAdd
-                            }
-                        }
-                    )
+                const key = {...keysToAdd};
+                key.name = name[i];
+                product.keys.all.push(key);
+                product.keys.active.push(key);
             }
+            await db
+                .collection('products')
+                .replaceOne(
+                    { title },
+                    product
+                )
 
             createLog({
                 log: {

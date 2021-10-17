@@ -22,7 +22,7 @@ function sendMail({
         to: email,
         subject: 'Сброс пароля в zeer.im',
         html: `
-            <label>Сгенерированный пароль: ${generatedPassword}.</label>
+            <label>Сгенерированный пароль: ${generatedPassword}.</label><br />
             <a
                 href="https://zeer-marketplace-ui-macsik121.herokuapp.com"
             >
