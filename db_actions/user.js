@@ -197,7 +197,6 @@ async function resetPassword(_, {
 }) {
     try {
         const db = getDb();
-        console.log(email);
         let user = (
             await db.collection('users').findOne({ email })
         );
@@ -921,6 +920,7 @@ async function activatePromo(_, {
                 )
         );
         let incrementActivations = true;
+        let promocodeExpired = false;
         let promocode = {};
         const {
             promocodes: {
@@ -931,13 +931,37 @@ async function activatePromo(_, {
             const currentPromo = all[i];
             if (currentPromo.name == name) {
                 promocode = currentPromo;
-                if (currentPromo.activationsAmount + 1 > currentPromo.promocodesAmount) {
+                if (new Date(currentPromo.expirationDays) - new Date() < 0) {
+                    promocodeExpired = true;
+                } else if (currentPromo.activationsAmount + 1 > currentPromo.promocodesAmount) {
                     incrementActivations = false;
                 }
             }
         }
 
-        if (incrementActivations) {
+        if (promocodeExpired) {
+            await db
+                .collection('products')
+                .updateOne(
+                    { title },
+                    {
+                        $pull: {
+                            'promocodes.active': { name }
+                        },
+                        $push: {
+                            'promocodes.unactive': promocode
+                        }
+                    }
+                )
+
+            return {
+                response: {
+                    success: false,
+                    message: 'Промокод неактивен, поэтому не может быть активирован'
+                },
+                discountPercent: 1
+            };
+        } else if (incrementActivations) {
             await db
                 .collection('products')
                 .updateOne(
@@ -971,8 +995,11 @@ async function activatePromo(_, {
             });
 
             return {
-                message: 'Вы успешно активировали промокод',
-                success: true
+                response: {
+                    message: 'Вы успешно активировали промокод',
+                    success: true
+                },
+                discountPercent: promocode.discountPercent
             };
         } else {
             await db
@@ -999,8 +1026,11 @@ async function activatePromo(_, {
             });
 
             return {
-                message: 'Превышен лимит использования введёного промокода',
-                success: false
+                response: {
+                    message: 'Превышен лимит использования введёного промокода',
+                    success: false
+                },
+                discountPercent: 1
             }
         }
     } catch (error) {

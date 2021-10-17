@@ -3,7 +3,7 @@ const typeDefs = `
 
     input NavigatorInput {
         userAgent: String!
-        platform: String!
+        platform: String
         appVersion: String
         appName: String
     }
@@ -596,7 +596,7 @@ const typeDefs = `
             username: String!,
             navigator: NavigatorInput!,
             locationData: LocationInput!
-        ): ServerResponse!
+        ): isPromoRightResponse!
         changeLoaderVersion(version: String!): ServerResponse!
     }
 `;

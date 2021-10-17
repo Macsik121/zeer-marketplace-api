@@ -1091,10 +1091,14 @@ async function isPromocodeRight(_, { name, title }) {
             },
             discountPercent: 1
         };
+        // let promocodeExpired = false;
         for(let i = 0; i < active.length; i++) {
             const promo = active[i];
             if (promo.name == name) {
                 console.log(promo);
+                // if (new Date(currentPromo.expirationDays) - new Date() < 0) {
+                //     promocodeExpired = true;
+                // } else
                 if (promo.activationsAmount + 1 > promo.promocodesAmount) {
                     response = {
                         response: {
@@ -1115,6 +1119,26 @@ async function isPromocodeRight(_, { name, title }) {
                 break;
             }
         }
+        // if (promocodeExpired) {
+        //     await db
+        //         .collection('products')
+        //         .updateOne(
+        //             { title },
+        //             {
+        //                 $pull: {
+        //                     'promocodes.active': { name }
+        //                 },
+        //                 $push: {
+        //                     'promocodes.unactive': promocode
+        //                 }
+        //             }
+        //         )
+            
+        //     return {
+        //         success: false,
+        //         message: 'Промокод неактивен, поэтому не может быть активирован'
+        //     };
+        // }
         return response;
     } catch (error) {
         console.log(error);
