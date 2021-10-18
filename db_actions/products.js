@@ -115,7 +115,6 @@ async function buyProduct(
         }
         let activelyUntil = new Date().setDate(new Date().getDate() + days);
         activelyUntil = new Date(activelyUntil);
-        console.log(subExists, userExists);
         if (!userExists || !subExists) {
             if (!userExists) {
                 boughtProduct = (
@@ -162,6 +161,9 @@ async function buyProduct(
                     userSub.activelyUntil
                 )
             );
+            if (userSub.activelyUntil - new Date() < 0) {
+                userSub.activelyUntil = new Date();
+            }
             userSub.activelyUntil.setDate(userSub.activelyUntil.getDate() + days);
             await db
                 .collection('users')

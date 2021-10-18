@@ -30,7 +30,13 @@ async function getUser(_, { name }) {
     }
 }
 
-async function signUp(_, { email, name, password, navigator, locationData }) {
+async function signUp(_, {
+    email,
+    name,
+    password,
+    navigator,
+    locationData
+}) {
     try {
         const db = getDb();
         const existingUser = (
@@ -74,7 +80,8 @@ async function signUp(_, { email, name, password, navigator, locationData }) {
             },
             registeredDate: new Date(),
             resetRequests: [],
-            hwid: ''
+            hwid: '',
+            usedPromocodes: []
         });
 
         const insertedId = createdUser.insertedId;
@@ -97,7 +104,8 @@ async function signUp(_, { email, name, password, navigator, locationData }) {
                 name: user.name,
                 avatar: user.avatar,
                 status: user.status,
-                hwid: user.hwid
+                hwid: user.hwid,
+                subscriptions: user.subscriptions
             },
             '!@secretKey: Morgenshtern - Show@!',
             { expiresIn: '3d' }
@@ -151,7 +159,8 @@ async function signIn(_, {
                     name: user.name,
                     avatar: user.avatar,
                     status: user.status,
-                    hwid: user.hwid
+                    hwid: user.hwid,
+                    subscriptions: user.subscriptions
                 },
                 '!@secretKey: Morgenshtern - Show@!'
             );
@@ -163,7 +172,8 @@ async function signIn(_, {
                     name: user.name,
                     avatar: user.avatar,
                     status: user.status,
-                    hwid: user.hwid
+                    hwid: user.hwid,
+                    subscriptions: user.subscriptions
                 },
                 '!@secretKey: Morgenshtern - Show@!',
                 { expiresIn: '3d' }
@@ -284,7 +294,8 @@ async function changeAvatar(_, { name, avatar }) {
                     name: user.name,
                     avatar: user.avatar,
                     status: user.status,
-                    hwid: user.hwid
+                    hwid: user.hwid,
+                    subscriptions: user.subscriptions
                 },
                 '!@secretKey: Morgenshtern - Show@!',
                 { expiresIn: '3d' }
@@ -919,14 +930,42 @@ async function activatePromo(_, {
                     { projection: { promocodes: 1 } }
                 )
         );
+        const user = (
+            await db
+                .collection('users')
+                .findOne(
+                    { name: username },
+                    {
+                        projection: {
+                            usedPromocodes: 1
+                        }
+                    }
+                )
+        );
         let incrementActivations = true;
         let promocodeExpired = false;
+        let promocodeUsed = false;
         let promocode = {};
         const {
             promocodes: {
                 all
             }
         } = product;
+        for(let i = 0; i < user.usedPromocodes.length; i++) {
+            if (user.usedPromocodes[i] == name) {
+                promocodeUsed = true;
+                break;
+            }
+        }
+        if (promocodeUsed) {
+            return {
+                response: {
+                    message: 'Вы уже использовали этот промокод',
+                    success: false
+                },
+                discountPercent: 1
+            }
+        }
         for(let i = 0; i < all.length; i++) {
             const currentPromo = all[i];
             if (currentPromo.name == name) {
@@ -936,6 +975,7 @@ async function activatePromo(_, {
                 } else if (currentPromo.activationsAmount + 1 > currentPromo.promocodesAmount) {
                     incrementActivations = false;
                 }
+                break;
             }
         }
 
@@ -974,6 +1014,9 @@ async function activatePromo(_, {
                         $set: {
                             'promocodes.all.$[promocode].isUsed': true,
                             'promocodes.active.$[promocode].isUsed': true
+                        },
+                        $push: {
+                            'usedPromocodes': name
                         }
                     },
                     {
@@ -982,6 +1025,17 @@ async function activatePromo(_, {
                                 'promocode.name': name
                             }
                         ]
+                    }
+                )
+
+            await db
+                .collection('users')
+                .updateOne(
+                    { name: username },
+                    {
+                        $push: {
+                            usedPromocodes: name
+                        }
                     }
                 )
 

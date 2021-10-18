@@ -9,6 +9,7 @@ const purchases = require('./db_actions/purchases');
 const profit = require('./db_actions/profit');
 const injectLogs = require('./db_actions/inject-logs');
 const crashLogs = require('./db_actions/crash-logs');
+const lmi_payment_no = require('./db_actions/lmi_no_payment');
 
 const dateScalar = new GraphQLScalarType({
     name: 'Date',
@@ -43,7 +44,8 @@ const resolvers = {
         profit: profit.getAllProfit,
         injectLogs: injectLogs.injectLogs,
         crashLogs: crashLogs.crashLogs,
-        isPromocodeRight: products.isPromocodeRight
+        isPromocodeRight: products.isPromocodeRight,
+        paymentNumber: lmi_payment_no.paymentNumber
     },
     Mutation: {
         signUp: user.signUp,
@@ -95,7 +97,8 @@ const resolvers = {
         cleanCrashLogs: crashLogs.cleanLogs,
         refuseSub: user.refuseSub,
         activatePromo: user.activatePromo,
-        changeLoaderVersion: products.changeLoaderVersion
+        changeLoaderVersion: products.changeLoaderVersion,
+        updatePaymentNumber: lmi_payment_no.updatePaymentNumber
     }
 }
 

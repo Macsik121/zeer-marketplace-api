@@ -250,7 +250,8 @@ const typeDefs = `
         subscriptions: [Subscription]
         status: UserStatus
         resetRequests: [ResetRequest]
-        hwid: String!
+        hwid: String
+        usedPromocodes: [String]!
     }
 
     input UserInput {
@@ -410,6 +411,7 @@ const typeDefs = `
         injectLogs: [InjectLog]!
         crashLogs: [CrashLog]!
         isPromocodeRight(title: String!, name: String!): isPromoRightResponse!
+        paymentNumber: Int!
     }
 
     type Mutation {
@@ -598,6 +600,7 @@ const typeDefs = `
             locationData: LocationInput!
         ): isPromoRightResponse!
         changeLoaderVersion(version: String!): ServerResponse!
+        updatePaymentNumber: ServerResponse
     }
 `;
 
