@@ -62,9 +62,10 @@ const typeDefs = `
         token: String!
         message: String!
     }
-    
+
     type Reset {
         message: String!
+        success: Boolean
     }
 
     input AnswerInput {

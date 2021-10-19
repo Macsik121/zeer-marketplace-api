@@ -215,7 +215,10 @@ async function resetPassword(_, {
             email = user.email;
         }
         if (!user) {
-            return { message: 'Этого пользователя не существует' };
+            return {
+                message: 'Этого пользователя не существует',
+                success: false
+            };
         }
         const generatedPassword = generateString(15, false);
         sendMail({
@@ -241,7 +244,8 @@ async function resetPassword(_, {
             )
         return {
             // user,
-            message: 'На указанную почту отправленно сообщение'
+            message: 'На указанную почту отправленно сообщение',
+            success: true
         };
     } catch (error) {
         console.log(error);
