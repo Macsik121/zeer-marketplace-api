@@ -867,6 +867,25 @@ async function createProduct(_, {
     try {
         const db = getDb();
         const products = await db.collection('products').find().toArray();
+        let productExists = false;
+        for(let i = 0; i < products.length; i++) {
+            const currentProduct = products[i];
+            if (currentProduct.title == product.title) {
+                productExists = true;
+                break;
+            }
+        }
+        if (productExists) {
+            return {
+                response: {
+                    success: false,
+                    message: 'Продукт с таким названием уже существует'
+                },
+                product: {
+                    title: 'unknown'
+                }
+            }
+        }
         product.id = products[products.length - 1].id + 1;
         product.status = 'undetect';
         product.allCost = [
@@ -893,7 +912,13 @@ async function createProduct(_, {
             navigator,
             locationData
         });
-        return result.ops[0];
+        return {
+            response: {
+                success: true,
+                message: `Продукт с названием ${product.title} успешно создан`
+            },
+            product: result.ops[0]
+        };
     } catch (error) {
         console.log(error);
     }

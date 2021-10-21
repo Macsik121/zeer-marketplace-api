@@ -312,7 +312,7 @@ const typeDefs = `
         changes: [ProductChange]
         locks: String
         keys: ProductsKeyTypes
-        peopleBought: [User]!
+        peopleBought: [User]
         timeBought: Int
         currentDate: Date
         promocodes: ProductPromocodes
@@ -337,7 +337,7 @@ const typeDefs = `
         changes: [ProductChangeInput]
         locks: String
         keys: ProductsKeyTypesInput
-        peopleBought: [UserInput]!
+        peopleBought: [UserInput]
         timeBought: Int
         currentDate: Date
         promocodes: ProductPromocodesInput
@@ -390,6 +390,11 @@ const typeDefs = `
     type isPromoRightResponse {
         response: ServerResponse!
         discountPercent: Int!
+    }
+
+    type CreateProductRes {
+        response: ServerResponse
+        product: Product
     }
 
     type Query {
@@ -537,7 +542,7 @@ const typeDefs = `
             navigator: NavigatorInput!,
             adminName: String!,
             locationData: LocationInput
-        ): Product!
+        ): CreateProductRes!
         createNews(title: String!, change: ProductChangeInput!): String!
         deleteNews(title: String!, changeTitle: Int!): String!
         deleteAllNews(title: String!): String!
