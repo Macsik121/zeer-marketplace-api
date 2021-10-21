@@ -2,6 +2,7 @@ const { getDb } = require('./db');
 
 async function getPurchases(_, { week }) {
     try {
+        console.log('getPurhcases is triggered');
         const db = getDb();
         const result = await db.collection('purchases').find().toArray();
         let purchases = Array.from(Array(7).keys());
@@ -9,11 +10,11 @@ async function getPurchases(_, { week }) {
         from = new Date(from).getTime();
         to = new Date(to).getTime();
         for (let i = 0; i < 7; i++) {
-            const purchase = result[i];
+            const purchase = result[result.length - i + 1];
             let purchaseDate;
             if (purchase) {
-                purchaseDate = new Date(purchase.date).getTime();
-                if (from <= purchaseDate && purchaseDate <= to) {
+                purchaseDate = new Date(purchase.date);
+                if (from <= purchaseDate.getTime() && purchaseDate.getTime() <= to) {
                     purchases[new Date(purchaseDate).getDay()] = purchase;
                 }
             };
