@@ -215,23 +215,31 @@ async function getProduct(_, { title }) {
     return product;
 }
 
-async function updateBoughtIcon(_, { name }) {
+async function updateBoughtIcon(_, { name, newAvatar }) {
     try {
         const db = getDb();
-        const products = await db.collection('products').find().toArray();
-        const user = await db.collection('users').findOne({ name });
-        products.map(product => {
-            for(let i = 0; i < product.peopleBought.length; i++) {
-                const person = product.peopleBought[i];
-                if (person.name == name && person.avatar != user.avatar) {
-                    person.avatar = user.avatar;
-                    break;
+        console.log(newAvatar);
+        await db
+            .collection('products')
+            .updateMany(
+                {},
+                {
+                    $set: {
+                        'peopleBought.$[user].avatar': newAvatar
+                    }
+                },
+                {
+                    arrayFilters: [
+                        {
+                            'user.name': name
+                        }
+                    ]
                 }
-            }
-        });
-        await db.collection('products').drop();
-        const newProductsCollection = await db.collection('products').insertMany(products)
-        return newProductsCollection;
+            )
+        return {
+            success: true,
+            message: 'Иконка успешно обновилась'
+        };
     } catch (error) {
         console.log(error);
     }
@@ -887,12 +895,13 @@ async function createProduct(_, {
             }
         }
         product.id = products[products.length - 1].id + 1;
-        product.status = 'undetect';
+        product.status = 'onupdate';
         product.allCost = [
             {
                 menuText: 'Ежемесячно',
                 cost: 0,
-                costPer: 'Месяц'
+                costPer: 'Месяц',
+                days: 30
             }
         ];
         product.currentDate = new Date();

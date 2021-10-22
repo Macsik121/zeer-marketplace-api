@@ -482,7 +482,7 @@ const typeDefs = `
             days: Int,
             locationData: LocationInput
         ): Product!
-        updateBoughtIcon(name: String!): [Product!]!
+        updateBoughtIcon(name: String!, newAvatar: String!): ServerResponse!
         freezeSubscription(name: String!, title: String!): ServerResponse!
         unfreezeSubscription(name: String!, title: String!): ServerResponse!
         makeResetRequest(

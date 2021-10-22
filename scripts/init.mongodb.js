@@ -566,6 +566,4 @@ db.products.insertMany(products);
 db.answersFAQ.deleteMany({});
 db.answersFAQ.insertMany(answers);
 
-db.purchases.deleteMany({});
-db.profit.deleteMany({});
 db.users.updateMany({}, { $set: { subscriptions: [] } });
