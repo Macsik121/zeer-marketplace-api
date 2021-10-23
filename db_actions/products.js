@@ -192,7 +192,7 @@ async function buyProduct(
             if (!issueSub) {
                 createPurchase();
                 createProfit(productCost);
-                console.log(user.name, navigator, locationData)
+                console.log('navigator in buyProduct' + navigator)
                 createLog({
                     log: {
                         name: user.name,

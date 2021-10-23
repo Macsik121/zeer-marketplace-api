@@ -7,6 +7,7 @@ module.exports = async function createActionLog({
     browser = null,
     platform = null
 }) {
+    console.log('navigator in createActionLog:', navigator)
     try {
         await createLog(
             '',
