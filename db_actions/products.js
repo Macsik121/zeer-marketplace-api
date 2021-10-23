@@ -192,6 +192,7 @@ async function buyProduct(
             if (!issueSub) {
                 createPurchase();
                 createProfit(productCost);
+                console.log(user.name, navigator, locationData)
                 createLog({
                     log: {
                         name: user.name,
