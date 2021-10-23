@@ -26,7 +26,12 @@ async function logInject(_, {
 }) {
     try {
         const db = getDb();
-        const { location } = await getLocationByIP(ip);
+        let location = 'location is not provided';
+        if (ip != 'null') {
+            ip = 'IP is not provided';
+            const locationData = await getLocationByIP(ip);
+            location = locationData.location;
+        }
         const id = await db.collection('injectLogs').countDocuments();
 
         await db.collection('injectLogs').insertOne({

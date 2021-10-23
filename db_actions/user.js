@@ -81,7 +81,8 @@ async function signUp(_, {
             registeredDate: new Date(),
             resetRequests: [],
             hwid: '',
-            usedPromocodes: []
+            usedPromocodes: [],
+            usedKeys: []
         });
 
         const insertedId = createdUser.insertedId;

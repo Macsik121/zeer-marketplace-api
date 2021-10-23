@@ -241,6 +241,11 @@ const typeDefs = `
         isBanned: Boolean
     }
 
+    type UsedKey {
+        name: String!
+        activatedDate: Date!
+    }
+
     type User {
         id: Int
         name: String!
@@ -252,7 +257,8 @@ const typeDefs = `
         status: UserStatus
         resetRequests: [ResetRequest]
         hwid: String
-        usedPromocodes: [String]!
+        usedPromocodes: [String]
+        usedKeys: [UsedKey]
     }
 
     input UserInput {

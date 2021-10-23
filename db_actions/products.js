@@ -661,6 +661,7 @@ async function activateKey(
         const db = getDb();
 
         const allProducts = await db.collection('products').find().toArray();
+        const user = await db.collection('users').findOne({ name: username });
         let keyExists = false;
         let message = '';
         let matchedProduct = {};
@@ -691,6 +692,27 @@ async function activateKey(
             }
         }
 
+        let keyUsed = false;
+        let userHasKey = false;
+        for(let i = 0; i < user.usedKeys.length; i++) {
+            const currentKey = user.usedKeys[i];
+            if (currentKey.name == keyName) {
+                userHasKey = true;
+                if (new Date(new Date(currentKey.activatedDate) - new Date()).getHours() < 12) {
+                    keyUsed = true;
+                    break;
+                }
+            }
+        }
+        console.log(keyUsed);
+        console.log(userHasKey);
+        if (keyUsed) {
+            return {
+                success: false,
+                message: 'Вы уже использовали этот ключ, вы сможете использовать его только через 12ч после последнего использования'
+            }
+        }
+
         if (message == '' && keyExists) {
             buyProduct(
                 _,
@@ -711,24 +733,7 @@ async function activateKey(
                         $set: {
                             'keys.all.$[key]': {
                                 ...matchedKey
-                            }
-                        }
-                    },
-                    {
-                        arrayFilters: [
-                            {
-                                'key.name': matchedKey.name
-                            }
-                        ]
-                    }
-                )
-
-            await db
-                .collection('products')
-                .updateOne(
-                    { title: matchedProduct.title },
-                    {
-                        $set: {
+                            },
                             'keys.active.$[key]': {
                                 ...matchedKey
                             }
@@ -753,14 +758,7 @@ async function activateKey(
                                 'keys.active': {
                                     name: matchedKey.name
                                 }
-                            }
-                        }
-                    )
-                await db
-                    .collection('products')
-                    .updateOne(
-                        { title: matchedProduct.title },
-                        {
+                            },
                             $push: {
                                 'keys.unactive': matchedKey
                             }
@@ -779,6 +777,39 @@ async function activateKey(
                 navigator,
                 locationData
             });
+            if (!userHasKey) {
+                await db
+                    .collection('users')
+                    .updateOne(
+                        { name: username },
+                        {
+                            $push: {
+                                usedKeys: {
+                                    name: keyName,
+                                    activatedDate: new Date()
+                                }
+                            }
+                        }
+                    )
+            } else {
+                await db
+                    .collection('users')
+                    .updateOne(
+                        { name: username },
+                        {
+                            $set: {
+                                'usedKeys.$[key].activatedDate': new Date()
+                            }
+                        },
+                        {
+                            arrayFilters: [
+                                {
+                                    'key.name': keyName
+                                }
+                            ]
+                        }
+                    )
+            }
             return {
                 success: true,
                 message

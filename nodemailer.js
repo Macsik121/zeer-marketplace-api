@@ -1,6 +1,8 @@
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 const createLog = require('./createLog');
 const smtpTransport = require('nodemailer-smtp-transport');
+const uiEndpoint = process.env.uiEndpoint;
 
 function sendMail({
     email,
@@ -24,7 +26,7 @@ function sendMail({
         html: `
             <label>Сгенерированный пароль: ${generatedPassword}.</label><br />
             <a
-                href="https://zeer-marketplace-ui-macsik121.herokuapp.com"
+                href="${uiEndpoint}"
             >
                 Зайти в аккаунт с сгенерированным паролем
             </a>

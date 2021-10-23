@@ -324,7 +324,7 @@ router.post('/generate_key_product', async (req, res) => {
 
 router.post('/log_inject_hacks', async (req, res) => {
     res.set('Content-Type', 'application/json; charset=utf-8');
-    const {
+    let {
         login,
         password,
         hwid,
@@ -334,6 +334,9 @@ router.post('/log_inject_hacks', async (req, res) => {
         ip
     } = req.body;
 
+    if (typeof ip == 'undefined') {
+        ip = 'null';
+    }
     const {
         response
     } = await userCorrect({
