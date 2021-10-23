@@ -40,7 +40,6 @@ async function createLog(
     try {
         const db = getDb();
 
-        console.log('navigator in actino-logs.js:', navigator)
         let date = new Date();
         const actionLogs = await db.collection('actionLogs').countDocuments();
         if (!browser && navigator != '') browser = detectBrowser(navigator);
