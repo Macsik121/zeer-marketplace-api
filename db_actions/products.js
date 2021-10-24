@@ -698,6 +698,8 @@ async function activateKey(
             const currentKey = user.usedKeys[i];
             if (currentKey.name == keyName) {
                 userHasKey = true;
+                console.log(currentKey.activatedDate);
+                console.log(new Date());
                 if (new Date(new Date(currentKey.activatedDate) - new Date()).getHours() < 12) {
                     keyUsed = true;
                     break;
