@@ -139,6 +139,7 @@ async function buyProduct(
                     {
                         $push: {
                             subscriptions: {
+                                id: product.id,
                                 status: {
                                     isFreezed: false,
                                     isActive: subExpired ? false : true,
@@ -192,7 +193,6 @@ async function buyProduct(
             if (!issueSub) {
                 createPurchase();
                 createProfit(productCost);
-                console.log('navigator in buyProduct' + navigator)
                 createLog({
                     log: {
                         name: user.name,

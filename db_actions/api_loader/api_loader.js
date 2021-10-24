@@ -101,7 +101,6 @@ router.post('/auth', async (req, res) => {
     for(let i = 0; i < subscriptions.length; i++) {
         const subscription = subscriptions[i];
         let lastUpdate = {
-            index: 0,
             description: 'Обновлений не было за последнее время'
         };
         const {
@@ -122,7 +121,6 @@ router.post('/auth', async (req, res) => {
                 const change = currentProduct.changes[lastUpdateIndex - 1];
                 if (change) {
                     lastUpdate.description = utf8.decode(change.description);
-                    lastUpdate.index = lastUpdateIndex;
                 }
                 break;
             };
@@ -143,7 +141,6 @@ router.post('/auth', async (req, res) => {
                     title: productTitle,
                     sub: `${days}.${months + 1}.${years}`,
                     typeGame: productFor,
-                    index: slotNumber,
                     update_log: '- ' + encodeURIComponent(lastUpdate.description)
                 }
             };

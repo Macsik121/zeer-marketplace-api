@@ -204,6 +204,7 @@ const typeDefs = `
     }
 
     type Subscription {
+        id: Int
         status: Status!
         activelyUntil: Date!
         title: String!
