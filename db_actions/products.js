@@ -699,17 +699,15 @@ async function activateKey(
             if (currentKey.name == keyName) {
                 userHasKey = true;
                 console.log(currentKey.activatedDate);
+                console.log(new Date(currentKey.activatedDate));
                 console.log(new Date());
                 console.log(new Date(new Date(currentKey.activatedDate) - new Date()).getHours());
-                console.log(new Date(new Date(currentKey.activatedDate) - new Date()).getHours() < 12);
                 if (new Date(new Date(currentKey.activatedDate) - new Date()).getHours() < 12) {
                     keyUsed = true;
                     break;
                 }
             }
         }
-        console.log(keyUsed);
-        console.log(userHasKey);
         if (keyUsed) {
             return {
                 success: false,
