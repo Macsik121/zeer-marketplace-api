@@ -98,7 +98,8 @@ const resolvers = {
         refuseSub: user.refuseSub,
         activatePromo: user.activatePromo,
         changeLoaderVersion: products.changeLoaderVersion,
-        updatePaymentNumber: lmi_payment_no.updatePaymentNumber
+        updatePaymentNumber: lmi_payment_no.updatePaymentNumber,
+        issueSubForEverybody: products.issueSubForEverybody
     }
 }
 

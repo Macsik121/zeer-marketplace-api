@@ -16,7 +16,9 @@ module.exports = async function userCorrect({
     const db = getDb();
     let user = await db.collection('users').findOne({ name });
     let response = {
-        success: true
+        success: true,
+        message: '',
+        select_product_title: title
     };
     if (!location) {
         location = await getLocationByIP(ip).location;
@@ -104,10 +106,13 @@ module.exports = async function userCorrect({
     if (title) {
         let subscriptionExists = false;
         let subscriptionFreezed = false;
+        let matchedTitle = title;
         for(let i = 0; i < user.subscriptions.length; i++) {
             const subscription = user.subscriptions[i];
-            if (title == subscription.title) {
+            if (title == subscription.id) {
                 subscriptionExists = true;
+                matchedTitle = subscription.title;
+                response.select_product_title = matchedTitle;
                 if (subscription.status.isExpired) {
                     subscriptionExists = false;
                 }
@@ -122,7 +127,7 @@ module.exports = async function userCorrect({
             createLog({
                 log: {
                     name,
-                    action: logErrorTopic + `: нету подписки на продукт ${title}`
+                    action: logErrorTopic + `: нету подписки на продукт ${matchedTitle}`
                 },
                 navigator: '',
                 locationData: {
@@ -135,7 +140,8 @@ module.exports = async function userCorrect({
             return {
                 response: {
                     success: false,
-                    message: 'no license sub'
+                    message: 'no license sub',
+                    select_product_title: matchedTitle
                 }
             };
         }
@@ -143,7 +149,7 @@ module.exports = async function userCorrect({
             createLog({
                 log: {
                     name,
-                    action: logErrorTopic + `: подписка заморожена на продукт ${title}`
+                    action: logErrorTopic + `: подписка заморожена на продукт ${matchedTitle}`
                 },
                 navigator: '',
                 locationData: {

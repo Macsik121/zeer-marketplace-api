@@ -614,6 +614,7 @@ const typeDefs = `
         ): isPromoRightResponse!
         changeLoaderVersion(version: String!): ServerResponse!
         updatePaymentNumber: ServerResponse
+        issueSubForEverybody(days: Int!, title: String!): ServerResponse
     }
 `;
 

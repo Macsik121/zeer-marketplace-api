@@ -1233,6 +1233,38 @@ async function changeLoaderVersion(_, { version }) {
     }
 }
 
+async function issueSubForEverybody(_, { days, title }) {
+    try {
+        const db = getDb();
+
+        await db
+            .collection('users')
+            .updateMany(
+                {},
+                {
+                    $set: {
+                        'subscriptions.$[subscription].activelyUntil': new Date('$activelyUntil' + days * 60 * 60 * 24)
+                    }
+                },
+                {
+                    arrayFilters: [
+                        {
+                            'subscription.title': title,
+                            'subscription.status.isActive': true
+                        }
+                    ]
+                }
+            )
+
+        return {
+            success: true,
+            message: `Вы успешно добавили ${days} дней ко всем пользователей`
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getProducts,
     getPopularProducts,
@@ -1260,5 +1292,6 @@ module.exports = {
     saveCostChanges,
     updateProductBG,
     isPromocodeRight,
-    changeLoaderVersion
+    changeLoaderVersion,
+    issueSubForEverybody
 };

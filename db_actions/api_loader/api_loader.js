@@ -330,6 +330,7 @@ router.post('/log_inject_hacks', async (req, res) => {
         select_product,
         ip
     } = req.body;
+    select_product = +select_product;
 
     if (typeof ip == 'undefined') {
         ip = 'null';
@@ -345,7 +346,12 @@ router.post('/log_inject_hacks', async (req, res) => {
         logErrorTopic: 'Запуск продукта'
     });
 
-    const { success, message } = response;
+    const {
+        success,
+        message,
+        select_product_title
+    } = response;
+    console.log(select_product_title)
     if (!success) {
         res.status(500).json({
             message
@@ -374,7 +380,7 @@ router.post('/log_inject_hacks', async (req, res) => {
         }
     `;
 
-    const action = `Инжект продукта ${select_product}`;
+    const action = `Инжект продукта ${select_product_title}`;
     const vars = {
         name: login,
         id_steam,
@@ -386,7 +392,7 @@ router.post('/log_inject_hacks', async (req, res) => {
     await fetchGraphQLServer(query, vars);
 
     res.status(200).json({
-        message: `Successfully created log for ${select_product}` 
+        message: `Successfully created log for ${select_product_title}` 
     });
 });
 
