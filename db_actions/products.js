@@ -1243,14 +1243,14 @@ async function issueSubForEverybody(_, { days, title }) {
                 {},
                 {
                     $set: {
-                        'subscriptions.$[subscription].activelyUntil': new Date('$activelyUntil' + days * 60 * 60 * 24)
+                        'subscriptions.$[subscription].activelyUntil': new Date(2021, 10, 11, 12, 13)
                     }
                 },
                 {
                     arrayFilters: [
                         {
                             'subscription.title': title,
-                            'subscription.status.isActive': true
+                            'subscription.status.isExpired': false
                         }
                     ]
                 }
