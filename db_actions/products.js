@@ -1236,25 +1236,22 @@ async function changeLoaderVersion(_, { version }) {
 async function issueSubForEverybody(_, { days, title }) {
     try {
         const db = getDb();
+        const users = await db.collection('users').find().toArray();
+        await db.collection('users').drop();
 
-        await db
-            .collection('users')
-            .updateMany(
-                {},
-                {
-                    $set: {
-                        'subscriptions.$[subscription].activelyUntil': new Date(2021, 10, 11, 12, 13)
-                    }
-                },
-                {
-                    arrayFilters: [
-                        {
-                            'subscription.title': title,
-                            'subscription.status.isExpired': false
-                        }
-                    ]
+        for(let i = 0; i < users.length; i++) {
+            const user = users[i];
+            for(let j = 0; j < user.subscriptions; i++) {
+                const sub = user.subscriptions[i];
+                if (sub.status.isActive && sub.title == title) {
+                    let date = new Date(sub.activelyUntil);
+                    sub.activelyUntil = new Date(date.setDate(date.getDate() + days));
+                    break;
                 }
-            )
+            }
+        }
+
+        await db.collection('users').insertMany(users);
 
         return {
             success: true,
