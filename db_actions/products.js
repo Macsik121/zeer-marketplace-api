@@ -704,7 +704,7 @@ async function activateKey(
                 console.log(new Date(currentKey.activatedDate));
                 console.log(new Date());
                 console.log(new Date(new Date(currentKey.activatedDate) - new Date()).getHours());
-                if (new Date(new Date(currentKey.activatedDate) - new Date()).getHours() < 12) {
+                if (new Date(new Date(currentKey.activatedDate) - new Date()).getHours() > 12) {
                     keyUsed = true;
                     break;
                 }
