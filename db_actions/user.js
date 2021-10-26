@@ -947,6 +947,7 @@ async function activatePromo(_, {
                     }
                 )
         );
+        let promocodeExists = false;
         let incrementActivations = true;
         let promocodeExpired = false;
         let promocodeUsed = false;
@@ -974,6 +975,7 @@ async function activatePromo(_, {
         for(let i = 0; i < all.length; i++) {
             const currentPromo = all[i];
             if (currentPromo.name == name) {
+                promocodeExists = true;
                 promocode = currentPromo;
                 if (new Date(currentPromo.expirationDays) - new Date() < 0) {
                     promocodeExpired = true;
@@ -984,7 +986,17 @@ async function activatePromo(_, {
             }
         }
 
-        if (promocodeExpired) {
+        if (!promocodeExists) {
+            return {
+                response: {
+                    success: false,
+                    message: 'Такого промокода не существует'
+                },
+                discountPercent: 1
+            }
+        }
+
+        if (promocodeExpire) {
             await db
                 .collection('products')
                 .updateOne(
