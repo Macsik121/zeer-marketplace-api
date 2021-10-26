@@ -58,6 +58,12 @@ async function createLog(
             if (navigator.userAgent.indexOf("Linux")          != -1) platform="Linux";
         } else platform = "Unknown OS";
 
+        if (!ip) {
+            ip = 'IP is not provided'
+        }
+        if (!location) {
+            location = 'null'
+        }
         const actionLog = {
             id: actionLogs,
             date,
