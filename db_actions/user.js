@@ -996,7 +996,7 @@ async function activatePromo(_, {
             }
         }
 
-        if (promocodeExpire) {
+        if (promocodeExpired) {
             await db
                 .collection('products')
                 .updateOne(
