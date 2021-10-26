@@ -107,9 +107,10 @@ module.exports = async function userCorrect({
         let subscriptionExists = false;
         let subscriptionFreezed = false;
         let matchedTitle = title;
+        console.log(title);
         for(let i = 0; i < user.subscriptions.length; i++) {
             const subscription = user.subscriptions[i];
-            if (title == subscription.id) {
+            if (title == subscription.id || title == subscription.title) {
                 subscriptionExists = true;
                 matchedTitle = subscription.title;
                 response.select_product_title = matchedTitle;
