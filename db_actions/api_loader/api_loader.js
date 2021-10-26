@@ -21,6 +21,10 @@ router.post('/auth', async (req, res) => {
     if (!location) {
         location = 'failed city'
     }
+    if (!password || !login || !hwid || !ip) {
+        res.status(400).json({ message: 'argument empty' });
+        return;
+    }
 
     const {
         user,
@@ -200,6 +204,10 @@ router.post('/inject_dll_preload', async (req, res) => {
         select_product,
         ip
     } = req.body;
+    if (!login || !password || !hwid || !select_product || !ip) {
+        res.status(400).json({ message: 'argument empty' });
+        return;
+    }
     const { location } = await getLocationByIP(ip);
     const db = getDb();
     const product = await db.collection('products').findOne({ id: +select_product }, { title: 1 })
@@ -251,6 +259,10 @@ router.post('/generate_key_product', async (req, res) => {
         count_activations,
     } = req.body;
     let { ip } = req.body;
+    if (!select_product || !count_days || !count_activations || !ip) {
+        res.status(400).json({ message: 'argument empty' });
+        return;
+    }
     const db = getDb();
     let { location } = await getLocationByIP(ip);
     if (!location) location = 'failed city';
@@ -331,8 +343,17 @@ router.post('/log_inject_hacks', async (req, res) => {
         ip
     } = req.body;
     select_product = +select_product;
-    if (isNaN(select_product)) {
-        res.status(400).send('Вы не передали аргумент select_product')
+    if (isNaN(select_product) ||
+        !login ||
+        !password ||
+        !hwid ||
+        !id_steam ||
+        !windows_name ||
+        !ip
+    ) {
+        res.status(400).json({
+            message: 'argument empty'
+        });
         return;
     }
 
@@ -410,6 +431,10 @@ router.post('/crash_logs', async (req, res) => {
         full_log_excetion
     } = req.body;
     const db = getDb();
+    if (!login || !exception_code || !log_exection || !time_game || full_log_excetion) {
+        res.status(400).json({ message: 'argument empty' });
+        return;
+    }
 
     const user = await db.collection('users').findOne({ name: login });
     if (!user) {
@@ -464,6 +489,10 @@ router.post('/block_user', async (req, res) => {
         login,
         ip
     } = req.body;
+    if (!login || !ip) {
+        res.status(400).json({ message: 'argument empty' });
+        return;
+    }
     const db = getDb();
     const user = await db.collection('users').findOne({ name: login });
     let { location } = await getLocationByIP(ip);
