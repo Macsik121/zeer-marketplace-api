@@ -30,7 +30,7 @@ async function logInject(_, {
         if (ip != 'null') {
             ip = 'IP is not provided';
             const locationData = await getLocationByIP(ip);
-            location = locationData.location;
+            location = locationData.location || 'null';
         }
         const id = await db.collection('injectLogs').countDocuments();
 

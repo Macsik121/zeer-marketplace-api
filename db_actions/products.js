@@ -1258,7 +1258,7 @@ async function issueSubForEverybody(_, { days, title }) {
         return {
             success: true,
             message: `Успешно добавлено + ${days} дней ко всем пользователям продукта ${title}`
-        }
+        };
     } catch (error) {
         console.log(error);
     }

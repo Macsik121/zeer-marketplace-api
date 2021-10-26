@@ -213,8 +213,8 @@ router.post('/inject_dll_preload', async (req, res) => {
         data: { password, hwid },
         compareHwid: true,
         title: product.title,
-        ip,
-        location,
+        ip: ip || 'IP is not provided',
+        location: location || 'null',
         logErrorTopic: 'Запуск продукта'
     });
 
@@ -331,6 +331,10 @@ router.post('/log_inject_hacks', async (req, res) => {
         ip
     } = req.body;
     select_product = +select_product;
+    if (isNaN(select_product)) {
+        res.status(400).send('Вы не передали аргумент select_product')
+        return;
+    }
 
     if (typeof ip == 'undefined') {
         ip = 'null';
