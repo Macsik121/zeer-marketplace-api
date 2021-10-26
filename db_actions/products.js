@@ -165,7 +165,9 @@ async function buyProduct(
             if (userSub.activelyUntil - new Date() < 0) {
                 userSub.activelyUntil = new Date();
             }
+            console.log('userSub.activelyUntil: ' + userSub.activelyUntil);
             userSub.activelyUntil.setDate(userSub.activelyUntil.getDate() + days);
+            console.log('userSub.activelyUntil after adding days: ' + userSub.activelyUntil)
             await db
                 .collection('users')
                 .updateOne(
@@ -1241,8 +1243,8 @@ async function issueSubForEverybody(_, { days, title }) {
 
         for(let i = 0; i < users.length; i++) {
             const user = users[i];
-            for(let j = 0; j < user.subscriptions; i++) {
-                const sub = user.subscriptions[i];
+            for(let j = 0; j < user.subscriptions.length; j++) {
+                const sub = user.subscriptions[j];
                 if (sub.status.isActive && sub.title == title) {
                     let date = new Date(sub.activelyUntil);
                     sub.activelyUntil = new Date(date.setDate(date.getDate() + days));

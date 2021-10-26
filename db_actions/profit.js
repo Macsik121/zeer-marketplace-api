@@ -12,7 +12,7 @@ async function getAllProfit(_, { week }) {
         from = generateDate(from).getTime();
         to = generateDate(to).getTime();
 
-        deleteUselessProfit(db, week);
+        // deleteUselessProfit(db, week);
         allProfit.map((profit, i) => {
             const profitDate = (
                 new Date(
