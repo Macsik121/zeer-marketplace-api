@@ -20,10 +20,12 @@ module.exports = async function userCorrect({
         message: '',
         select_product_title: title
     };
-    if (!location) {
-        location = await getLocationByIP(ip).location;
-        if (!location) location = 'failed';
-        if (!ip) ip = 'wrong IP';
+    if (ip) {
+        const result = await getLocationByIP(ip);
+        location = result.location;
+    } else {
+        location = 'failed';
+        ip = 'IP is not provided'
     }
 
     if (!user || !(await bcrypt.compare(data.password, user.password))) {
@@ -107,7 +109,6 @@ module.exports = async function userCorrect({
         let subscriptionExists = false;
         let subscriptionFreezed = false;
         let matchedTitle = title;
-        console.log(title);
         for(let i = 0; i < user.subscriptions.length; i++) {
             const subscription = user.subscriptions[i];
             if (title == subscription.id || title == subscription.title) {
@@ -172,6 +173,10 @@ module.exports = async function userCorrect({
 
     return {
         user,
-        response
+        response,
+        locationData: {
+            ip,
+            location
+        }
     };
 }

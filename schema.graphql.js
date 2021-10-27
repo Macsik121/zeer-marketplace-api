@@ -593,7 +593,8 @@ const typeDefs = `
             ip: String!,
             id_steam: String!,
             platform: String!,
-            action: String!
+            action: String!,
+            location: String
         ): ServerResponse!
         cleanInjectLogs: ServerResponse!
         logCrash(

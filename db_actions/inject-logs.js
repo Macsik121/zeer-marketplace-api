@@ -22,15 +22,15 @@ async function logInject(_, {
     ip,
     id_steam,
     platform,
-    action
+    action,
+    location = null
 }) {
     try {
         const db = getDb();
-        let location = 'location is not provided';
-        if (ip != 'null') {
-            ip = 'IP is not provided';
-            const locationData = await getLocationByIP(ip);
-            location = locationData.location || 'null';
+
+        if (!location) {
+            ip = 'wrong IP is provided';
+            location = 'null';
         }
         const id = await db.collection('injectLogs').countDocuments();
 

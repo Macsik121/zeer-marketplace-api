@@ -361,7 +361,12 @@ router.post('/log_inject_hacks', async (req, res) => {
         ip = 'null';
     }
     const {
-        response
+        response: {
+            success,
+            message,
+            select_product_title
+        },
+        locationData
     } = await userCorrect({
         name: login,
         data: { password, hwid },
@@ -371,12 +376,6 @@ router.post('/log_inject_hacks', async (req, res) => {
         logErrorTopic: 'Запуск продукта'
     });
 
-    const {
-        success,
-        message,
-        select_product_title
-    } = response;
-    console.log(select_product_title)
     if (!success) {
         res.status(500).json({
             message
@@ -390,14 +389,16 @@ router.post('/log_inject_hacks', async (req, res) => {
             $ip: String!,
             $id_steam: String!,
             $platform: String!,
-            $action: String!
+            $action: String!,
+            $location: String
         ) {
             logInject(
                 name: $name,
                 ip: $ip,
                 id_steam: $id_steam,
                 platform: $platform,
-                action: $action
+                action: $action,
+                location: $location
             ) {
                 message
                 success
@@ -411,10 +412,17 @@ router.post('/log_inject_hacks', async (req, res) => {
         id_steam,
         platform: windows_name,
         action,
-        ip
+        ip,
+        location: locationData.location
     };
+    // name: String!,
+    // ip: String!,
+    // id_steam: String!,
+    // platform: String!,
+    // action: String!,
+    // location: String!
 
-    await fetchGraphQLServer(query, vars);
+    const result = await fetchGraphQLServer(query, vars);
 
     res.status(200).json({
         message: `Successfully created log for ${select_product_title}` 
@@ -431,7 +439,7 @@ router.post('/crash_logs', async (req, res) => {
         full_log_excetion
     } = req.body;
     const db = getDb();
-    if (!login || !exception_code || !log_exection || !time_game || full_log_excetion) {
+    if (!login || !exception_code || !log_exection || !time_game || !full_log_excetion) {
         res.status(400).json({ message: 'argument empty' });
         return;
     }
