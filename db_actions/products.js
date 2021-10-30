@@ -133,7 +133,6 @@ async function buyProduct(
                 );
             }
             if (!subExists) {
-                let subExpired = new Date(activelyUntil) - new Date() > 0 ? false : true;
                 await db.collection('users').updateOne(
                     { name },
                     {
@@ -142,8 +141,8 @@ async function buyProduct(
                                 id: product.id,
                                 status: {
                                     isFreezed: false,
-                                    isActive: subExpired ? false : true,
-                                    isExpired: subExpired ? true : false
+                                    isActive: true,
+                                    isExpired: false
                                 },
                                 activelyUntil,
                                 title,
