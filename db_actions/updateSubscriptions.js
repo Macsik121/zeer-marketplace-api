@@ -1,4 +1,6 @@
+// --- db_actions/updateSubscriptions.js ---
 const { getDb } = require('./db');
+const { buildFullUser } = require('./user');
 
 module.exports = async function updateSubscriptions({
     user,
@@ -6,78 +8,30 @@ module.exports = async function updateSubscriptions({
 }) {
     try {
         const db = getDb();
-        const {
-            subscriptions,
-            name
-        } = user;
+        if (!user || !user.name) return;
 
-        let userHasExpiredSub = false;
-        let userHasExtended = false;
-        subscriptions.map(sub => {
-            const {
-                status,
-                activelyUntil
-            } = sub;
-            const dateDifference = new Date(activelyUntil) - new Date();
-            if (dateDifference < 0 && !status.isFreezed) {
-                userHasExpiredSub = true;
-            } else if (dateDifference > 0 && status.isExpired) {
-                userHasExtended = true;
-            }
-        });
-        if (userHasExpiredSub) {
-            user = await db
-                .collection('users')
-                .findOneAndUpdate(
-                    { name },
-                    {
-                        $set: {
-                            'subscriptions.$[subscription].status': {
-                                isActive: false,
-                                isFreezed: false,
-                                isExpired: true
-                            }
-                        }
-                    },
-                    {
-                        arrayFilters: [
-                            {
-                                'subscription.activelyUntil': {
-                                    $lt: new Date()
-                                }
-                            }
-                        ],
-                        returnOriginal: false
-                    }
-                )
+        const { name } = user;
+        const { rows: uRows } = await db.query('SELECT * FROM users WHERE name = $1', [name]);
+        if (!uRows[0]) return;
+        const userId = uRows[0].id;
+
+        // 1. Переводим истекшие активные подписки в статус 'expired'
+        await db.query(`
+            UPDATE subscription
+            SET status = 'expired'
+            WHERE user_id = $1 AND status = 'active' AND active_until < NOW()
+        `, [userId]);
+
+        // 2. Переводим продленные подписки из 'expired' обратно в 'active'
+        await db.query(`
+            UPDATE subscription
+            SET status = 'active'
+            WHERE user_id = $1 AND status = 'expired' AND active_until > NOW()
+        `, [userId]);
+
+        if (returnUser) {
+            return await buildFullUser(db, uRows[0]);
         }
-        if (userHasExtended) {
-            user = await db
-                .collection('users')
-                .findOneAndUpdate(
-                    { name },
-                    {
-                        $set: {
-                            'subscriptions.$[subscription].status': {
-                                isActive: true,
-                                isFreezed: false,
-                                isExpired: false
-                            }
-                        }
-                    },
-                    {
-                        arrayFilters: [
-                            {
-                                'subscription.activelyUntil': {
-                                    $gt: new Date()
-                                }
-                            }
-                        ],
-                        returnOriginal: false
-                    }
-                )
-        }
-        if (returnUser) return user.value || user;
     } catch (error) {
         console.log(error);
     }
