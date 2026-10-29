@@ -1,9 +1,9 @@
-version: '3.8'
-
 services:
   # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
+    security_opt:
+      - seccomp:unconfined
     container_name: zeer_postgres
     environment:
       POSTGRES_USER: postgres

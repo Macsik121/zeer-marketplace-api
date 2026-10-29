@@ -1,12 +1,12 @@
-FROM node:14-alpine
+FROM node:14
 
 WORKDIR /app
 
-COPY package*.json ./
-
-RUN npm install --production
-
 COPY . .
+
+RUN rm -rf node_modules package-lock.json && \
+    npm install --production && \
+    npm install pg@8.23.1 --save-exact
 
 EXPOSE 3000
 
